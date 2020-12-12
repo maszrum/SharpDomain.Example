@@ -13,11 +13,16 @@ namespace VotingSystem.Application.ViewModels
         public override string ToString()
         {
             var questionsFormatted = Questions
-                .Select(q => q.ToString())
-                .Select((q, i) => $"  [{i}]: {q}");
-            var questionsString = string.Join(Environment.NewLine, questionsFormatted)
-                .Replace(Environment.NewLine, $"{Environment.NewLine}  ");
-            
+                .SelectMany((q, i) =>
+                {
+                    var lines = q.ToString().Split(Environment.NewLine);
+                    lines[0] = $"[{i}] {lines[0]}";
+                    return lines;
+                })
+                .Select(q => $"  {q}");
+
+            var questionsString = string.Join($"{Environment.NewLine}", questionsFormatted);
+
             return new StringBuilder()
                 .AppendLine($"# {nameof(Question)}[]")
                 .Append(questionsString)
