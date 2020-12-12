@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Autofac;
 using MediatR;
 using VotingSystem.Application.Commands;
 using VotingSystem.Application.ViewModels;
@@ -11,13 +10,15 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
     internal class RegisterCommand : IConsoleCommand
     {
         private readonly ConsoleState _consoleState;
+        private readonly IMediator _mediator;
 
-        public RegisterCommand(ConsoleState consoleState)
+        public RegisterCommand(ConsoleState consoleState, IMediator mediator)
         {
             _consoleState = consoleState;
+            _mediator = mediator;
         }
 
-        public Task Execute(IComponentContext services, IReadOnlyList<string> args)
+        public Task Execute(IReadOnlyList<string> args)
         {
             if (!string.IsNullOrEmpty(_consoleState.VoterPesel))
             {
@@ -31,18 +32,17 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
                 return Task.CompletedTask;
             }
             
-            return Register(services, pesel);
+            return Register(pesel);
         }
 
-        private static async Task Register(IComponentContext services, string pesel)
+        private async Task Register(string pesel)
         {
-            var mediator = services.Resolve<IMediator>();
             var createVoter = new CreateVoter(pesel);
             
             VoterViewModel createVoterResponse;
             try
             {
-                createVoterResponse = await mediator.Send(createVoter);
+                createVoterResponse = await _mediator.Send(createVoter);
             }
             catch (Exception exception)
             {

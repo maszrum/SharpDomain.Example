@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Autofac;
 using MediatR;
 using VotingSystem.Application.Commands;
 using VotingSystem.Application.ViewModels;
@@ -10,14 +9,14 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
 {
     internal class AddQuestionCommand : IConsoleCommand
     {
-        private readonly ConsoleState _consoleState;
+        private readonly IMediator _mediator;
 
-        public AddQuestionCommand(ConsoleState consoleState)
+        public AddQuestionCommand(IMediator mediator)
         {
-            _consoleState = consoleState;
+            _mediator = mediator;
         }
 
-        public Task Execute(IComponentContext services, IReadOnlyList<string> args)
+        public Task Execute(IReadOnlyList<string> args)
         {
             if (!TryParseArgs(args, out string text))
             {
@@ -33,7 +32,7 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
                 return Task.CompletedTask;
             }
             
-            return AddQuestion(services, text, answers);
+            return AddQuestion(text, answers);
         }
 
         private static IList<string> ReadAnswersFromConsole(out bool cancelled)
@@ -62,15 +61,14 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
             return result;
         }
         
-        private static async Task AddQuestion(IComponentContext services, string question, IList<string> answers)
+        private async Task AddQuestion(string question, IList<string> answers)
         {
-            var mediator = services.Resolve<IMediator>();
             var addQuestion = new CreateQuestion(question, answers);
             
             QuestionViewModel addQuestionResponse;
             try
             {
-                addQuestionResponse = await mediator.Send(addQuestion);
+                addQuestionResponse = await _mediator.Send(addQuestion);
             }
             catch (Exception exception)
             {
@@ -83,7 +81,7 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
             Console.WriteLine();
         }
 
-        public string GetDefinition() => "add-question [text]"; // TODO
+        public string GetDefinition() => "add-question [text]";
         
         private static bool TryParseArgs(IReadOnlyCollection<string> args, out string text)
         {

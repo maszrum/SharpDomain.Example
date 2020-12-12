@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Autofac;
 using MediatR;
 using VotingSystem.Application.Queries;
 using VotingSystem.Application.ViewModels;
@@ -10,22 +9,21 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
 {
     internal class GetQuestionsCommand : IConsoleCommand
     {
-        private readonly ConsoleState _consoleState;
+        private readonly IMediator _mediator;
 
-        public GetQuestionsCommand(ConsoleState consoleState)
+        public GetQuestionsCommand(IMediator mediator)
         {
-            _consoleState = consoleState;
+            _mediator = mediator;
         }
 
-        public async Task Execute(IComponentContext services, IReadOnlyList<string> args)
+        public async Task Execute(IReadOnlyList<string> args)
         {
-            var mediator = services.Resolve<IMediator>();
             var getQuestions = new GetQuestions();
             
             QuestionsListViewModel getQuestionsResponse;
             try
             {
-                getQuestionsResponse = await mediator.Send(getQuestions);
+                getQuestionsResponse = await _mediator.Send(getQuestions);
             }
             catch (Exception exception)
             {

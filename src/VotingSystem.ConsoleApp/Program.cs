@@ -28,11 +28,11 @@ namespace VotingSystem.ConsoleApp
             var applicationAssembly = typeof(CreateQuestion).Assembly;
             var persistenceAssembly = typeof(QuestionEntity).Assembly;
             var inMemoryPersistenceAssembly = typeof(Persistence.InMemory.AutofacExtensions).Assembly;
-            
+
             var containerBuilder = new ContainerBuilder()
                 .RegisterDomainLayer(domainAssembly)
                 .RegisterApplicationLayer(
-                    assembly: applicationAssembly, 
+                    assembly: applicationAssembly,
                     configurationAction: config =>
                     {
                         config.ForbidMediatorInHandlers = true;
@@ -43,7 +43,9 @@ namespace VotingSystem.ConsoleApp
                 .RegisterPersistenceLayer(persistenceAssembly)
                 .RegisterInMemoryPersistence()
                 .RegisterAutoTransaction(inMemoryPersistenceAssembly);
-            
+
+            containerBuilder.RegisterClientDependencies();
+
             await using var container = containerBuilder.Build();
 
             await SeedDataForTesting(container);
@@ -85,7 +87,7 @@ namespace VotingSystem.ConsoleApp
                 await simulatedVoter.VoteRandomly();
                 simulatedVoter.Logout();
                 
-                await Task.Delay(1000, cancellationToken);
+                await Task.Delay(200, cancellationToken);
             }
         }
 

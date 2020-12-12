@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Autofac;
 using MediatR;
 using VotingSystem.Application.Queries;
 using VotingSystem.Application.ViewModels;
@@ -11,13 +10,15 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
     internal class LogInCommand : IConsoleCommand
     {
         private readonly ConsoleState _consoleState;
+        private readonly IMediator _mediator;
 
-        public LogInCommand(ConsoleState consoleState)
+        public LogInCommand(ConsoleState consoleState, IMediator mediator)
         {
             _consoleState = consoleState;
+            _mediator = mediator;
         }
 
-        public Task Execute(IComponentContext services, IReadOnlyList<string> args)
+        public Task Execute(IReadOnlyList<string> args)
         {
             if (!string.IsNullOrEmpty(_consoleState.VoterPesel))
             {
@@ -31,18 +32,17 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
                 return Task.CompletedTask;
             }
             
-            return LogIn(services, pesel);
+            return LogIn(pesel);
         }
         
-        private async Task LogIn(IComponentContext services, string pesel)
+        private async Task LogIn(string pesel)
         {
             var logIn = new LogIn(pesel);
-            var mediator = services.Resolve<IMediator>();
             
             VoterViewModel logInResult;
             try
             {
-                logInResult = await mediator.Send(logIn);
+                logInResult = await _mediator.Send(logIn);
             }
             catch (Exception exception)
             {

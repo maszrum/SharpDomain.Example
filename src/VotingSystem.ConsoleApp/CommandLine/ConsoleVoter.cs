@@ -2,43 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using VotingSystem.ConsoleApp.CommandLine.Commands;
 
 namespace VotingSystem.ConsoleApp.CommandLine
 {
     internal class ConsoleVoter
     {
         private readonly IContainer _container;
-        private readonly ConsoleState _state = new();
-        private readonly Dictionary<string, IConsoleCommand> _commands = new ();
+        private readonly ConsoleState _consoleState;
+        private readonly Dictionary<string, Func<ILifetimeScope, IConsoleCommand>> _commandsFactory = new();
+        private readonly Dictionary<string, string> _commandDefinitions = new();
         
         public ConsoleVoter(IContainer container)
         {
             _container = container;
-            SetupCommands();
-        }
-        
-        private void SetupCommands()
-        {
-            static string GetCommandText(IConsoleCommand command) => 
-                command.GetDefinition().Split(' ')[0];
-
-            var commands = new IConsoleCommand[]
-            {
-                new RegisterCommand(_state),
-                new LogInCommand(_state),
-                new LogOutCommand(_state),
-                new GetQuestionsCommand(_state),
-                new AddQuestionCommand(_state),
-                new VoteCommand(_state),
-                new GetResultCommand(_state)
-            };
-
-            foreach (var command in commands)
-            {
-                var commandText = GetCommandText(command);
-                _commands.Add(commandText, command);
-            }
+            _consoleState = container.Resolve<ConsoleState>();
+            SetupCommands(container);
         }
         
         public void RunBlocking()
@@ -65,10 +43,11 @@ namespace VotingSystem.ConsoleApp.CommandLine
                     {
                         ShowHelp();
                     }
-                    else if (_commands.TryGetValue(command, out var commandHandler))
+                    else if (_commandsFactory.TryGetValue(command, out var commandFactory))
                     {
                         using var scope = _container.BeginLifetimeScope();
-                        commandHandler.Execute(scope, args).GetAwaiter().GetResult();
+                        var commandHandler = commandFactory(scope);
+                        commandHandler.Execute(args).GetAwaiter().GetResult();
                     }
                     else if (!IsQuitCommand(command))
                     {
@@ -77,6 +56,24 @@ namespace VotingSystem.ConsoleApp.CommandLine
                 }
             }
             while (!IsQuitCommand(command));
+        }
+
+        private void SetupCommands(IContainer container)
+        {
+            static string GetCommandText(IConsoleCommand command) =>
+                command.GetDefinition().Split(' ')[0];
+
+            using var scope = container.BeginLifetimeScope();
+
+            var commands = scope.Resolve<IEnumerable<IConsoleCommand>>();
+
+            foreach (var command in commands)
+            {
+                var commandType = command.GetType();
+                var commandText = GetCommandText(command);
+                _commandsFactory.Add(commandText, scope => (IConsoleCommand)scope.Resolve(commandType));
+                _commandDefinitions.Add(commandText, command.GetDefinition());
+            }
         }
 
         private void ShowWelcomeMessage()
@@ -94,17 +91,17 @@ namespace VotingSystem.ConsoleApp.CommandLine
         {
             Console.WriteLine("Available commands:");
             
-            foreach (var command in _commands.Values)
+            foreach (var commandDefinition in _commandDefinitions.Values)
             {
-                Console.WriteLine($"  {command.GetDefinition()}");
+                Console.WriteLine($"  {commandDefinition}");
             }
         }
 
         private string GetReadLinePrefix()
         {
-            return string.IsNullOrEmpty(_state.VoterPesel) 
+            return string.IsNullOrEmpty(_consoleState.VoterPesel) 
                 ? "<not-logged>: " 
-                : $"<{_state.VoterPesel}>: ";
+                : $"<{_consoleState.VoterPesel}>: ";
         }
         
         private static bool TryReadLine(out string line)

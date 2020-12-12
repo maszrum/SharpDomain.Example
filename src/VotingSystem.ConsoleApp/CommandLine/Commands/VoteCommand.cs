@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Autofac;
 using MediatR;
 using VotingSystem.Application.Commands;
 
@@ -11,13 +9,15 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
     internal class VoteCommand : IConsoleCommand
     {
         private readonly ConsoleState _consoleState;
+        private readonly IMediator _mediator;
 
-        public VoteCommand(ConsoleState consoleState)
+        public VoteCommand(ConsoleState consoleState, IMediator mediator)
         {
             _consoleState = consoleState;
+            _mediator = mediator;
         }
 
-        public Task Execute(IComponentContext services, IReadOnlyList<string> args)
+        public Task Execute(IReadOnlyList<string> args)
         {
             if (string.IsNullOrEmpty(_consoleState.VoterPesel))
             {
@@ -25,14 +25,12 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
                 return Task.CompletedTask;
             }
             
-            return DoVote(services);
+            return DoVote();
         }
 
-        private async Task DoVote(IComponentContext services)
+        private async Task DoVote()
         {
-            var mediator = services.Resolve<IMediator>();
-            
-            var selectedQuestion = await CommandLineHelper.AskToSelectQuestion(mediator);
+            var selectedQuestion = await CommandLineHelper.AskToSelectQuestion(_mediator);
             if (selectedQuestion is null)
             {
                 return;
@@ -51,7 +49,7 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
             
             try
             {
-                await mediator.Send(voteFor);
+                await _mediator.Send(voteFor);
             }
             catch (Exception exception)
             {

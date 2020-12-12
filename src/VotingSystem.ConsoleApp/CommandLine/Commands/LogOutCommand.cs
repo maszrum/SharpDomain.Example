@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Autofac;
 
 namespace VotingSystem.ConsoleApp.CommandLine.Commands
 {
@@ -14,7 +13,7 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
             _consoleState = consoleState;
         }
 
-        public Task Execute(IComponentContext services, IReadOnlyList<string> args)
+        public Task Execute(IReadOnlyList<string> args)
         {
             if (string.IsNullOrEmpty(_consoleState.VoterPesel))
             {
