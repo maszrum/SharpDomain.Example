@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
@@ -34,12 +36,11 @@ namespace VotingSystem.Persistence.EventHandlers
             
             await  _questionResultsWriteRepository.Create(questionResultEntity);
 
-            foreach (var answerResult in questionResult.AnswerResults)
-            {
-                var answerResultEntity = _mapper.Map<AnswerResult, AnswerResultEntity>(answerResult);
-                
-                await _answerResultsWriteRepository.Create(answerResultEntity);
-            }
+            var answerResultEntities = _mapper
+                .Map<IEnumerable<AnswerResult>, IEnumerable<AnswerResultEntity>>(questionResult.AnswerResults)
+                .ToArray();
+
+            await _answerResultsWriteRepository.Create(answerResultEntities);
         }
     }
 }
