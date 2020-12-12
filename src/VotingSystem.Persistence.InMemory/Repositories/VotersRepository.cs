@@ -37,7 +37,7 @@ namespace VotingSystem.Persistence.InMemory.Repositories
             return Task.FromResult((Voter?)voter);
         }
 
-        public Task<bool> Exists(string? pesel)
+        public Task<bool> Exists(string pesel)
         {
             if (pesel == null)
             {

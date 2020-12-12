@@ -5,11 +5,11 @@ namespace VotingSystem.Application.Commands
 {
     public class CreateVoter : IRequest<VoterViewModel>
     {
-        public CreateVoter(string? pesel)
+        public CreateVoter(string pesel)
         {
             Pesel = pesel;
         }
 
-        public string? Pesel { get; }
+        public string Pesel { get; }
     }
 }
