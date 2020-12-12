@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
@@ -51,6 +52,8 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
                 return;
             }
 
+            var allVotes = getQuestionResultResponse.AnswerResults.Sum(ar => ar.Votes);
+
             Console.WriteLine();
             Console.WriteLine($"{selectedQuestion.QuestionText}");
             var index = 1;
@@ -60,7 +63,10 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
                     .Single(a => a.Id == answerResult.AnswerId)
                     .Text;
 
-                Console.WriteLine($"[{index}]: {answerText} - {answerResult.Votes} votes");
+                var percentage = ((double)answerResult.Votes) / allVotes;
+                var percentageFormatted = percentage.ToString("0.00", CultureInfo.InvariantCulture);
+
+                Console.WriteLine($"[{index}]: {answerText} - {percentageFormatted}% ({answerResult.Votes} votes)");
                 
                 index++;
             }
