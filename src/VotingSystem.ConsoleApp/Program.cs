@@ -3,7 +3,6 @@ using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
-using MediatR;
 using SharpDomain.Application;
 using SharpDomain.AutoMapper;
 using SharpDomain.AutoTransaction;
@@ -44,11 +43,11 @@ namespace VotingSystem.ConsoleApp
                 .RegisterInMemoryPersistence()
                 .RegisterAutoTransaction(inMemoryPersistenceAssembly);
 
-            containerBuilder.RegisterClientDependencies();
+            containerBuilder
+                .RegisterClientDependencies()
+                .SeedOnBuild();
 
             await using var container = containerBuilder.Build();
-
-            await SeedDataForTesting(container);
 
             var tcs = new CancellationTokenSource();
             var consoleTask = RunConsole(container)
@@ -89,18 +88,6 @@ namespace VotingSystem.ConsoleApp
                 
                 await Task.Delay(200, cancellationToken);
             }
-        }
-
-        private static async Task SeedDataForTesting(IContainer container)
-        {
-            await using var scope = container.BeginLifetimeScope();
-            var mediator = scope.Resolve<IMediator>();
-
-            var createVoter = new CreateVoter("12312312312");
-            await mediator.Send(createVoter);
-
-            var createQuestion = new CreateQuestion("Some question?", new[] { "Answer 1", "Answer 2", "Answer 3" });
-            await mediator.Send(createQuestion);
         }
     }
 }
