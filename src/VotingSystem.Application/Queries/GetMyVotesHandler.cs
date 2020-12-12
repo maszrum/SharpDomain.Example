@@ -24,8 +24,6 @@ namespace VotingSystem.Application.Queries
 
         public async Task<MyVotesViewModel> Handle(GetMyVotes request, CancellationToken cancellationToken)
         {
-            // TODO: validate request
-            
             var votes = await _votesRepository.GetByVoter(request.VoterId);
             
             var viewModel = _mapper.Map<IEnumerable<Vote>, MyVotesViewModel>(votes);

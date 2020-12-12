@@ -29,8 +29,8 @@ namespace VotingSystem.Core.EventHandlers
             
             if (answerResult is null)
             {
-                // TODO: proper exception
-                throw new Exception("not found");
+                throw new NullReferenceException(
+                    $"answer result associated with answer id {notification.AnswerId} was not found");
             }
             
             answerResult.IncrementVotes()

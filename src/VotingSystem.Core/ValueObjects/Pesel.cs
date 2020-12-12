@@ -1,4 +1,5 @@
 ﻿using System;
+using VotingSystem.Core.Exceptions;
 
 namespace VotingSystem.Core.ValueObjects
 {
@@ -8,8 +9,7 @@ namespace VotingSystem.Core.ValueObjects
         {
             if (string.IsNullOrWhiteSpace(pesel))
             {
-                // TODO: proper exception
-                throw new Exception();
+                throw new EmptyPeselException();
             }
             
             Code = pesel;
@@ -42,11 +42,15 @@ namespace VotingSystem.Core.ValueObjects
         {
             if (string.IsNullOrWhiteSpace(pesel))
             {
-                // TODO: proper exception
-                throw new Exception();
+                throw new EmptyPeselException();
             }
-            
-            // TODO: validate pesel
+
+            // deliberately do not do full validation
+            // if you want - do it
+            if (pesel.Length != 11)
+            {
+                throw new InvalidPeselException(pesel);
+            }
 
             return new Pesel(pesel);
         }

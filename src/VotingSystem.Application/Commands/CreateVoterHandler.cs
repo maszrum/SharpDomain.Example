@@ -30,19 +30,24 @@ namespace VotingSystem.Application.Commands
 
         public async Task<VoterViewModel> Handle(CreateVoter request, CancellationToken cancellationToken)
         {
+            await ThrowIfVoterAlreadyExists(request);
+
+            var voter = Voter.Create(request.Pesel)
+                .CollectEvents(_domainEvents);
+
+            await _domainEvents.PublishCollected(cancellationToken);
+
+            var viewModel = _mapper.Map<Voter, VoterViewModel>(voter);
+            return viewModel;
+        }
+
+        private async Task ThrowIfVoterAlreadyExists(CreateVoter request)
+        {
             var exists = await _voters.Exists(request.Pesel);
             if (exists)
             {
-                throw new VoterAlreadyExists(request.Pesel);
+                throw new VoterAlreadyExistsException(request.Pesel);
             }
-            
-            var voter = Voter.Create(request.Pesel)
-                .CollectEvents(_domainEvents);
-            
-            await _domainEvents.PublishCollected(cancellationToken);
-            
-            var viewModel = _mapper.Map<Voter, VoterViewModel>(voter);
-            return viewModel;
         }
     }
 }

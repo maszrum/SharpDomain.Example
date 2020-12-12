@@ -6,6 +6,7 @@ using VotingSystem.Core.Models;
 using VotingSystem.Core.ValueObjects;
 using VotingSystem.Persistence.Entities;
 using VotingSystem.Persistence.InMemory.Datastore;
+using VotingSystem.Persistence.InMemory.Exceptions;
 using VotingSystem.Persistence.RepositoryInterfaces;
 
 // ReSharper disable once UnusedType.Global
@@ -58,8 +59,8 @@ namespace VotingSystem.Persistence.InMemory.Repositories
         {
             if (_datastore.Voters.ContainsKey(voter.Id))
             {
-                // TODO: proper exception
-                throw new Exception();
+                throw new EntityAlreadyExistsException(
+                    typeof(VoterEntity), voter.Id);
             }
             
             _datastore.Voters.Add(voter.Id, voter);
@@ -71,8 +72,8 @@ namespace VotingSystem.Persistence.InMemory.Repositories
         {
             if (!_datastore.Voters.ContainsKey(voter.Id))
             {
-                // TODO: proper exception
-                throw new Exception();
+                throw new EntityNotFoundException(
+                    typeof(VoterEntity), voter.Id);
             }
             
             _datastore.Voters[voter.Id] = voter;

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
+using VotingSystem.Application.Exceptions;
 using VotingSystem.Application.ViewModels;
 using VotingSystem.Core.InfrastructureAbstractions;
 using VotingSystem.Core.Models;
@@ -31,8 +32,7 @@ namespace VotingSystem.Application.Queries
             
             if (voter is null)
             {
-                // TODO: proper exception
-                throw new Exception();
+                throw new LogInFailedException();
             }
             
             var viewModel = _mapper.Map<Voter, VoterViewModel>(voter);

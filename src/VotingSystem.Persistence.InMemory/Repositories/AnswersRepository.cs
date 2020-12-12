@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using VotingSystem.Persistence.Entities;
 using VotingSystem.Persistence.InMemory.Datastore;
+using VotingSystem.Persistence.InMemory.Exceptions;
 using VotingSystem.Persistence.RepositoryInterfaces;
 
 // ReSharper disable once UnusedType.Global
@@ -20,11 +21,11 @@ namespace VotingSystem.Persistence.InMemory.Repositories
 
         public Task Create(params AnswerEntity[] answers)
         {
-            var anyExist = answers.Any(a => _datastore.Answers.ContainsKey(a.Id));
-            if (anyExist)
+            var anyExist = answers.SingleOrDefault(a => _datastore.Answers.ContainsKey(a.Id));
+            if (anyExist is not null)
             {
-                // TODO: proper exception
-                throw new Exception();
+                throw new EntityAlreadyExistsException(
+                    typeof(AnswerEntity), anyExist.Id);
             }
             
             foreach (var answer in answers)

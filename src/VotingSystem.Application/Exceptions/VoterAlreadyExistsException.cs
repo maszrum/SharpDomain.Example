@@ -2,11 +2,11 @@
 
 namespace VotingSystem.Application.Exceptions
 {
-    internal class VoterAlreadyExists : ApplicationException
+    internal class VoterAlreadyExistsException : ApplicationException
     {
-        public string? Pesel { get; }
+        public string Pesel { get; }
 
-        public VoterAlreadyExists(string? pesel) 
+        public VoterAlreadyExistsException(string pesel) 
             : base($"voter with pesel {pesel} already exists")
         {
             Pesel = pesel;

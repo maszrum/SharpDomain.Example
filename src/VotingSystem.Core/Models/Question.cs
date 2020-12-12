@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using SharpDomain.Core;
 using VotingSystem.Core.Events;
+using VotingSystem.Core.Exceptions;
 
 namespace VotingSystem.Core.Models
 {
     public class Question : AggregateRoot<Question>
     {
+        public const int MinimmumAnswers = 2;
+
         public Question(
             Guid id, 
             string questionText, 
@@ -39,10 +42,10 @@ namespace VotingSystem.Core.Models
                     })
                 .ToList();
             
-            if (answerModels.Count < 2)
+            if (answerModels.Count < MinimmumAnswers)
             {
-                // TODO: proper exception
-                throw new Exception();
+                throw new TooFewAnswersToQuestionException(
+                    minimumAnswers: MinimmumAnswers);
             }
             
             var question = new Question(questionId, questionText, answerModels);

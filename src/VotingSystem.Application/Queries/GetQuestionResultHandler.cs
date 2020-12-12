@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
+using VotingSystem.Application.Exceptions;
 using VotingSystem.Application.ViewModels;
 using VotingSystem.Core.InfrastructureAbstractions;
 using VotingSystem.Core.Models;
@@ -15,29 +17,43 @@ namespace VotingSystem.Application.Queries
     {
         private readonly IMapper _mapper;
         private readonly IQuestionResultsRepository _questionResultsRepository;
+        private readonly IVotesRepository _votesRepository;
 
-        public GetQuestionResultHandler(IMapper mapper, IQuestionResultsRepository questionResultsRepository)
+        public GetQuestionResultHandler(
+            IMapper mapper, 
+            IQuestionResultsRepository questionResultsRepository, 
+            IVotesRepository votesRepository)
         {
             _mapper = mapper;
             _questionResultsRepository = questionResultsRepository;
+            _votesRepository = votesRepository;
         }
 
         public async Task<QuestionResultViewModel> Handle(GetQuestionResult request, CancellationToken cancellationToken)
         {
-            // TODO: validate request
-            // user not voted? -> access denied
+            await ThrowIfUserNotVoted(request);
             
             var questionResult = await _questionResultsRepository.GetQuestionResultByQuestionId(request.QuestionId);
             
             if (questionResult is null)
             {
-                // TODO: proper exception
-                throw new Exception();
+                throw new ObjectNotFoundException<Question>(request.QuestionId);
             }
             
             var viewModel = _mapper.Map<QuestionResult, QuestionResultViewModel>(questionResult);
             
             return viewModel;
+        }
+
+        private async Task ThrowIfUserNotVoted(GetQuestionResult request)
+        {
+            var userVotes = await _votesRepository.GetByVoter(request.VoterId);
+            var userVoted = userVotes.Any(v => v.QuestionId == request.QuestionId);
+            if (!userVoted)
+            {
+                throw new DenialOfAccessToVotingResultsException(
+                    request.VoterId, request.QuestionId);
+            }
         }
     }
 }

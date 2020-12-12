@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using SharpDomain.Core;
+using VotingSystem.Application.Exceptions;
 using VotingSystem.Core.InfrastructureAbstractions;
 using VotingSystem.Core.Models;
 
@@ -26,19 +26,24 @@ namespace VotingSystem.Application.Commands
 
         protected override async Task Handle(VoteFor request, CancellationToken cancellationToken)
         {
+            await ThrowIfVoterAlreadyVoted(request);
+
+            Vote.Create(request.VoterId, request.QuestionId, request.AnswerId)
+                .CollectEvents(_domainEvents);
+
+            await _domainEvents.PublishCollected(cancellationToken);
+        }
+
+        private async Task ThrowIfVoterAlreadyVoted(VoteFor request)
+        {
             var voterVotes = await _votesRepository.GetByVoter(request.VoterId);
-            
+
             var alreadyVoted = voterVotes.Any(v => v.QuestionId == request.QuestionId);
             if (alreadyVoted)
             {
-                // TODO: proper exception
-                throw new Exception();
+                throw new QuestionHasAlreadyBeenVotedException(
+                    request.QuestionId, request.VoterId);
             }
-            
-            Vote.Create(request.VoterId, request.QuestionId, request.AnswerId)
-                .CollectEvents(_domainEvents);
-            
-            await _domainEvents.PublishCollected(cancellationToken);
         }
     }
 }

@@ -5,6 +5,7 @@ using VotingSystem.Core.InfrastructureAbstractions;
 using VotingSystem.Core.Models;
 using VotingSystem.Persistence.Entities;
 using VotingSystem.Persistence.InMemory.Datastore;
+using VotingSystem.Persistence.InMemory.Exceptions;
 using VotingSystem.Persistence.RepositoryInterfaces;
 
 // ReSharper disable once UnusedType.Global
@@ -42,12 +43,12 @@ namespace VotingSystem.Persistence.InMemory.Repositories
         public Task Create(params AnswerResultEntity[] entities)
         {
             var anyExist = entities
-                .Any(e => _datastore.AnswerResults.ContainsKey(e.Id));
+                .SingleOrDefault(e => _datastore.AnswerResults.ContainsKey(e.Id));
             
-            if (anyExist)
+            if (anyExist is not null)
             {
-                // TODO: proper exception
-                throw new Exception();
+                throw new EntityAlreadyExistsException(
+                    typeof(AnswerResultEntity), anyExist.Id);
             }
 
             foreach (var entity in entities)
@@ -62,8 +63,8 @@ namespace VotingSystem.Persistence.InMemory.Repositories
         {
             if (!_datastore.AnswerResults.ContainsKey(entity.Id))
             {
-                // TODO: proper exception
-                throw new Exception();
+                throw new EntityNotFoundException(
+                    typeof(AnswerResultEntity), entity.Id);
             }
             
             _datastore.AnswerResults[entity.Id] = entity;

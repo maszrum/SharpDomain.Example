@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using VotingSystem.Application.Commands;
+using VotingSystem.Core.Models;
 
 // ReSharper disable once UnusedType.Global
 
@@ -12,7 +13,7 @@ namespace VotingSystem.Application.Validators
             RuleFor(x => x.QuestionText).NotEmpty();
             
             RuleFor(x => x.Answers).NotNull();
-            RuleFor(x => x.Answers.Count).GreaterThan(1);
+            RuleFor(x => x.Answers.Count).GreaterThanOrEqualTo(Question.MinimmumAnswers);
             RuleForEach(x => x.Answers).NotEmpty();
         }
     }
