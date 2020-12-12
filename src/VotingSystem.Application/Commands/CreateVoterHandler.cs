@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using SharpDomain.Core;
+using VotingSystem.Application.Exceptions;
 using VotingSystem.Application.ViewModels;
 using VotingSystem.Core.InfrastructureAbstractions;
 using VotingSystem.Core.Models;
@@ -29,7 +30,11 @@ namespace VotingSystem.Application.Commands
 
         public async Task<VoterViewModel> Handle(CreateVoter request, CancellationToken cancellationToken)
         {
-            // TODO: check if already exists
+            var exists = await _voters.Exists(request.Pesel);
+            if (exists)
+            {
+                throw new VoterAlreadyExists(request.Pesel);
+            }
             
             var voter = Voter.Create(request.Pesel)
                 .CollectEvents(_domainEvents);
