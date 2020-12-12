@@ -27,7 +27,7 @@ namespace VotingSystem.Application.Queries
         {
             var pesel = Pesel.ValidateAndCreate(request.Pesel);
             
-            var voter = await _votersRepository.GetVoterByPesel(pesel);
+            var voter = await _votersRepository.GetByPesel(pesel);
             
             if (voter is null)
             {

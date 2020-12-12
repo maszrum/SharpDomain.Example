@@ -21,7 +21,7 @@ namespace VotingSystem.Persistence.InMemory.Repositories
             _datastore = datastore;
         }
 
-        public Task<Voter?> GetVoterByPesel(Pesel pesel)
+        public Task<Voter?> GetByPesel(Pesel pesel)
         {
             var voterEntity = _datastore.Voters.Values
                 .SingleOrDefault(e => pesel.Equals(e.Pesel));
@@ -37,13 +37,18 @@ namespace VotingSystem.Persistence.InMemory.Repositories
             return Task.FromResult((Voter?)voter);
         }
 
-        public Task<bool> VoterExists(Guid id)
+        public Task<bool> Exists(string? pesel)
         {
-            var exists = _datastore.Voters.ContainsKey(id);
+            if (pesel == null)
+            {
+                throw new ArgumentNullException(nameof(pesel));
+            }
+
+            var exists = _datastore.Voters.Values.Any(v => v.Pesel == pesel);
             return Task.FromResult(exists);
         }
 
-        public Task<int> GetVotersCount()
+        public Task<int> GetCount()
         {
             var count = _datastore.Voters.Count;
             return Task.FromResult(count);

@@ -22,7 +22,7 @@ namespace VotingSystem.Core.EventHandlers
 
         public async Task Handle(VoterCreated notification, CancellationToken cancellationToken)
         {
-            var votersCount = await _votersRepository.GetVotersCount();
+            var votersCount = await _votersRepository.GetCount();
             if (votersCount == 1)
             {
                 var voter = notification.Voter;
