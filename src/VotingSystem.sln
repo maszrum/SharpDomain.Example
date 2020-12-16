@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VotingSystem.Persistence.In
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VotingSystem.ConsoleApp", "VotingSystem.ConsoleApp\VotingSystem.ConsoleApp.csproj", "{EE7E068F-10EA-48C6-99C2-3495A4BED07F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VotingSystem.WebApi", "VotingSystem.WebApi\VotingSystem.WebApi.csproj", "{559C222F-B922-4A9F-B91C-C57218F1516B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{6D20FC40-93B8-48F0-BC64-3845F3469900}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D20FC40-93B8-48F0-BC64-3845F3469900}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D20FC40-93B8-48F0-BC64-3845F3469900}.Release|Any CPU.Build.0 = Release|Any CPU
+		{559C222F-B922-4A9F-B91C-C57218F1516B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{559C222F-B922-4A9F-B91C-C57218F1516B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{559C222F-B922-4A9F-B91C-C57218F1516B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{559C222F-B922-4A9F-B91C-C57218F1516B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
