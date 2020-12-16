@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="SharpDomain.AutoTransaction" Version="0.1.0" />
+        <PackageReference Include="SharpDomain.AutoTransaction" Version="0.1.3" />
     </ItemGroup>
 
     <ItemGroup>
