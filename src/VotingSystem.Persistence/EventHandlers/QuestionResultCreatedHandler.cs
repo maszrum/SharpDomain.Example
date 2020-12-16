@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using MediatR;
+using SharpDomain.Persistence;
 using VotingSystem.Core.Events;
 using VotingSystem.Core.Models;
 using VotingSystem.Persistence.Entities;
@@ -13,7 +13,7 @@ using VotingSystem.Persistence.RepositoryInterfaces;
 
 namespace VotingSystem.Persistence.EventHandlers
 {
-    internal class QuestionResultCreatedHandler : INotificationHandler<QuestionResultCreated>
+    internal class QuestionResultCreatedHandler : InfrastructureHandler<QuestionResultCreated, QuestionResult>
     {
         private readonly IMapper _mapper;
         private readonly IQuestionResultsWriteRepository _questionResultsWriteRepository;
@@ -29,15 +29,14 @@ namespace VotingSystem.Persistence.EventHandlers
             _answerResultsWriteRepository = answerResultsWriteRepository;
         }
 
-        public async Task Handle(QuestionResultCreated notification, CancellationToken cancellationToken)
+        public override async Task Handle(QuestionResultCreated @event, QuestionResult model, CancellationToken cancellationToken)
         {
-            var questionResult = notification.QuestionResult;
-            var questionResultEntity = _mapper.Map<QuestionResult, QuestionResultEntity>(questionResult);
+            var questionResultEntity = _mapper.Map<QuestionResult, QuestionResultEntity>(model);
             
             await  _questionResultsWriteRepository.Create(questionResultEntity);
 
             var answerResultEntities = _mapper
-                .Map<IEnumerable<AnswerResult>, IEnumerable<AnswerResultEntity>>(questionResult.AnswerResults)
+                .Map<IEnumerable<AnswerResult>, IEnumerable<AnswerResultEntity>>(model.AnswerResults)
                 .ToArray();
 
             await _answerResultsWriteRepository.Create(answerResultEntities);

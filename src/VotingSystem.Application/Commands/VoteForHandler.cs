@@ -28,10 +28,11 @@ namespace VotingSystem.Application.Commands
         {
             await ThrowIfVoterAlreadyVoted(request);
 
-            Vote.Create(request.VoterId, request.QuestionId, request.AnswerId)
-                .CollectEvents(_domainEvents);
+            var vote = Vote.Create(request.VoterId, request.QuestionId, request.AnswerId);
 
-            await _domainEvents.PublishCollected(cancellationToken);
+            await _domainEvents
+                .CollectFrom(vote)
+                .PublishCollected(cancellationToken);
         }
 
         private async Task ThrowIfVoterAlreadyVoted(VoteFor request)

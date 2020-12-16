@@ -25,12 +25,13 @@ namespace VotingSystem.Application.Commands
 
         public async Task<QuestionViewModel> Handle(CreateQuestion request, CancellationToken cancellationToken)
         {
-            var model = Question.Create(request.QuestionText, request.Answers)
-                .CollectEvents(_domainEvents);
+            var question = Question.Create(request.QuestionText, request.Answers);
             
-            await _domainEvents.PublishCollected(cancellationToken);
+            await _domainEvents
+                .CollectFrom(question)
+                .PublishCollected(cancellationToken);
             
-            var viewModel = _mapper.Map<Question, QuestionViewModel>(model);
+            var viewModel = _mapper.Map<Question, QuestionViewModel>(question);
             return viewModel;
         }
     }

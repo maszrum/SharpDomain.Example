@@ -1,19 +1,19 @@
 ﻿using System;
-using MediatR;
-using VotingSystem.Core.Models;
+using SharpDomain.Core;
 
 namespace VotingSystem.Core.Events
 {
-    public class VotePosted : INotification
+    public class VotePosted : EventBase
     {
-        public VotePosted(Vote vote, Guid answerId)
+        public VotePosted(Guid voteId, Guid questionId, Guid answerId)
         {
-            Vote = vote;
+            VoteId = voteId;
+            QuestionId = questionId;
             AnswerId = answerId;
         }
-
-        public Vote Vote { get; }
         
+        public Guid VoteId { get; }
+        public Guid QuestionId { get; }
         public Guid AnswerId { get; }
     }
 }

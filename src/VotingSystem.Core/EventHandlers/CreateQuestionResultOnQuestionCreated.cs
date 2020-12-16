@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
 using SharpDomain.Core;
 using VotingSystem.Core.Events;
 using VotingSystem.Core.Models;
@@ -9,7 +8,7 @@ using VotingSystem.Core.Models;
 
 namespace VotingSystem.Core.EventHandlers
 {
-    internal class CreateQuestionResultOnQuestionCreated : INotificationHandler<QuestionCreated>
+    internal class CreateQuestionResultOnQuestionCreated : DomainEventHandler<QuestionCreated, Question>
     {
         private readonly IDomainEvents _domainEvents;
 
@@ -18,13 +17,13 @@ namespace VotingSystem.Core.EventHandlers
             _domainEvents = domainEvents;
         }
 
-        public Task Handle(QuestionCreated notification, CancellationToken cancellationToken)
+        public override Task Handle(QuestionCreated @event, Question model, CancellationToken cancellationToken)
         {
-            var question = notification.Question;
-            QuestionResult.CreateFromQuestion(question)
-                .CollectEvents(_domainEvents);
-            
-            return _domainEvents.PublishCollected(cancellationToken);
+            var questionResult = QuestionResult.CreateFromQuestion(model);
+
+            return _domainEvents
+                .CollectFrom(questionResult)
+                .PublishCollected(cancellationToken);
         }
     }
 }

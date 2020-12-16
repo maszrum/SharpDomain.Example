@@ -32,10 +32,11 @@ namespace VotingSystem.Application.Commands
         {
             await ThrowIfVoterAlreadyExists(request);
 
-            var voter = Voter.Create(request.Pesel)
-                .CollectEvents(_domainEvents);
+            var voter = Voter.Create(request.Pesel);
 
-            await _domainEvents.PublishCollected(cancellationToken);
+            await _domainEvents
+                .CollectFrom(voter)
+                .PublishCollected(cancellationToken);
 
             var viewModel = _mapper.Map<Voter, VoterViewModel>(voter);
             return viewModel;

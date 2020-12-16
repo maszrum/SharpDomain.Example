@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using MediatR;
+using SharpDomain.Persistence;
 using VotingSystem.Core.Events;
 using VotingSystem.Core.Models;
 using VotingSystem.Persistence.Entities;
@@ -11,7 +11,7 @@ using VotingSystem.Persistence.RepositoryInterfaces;
 
 namespace VotingSystem.Persistence.EventHandlers
 {
-    internal class VotePostedHandler : INotificationHandler<VotePosted>
+    internal class VotePostedHandler : InfrastructureHandler<VotePosted, Vote>
     {
         private readonly IMapper _mapper;
         private readonly IVotesWriteRepository _votesWriteRepository;
@@ -22,10 +22,9 @@ namespace VotingSystem.Persistence.EventHandlers
             _votesWriteRepository = votesWriteRepository;
         }
 
-        public Task Handle(VotePosted notification, CancellationToken cancellationToken)
+        public override Task Handle(VotePosted @event, Vote model, CancellationToken cancellationToken)
         {
-            var vote = notification.Vote;
-            var voteEntity = _mapper.Map<Vote, VoteEntity>(vote);
+            var voteEntity = _mapper.Map<Vote, VoteEntity>(model);
             
             return _votesWriteRepository.Create(voteEntity);
         }

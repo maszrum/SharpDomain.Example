@@ -7,9 +7,9 @@ using VotingSystem.Core.Exceptions;
 
 namespace VotingSystem.Core.Models
 {
-    public class Question : AggregateRoot<Question>
+    public class Question : AggregateRoot
     {
-        public const int MinimmumAnswers = 2;
+        public const int MinimumAnswers = 2;
 
         public Question(
             Guid id, 
@@ -28,7 +28,7 @@ namespace VotingSystem.Core.Models
         private readonly List<Answer> _answers;
         public IReadOnlyList<Answer> Answers => _answers;
         
-        public static IDomainResult<Question> Create(string questionText, IEnumerable<string> answers)
+        public static Question Create(string questionText, IEnumerable<string> answers)
         {
             var questionId = Guid.NewGuid();
             
@@ -42,17 +42,18 @@ namespace VotingSystem.Core.Models
                     })
                 .ToList();
             
-            if (answerModels.Count < MinimmumAnswers)
+            if (answerModels.Count < MinimumAnswers)
             {
                 throw new TooFewAnswersToQuestionException(
-                    minimumAnswers: MinimmumAnswers);
+                    minimumAnswers: MinimumAnswers);
             }
             
             var question = new Question(questionId, questionText, answerModels);
             
-            var @event = new QuestionCreated(question);
+            var createdEvent = new QuestionCreated(questionId);
+            question.Events.Append(createdEvent);
             
-            return Event(@event, question);
+            return question;
         }
     }
 }

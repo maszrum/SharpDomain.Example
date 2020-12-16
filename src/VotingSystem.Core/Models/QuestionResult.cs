@@ -6,7 +6,7 @@ using VotingSystem.Core.Events;
 
 namespace VotingSystem.Core.Models
 {
-    public class QuestionResult : AggregateRoot<QuestionResult>
+    public class QuestionResult : AggregateRoot
     {
         public QuestionResult(
             Guid id, 
@@ -24,7 +24,7 @@ namespace VotingSystem.Core.Models
         
         public IReadOnlyList<AnswerResult> AnswerResults { get; }
         
-        public static IDomainResult<QuestionResult> CreateFromQuestion(Question question)
+        public static QuestionResult CreateFromQuestion(Question question)
         {
             var questionResultId = Guid.NewGuid();
             
@@ -37,9 +37,10 @@ namespace VotingSystem.Core.Models
             
             var questionResult = new QuestionResult(questionResultId, question.Id, answerResults);
             
-            var createdEvent = new QuestionResultCreated(questionResult);
+            var createdEvent = new QuestionResultCreated(questionResultId, question.Id);
+            questionResult.Events.Append(createdEvent);
             
-            return Event(createdEvent, questionResult);
+            return questionResult;
         }
     }
 }

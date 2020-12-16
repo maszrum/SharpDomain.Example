@@ -3,8 +3,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using MediatR;
 using SharpDomain.Core;
+using SharpDomain.Persistence;
 using VotingSystem.Core.Models;
 using VotingSystem.Persistence.Entities;
 using VotingSystem.Persistence.RepositoryInterfaces;
@@ -13,7 +13,7 @@ using VotingSystem.Persistence.RepositoryInterfaces;
 
 namespace VotingSystem.Persistence.EventHandlers
 {
-    internal class AnswerResultChangedHandler : INotificationHandler<ModelChanged<AnswerResult>>
+    internal class AnswerResultChangedHandler : InfrastructureHandler<ModelChanged<AnswerResult>, AnswerResult>
     {
         private static readonly string[] ValidPropertiesChange = { nameof(AnswerResult.Votes) };
         
@@ -28,9 +28,9 @@ namespace VotingSystem.Persistence.EventHandlers
             _answerResultsWriteRepository = answerResultsWriteRepository;
         }
 
-        public Task Handle(ModelChanged<AnswerResult> notification, CancellationToken cancellationToken)
+        public override Task Handle(ModelChanged<AnswerResult> @event, AnswerResult model, CancellationToken cancellationToken)
         {
-            var invalidPropertyChanged = notification.PropertiesChanged
+            var invalidPropertyChanged = @event.PropertiesChanged
                 .FirstOrDefault(p => !ValidPropertiesChange.Contains(p));
             
             if (!string.IsNullOrEmpty(invalidPropertyChanged))
@@ -39,8 +39,7 @@ namespace VotingSystem.Persistence.EventHandlers
                     $"invalid property changed in {nameof(AnswerResult)}: {invalidPropertyChanged}");
             }
             
-            var answerResult = notification.Model;
-            var answerResultEntity = _mapper.Map<AnswerResult, AnswerResultEntity>(answerResult);
+            var answerResultEntity = _mapper.Map<AnswerResult, AnswerResultEntity>(model);
             
             return _answerResultsWriteRepository.Update(answerResultEntity);
         }

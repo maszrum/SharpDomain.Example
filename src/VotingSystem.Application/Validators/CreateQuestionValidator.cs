@@ -13,7 +13,7 @@ namespace VotingSystem.Application.Validators
             RuleFor(x => x.QuestionText).NotEmpty();
             
             RuleFor(x => x.Answers).NotNull();
-            RuleFor(x => x.Answers.Count).GreaterThanOrEqualTo(Question.MinimmumAnswers);
+            RuleFor(x => x.Answers.Count).GreaterThanOrEqualTo(Question.MinimumAnswers);
             RuleForEach(x => x.Answers).NotEmpty();
         }
     }

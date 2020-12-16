@@ -16,7 +16,7 @@ namespace VotingSystem.ConsoleApp.CommandLine.ResultTracking
 
         public Task Handle(AnswerResultIncremented notification, CancellationToken cancellationToken)
         {
-            _notificator.Publish(notification.AnswerResult.AnswerId);
+            _notificator.Publish(notification.AnswerId);
 
             return Task.CompletedTask;
         }

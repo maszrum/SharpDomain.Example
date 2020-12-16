@@ -5,12 +5,13 @@ using MediatR;
 using SharpDomain.Core;
 using VotingSystem.Core.Events;
 using VotingSystem.Core.InfrastructureAbstractions;
+using VotingSystem.Core.Models;
 
 // ReSharper disable once UnusedType.Global
 
 namespace VotingSystem.Core.EventHandlers
 {
-    internal class UpdateAnswerResultOnVotePosted : INotificationHandler<VotePosted>
+    internal class UpdateAnswerResultOnVotePosted : DomainEventHandler<VotePosted, Vote>
     {
         private readonly IDomainEvents _domainEvents;
         private readonly IAnswerResultsRepository _answerResultsRepository;
@@ -23,20 +24,21 @@ namespace VotingSystem.Core.EventHandlers
             _answerResultsRepository = answerResultsRepository;
         }
 
-        public async Task Handle(VotePosted notification, CancellationToken cancellationToken)
+        public override async Task Handle(VotePosted @event, Vote model, CancellationToken cancellationToken)
         {
-            var answerResult = await _answerResultsRepository.GetAnswerResultByAnswerId(notification.AnswerId);
+            var answerResult = await _answerResultsRepository.GetAnswerResultByAnswerId(@event.AnswerId);
             
             if (answerResult is null)
             {
                 throw new NullReferenceException(
-                    $"answer result associated with answer id {notification.AnswerId} was not found");
+                    $"answer result associated with answer id {@event.AnswerId} was not found");
             }
             
-            answerResult.IncrementVotes()
-                .CollectEvents(_domainEvents);
+            answerResult.IncrementVotes();
             
-            await _domainEvents.PublishCollected(cancellationToken);
+            await _domainEvents
+                .CollectFrom(answerResult)
+                .PublishCollected(cancellationToken);
         }
     }
 }

@@ -5,7 +5,7 @@ using VotingSystem.Core.ValueObjects;
 
 namespace VotingSystem.Core.Models
 {
-    public class Voter : AggregateRoot<Voter>
+    public class Voter : AggregateRoot
     {
         public Voter(
             Guid id, 
@@ -23,16 +23,17 @@ namespace VotingSystem.Core.Models
         
         public bool IsAdministrator { get; set; }
         
-        public static IDomainResult<Voter> Create(string? pesel)
+        public static Voter Create(string? pesel)
         {
-            var id = Guid.NewGuid();
+            var voterId = Guid.NewGuid();
             var peselValue = new Pesel(pesel);
             
-            var model = new Voter(id, peselValue, isAdministrator: false);
+            var voter = new Voter(voterId, peselValue, isAdministrator: false);
             
-            var createdEvent = new VoterCreated(model);
+            var createdEvent = new VoterCreated(voterId);
+            voter.Events.Append(createdEvent);
             
-            return Event(createdEvent, model);
+            return voter;
         }
     }
 }

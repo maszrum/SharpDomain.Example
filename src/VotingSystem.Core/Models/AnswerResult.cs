@@ -4,7 +4,7 @@ using VotingSystem.Core.Events;
 
 namespace VotingSystem.Core.Models
 {
-    public class AnswerResult : Aggregate<AnswerResult>
+    public class AnswerResult : Aggregate
     {
         public AnswerResult(
             Guid id, 
@@ -26,16 +26,16 @@ namespace VotingSystem.Core.Models
         
         public int Votes { get; private set; }
         
-        public IDomainResult<AnswerResult> IncrementVotes()
+        public void IncrementVotes()
         {
             var changedEvent = this.CaptureChangedEvent(
                 model => model.Votes++);
             
-            var incrementedEvent = new AnswerResultIncremented(this);
+            var incrementedEvent = new AnswerResultIncremented(Id, AnswerId);
             
-            return Events(
-                changedEvent, 
-                incrementedEvent);
+            Events
+                .Append(changedEvent)
+                .Append(incrementedEvent);
         }
     }
 }

@@ -4,7 +4,7 @@ using VotingSystem.Core.Events;
 
 namespace VotingSystem.Core.Models
 {
-    public class Vote : AggregateRoot<Vote>
+    public class Vote : AggregateRoot
     {
         public Vote(
             Guid id, 
@@ -22,14 +22,15 @@ namespace VotingSystem.Core.Models
 
         public Guid QuestionId { get; }
         
-        public static IDomainResult<Vote> Create(Guid voterId, Guid questionId, Guid answerId)
+        public static Vote Create(Guid voterId, Guid questionId, Guid answerId)
         {
-            var id = Guid.NewGuid();
-            var model = new Vote(id, voterId, questionId);
+            var voteId = Guid.NewGuid();
+            var vote = new Vote(voteId, voterId, questionId);
             
-            var createdEvent = new VotePosted(model, answerId);
+            var createdEvent = new VotePosted(voteId, questionId, answerId);
+            vote.Events.Append(createdEvent);
             
-            return Event(createdEvent, model);
+            return vote;
         }
     }
 }

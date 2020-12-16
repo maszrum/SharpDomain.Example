@@ -3,7 +3,7 @@ using SharpDomain.Core;
 
 namespace VotingSystem.Core.Models
 {
-    public class Answer : Aggregate<Answer>
+    public class Answer : Aggregate
     {
         public Answer(
             Guid id, 
