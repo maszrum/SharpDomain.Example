@@ -38,7 +38,7 @@ namespace VotingSystem.Core.Models
             var questionResult = new QuestionResult(questionResultId, question.Id, answerResults);
             
             var createdEvent = new QuestionResultCreated(questionResultId, question.Id);
-            questionResult.Events.Append(createdEvent);
+            questionResult.Events.Add(createdEvent);
             
             return questionResult;
         }

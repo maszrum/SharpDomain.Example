@@ -31,7 +31,7 @@ namespace VotingSystem.Core.Models
             var voter = new Voter(voterId, peselValue, isAdministrator: false);
             
             var createdEvent = new VoterCreated(voterId);
-            voter.Events.Append(createdEvent);
+            voter.Events.Add(createdEvent);
             
             return voter;
         }

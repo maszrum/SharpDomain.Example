@@ -33,9 +33,9 @@ namespace VotingSystem.Core.Models
             
             var incrementedEvent = new AnswerResultIncremented(Id, AnswerId);
             
-            Events
-                .Append(changedEvent)
-                .Append(incrementedEvent);
+            Events.Add(
+                changedEvent, 
+                incrementedEvent);
         }
     }
 }

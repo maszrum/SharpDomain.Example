@@ -28,7 +28,7 @@ namespace VotingSystem.Core.Models
             var vote = new Vote(voteId, voterId, questionId);
             
             var createdEvent = new VotePosted(voteId, questionId, answerId);
-            vote.Events.Append(createdEvent);
+            vote.Events.Add(createdEvent);
             
             return vote;
         }
