@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using VotingSystem.WebApi.Authentication;
 
 namespace VotingSystem.WebApi
 {
@@ -22,6 +23,9 @@ namespace VotingSystem.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            
+            services.AddJwtAuthentication(Configuration);
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "VotingSystem.WebApi", Version = "v1"});
