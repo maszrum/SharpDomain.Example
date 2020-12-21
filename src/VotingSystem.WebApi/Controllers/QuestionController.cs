@@ -4,12 +4,13 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using VotingSystem.Application.Commands;
 using VotingSystem.Application.Queries;
+using VotingSystem.WebApi.SharpDomain;
 
 namespace VotingSystem.WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class QuestionController : ControllerBase
+    public class QuestionController : DomainController
     {
         private readonly IMediator _mediator;
 
@@ -24,7 +25,7 @@ namespace VotingSystem.WebApi.Controllers
             var request = new GetQuestions();
             var response = await _mediator.Send(request);
             
-            return Ok(response);
+            return HandleErrors(response, Ok);
         }
         
         [HttpPost]
@@ -32,7 +33,7 @@ namespace VotingSystem.WebApi.Controllers
         {
             var response = await _mediator.Send(request);
             
-            return Ok(response);
+            return HandleErrors(response, Ok);
         }
         
         // TODO: remove voterId param and get it from jwt
@@ -44,7 +45,7 @@ namespace VotingSystem.WebApi.Controllers
             var request = new GetQuestionResult(questionId, voterId);
             var response = await _mediator.Send(request);
             
-            return Ok(response);
+            return HandleErrors(response, Ok);
         }
     }
 }

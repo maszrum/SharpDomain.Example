@@ -2,12 +2,13 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using VotingSystem.Application.Commands;
+using VotingSystem.WebApi.SharpDomain;
 
 namespace VotingSystem.WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class VoteController : ControllerBase
+    public class VoteController : DomainController
     {
         private readonly IMediator _mediator;
 
@@ -19,9 +20,9 @@ namespace VotingSystem.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Vote([FromBody] VoteFor request)
         {
-            await _mediator.Send(request);
+            var response = await _mediator.Send(request);
             
-            return Ok();
+            return HandleErrors(response, _ => Ok());
         }
     }
 }

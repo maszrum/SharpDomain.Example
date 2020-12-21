@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using VotingSystem.Application.Commands;
 using VotingSystem.Application.Queries;
+using VotingSystem.WebApi.SharpDomain;
 
 namespace VotingSystem.WebApi.Controllers
 {
@@ -11,7 +12,7 @@ namespace VotingSystem.WebApi.Controllers
     
     [ApiController]
     [Route("[controller]")]
-    public class AuthenticationController : ControllerBase
+    public class AuthenticationController : DomainController
     {
         private readonly IMediator _mediator;
 
@@ -25,7 +26,7 @@ namespace VotingSystem.WebApi.Controllers
         {
             var response = await _mediator.Send(request);
             
-            return Ok(response);
+            return HandleErrors(response, Ok);
         }
 
         [HttpPost("register")]
@@ -33,7 +34,7 @@ namespace VotingSystem.WebApi.Controllers
         {
             var response = await _mediator.Send(request);
             
-            return Ok(response);
+            return HandleErrors(response, Ok);
         }
     }
 }
