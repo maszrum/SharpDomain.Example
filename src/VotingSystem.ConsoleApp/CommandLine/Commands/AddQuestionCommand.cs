@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
+using SharpDomain.Application;
 using VotingSystem.Application.Commands;
 using VotingSystem.Application.ViewModels;
 
@@ -68,7 +69,8 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
             QuestionViewModel addQuestionResponse;
             try
             {
-                addQuestionResponse = await _mediator.Send(addQuestion);
+                addQuestionResponse = await _mediator.Send(addQuestion)
+                    .OnError(error => throw new InvalidOperationException(error.ToString()));
             }
             catch (Exception exception)
             {

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using SharpDomain.Application;
 using VotingSystem.Application.Queries;
 using VotingSystem.Application.ViewModels;
 
@@ -15,7 +16,8 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
             QuestionsListViewModel getQuestionsResponse;
             try
             {
-                getQuestionsResponse = await mediator.Send(getQuestions);
+                getQuestionsResponse = await mediator.Send(getQuestions)
+                    .OnError(error => throw new InvalidOperationException(error.ToString()));
             }
             catch (Exception exception)
             {

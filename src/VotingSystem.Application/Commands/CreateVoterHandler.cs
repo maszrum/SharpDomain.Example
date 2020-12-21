@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using MediatR;
+using SharpDomain.Application;
 using SharpDomain.Core;
-using VotingSystem.Application.Exceptions;
+using SharpDomain.Errors;
 using VotingSystem.Application.ViewModels;
 using VotingSystem.Core.InfrastructureAbstractions;
 using VotingSystem.Core.Models;
@@ -12,7 +12,7 @@ using VotingSystem.Core.Models;
 
 namespace VotingSystem.Application.Commands
 {
-    internal class CreateVoterHandler : IRequestHandler<CreateVoter, VoterViewModel>
+    internal class CreateVoterHandler : ICommandHandler<CreateVoter, VoterViewModel>
     {
         private readonly IMapper _mapper;
         private readonly IVotersRepository _voters;
@@ -28,9 +28,13 @@ namespace VotingSystem.Application.Commands
             _domainEvents = domainEvents;
         }
 
-        public async Task<VoterViewModel> Handle(CreateVoter request, CancellationToken cancellationToken)
+        public async Task<Response<VoterViewModel>> Handle(CreateVoter request, CancellationToken cancellationToken)
         {
-            await ThrowIfVoterAlreadyExists(request);
+            var exists = await _voters.Exists(request.Pesel);
+            if (exists)
+            {
+                return ObjectAlreadyExistsError.CreateFor<Voter>();
+            }
 
             var voter = Voter.Create(request.Pesel);
 
@@ -40,15 +44,6 @@ namespace VotingSystem.Application.Commands
 
             var viewModel = _mapper.Map<Voter, VoterViewModel>(voter);
             return viewModel;
-        }
-
-        private async Task ThrowIfVoterAlreadyExists(CreateVoter request)
-        {
-            var exists = await _voters.Exists(request.Pesel);
-            if (exists)
-            {
-                throw new VoterAlreadyExistsException(request.Pesel);
-            }
         }
     }
 }

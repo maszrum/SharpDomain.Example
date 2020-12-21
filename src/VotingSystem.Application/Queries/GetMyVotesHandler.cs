@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using MediatR;
+using SharpDomain.Application;
 using VotingSystem.Application.ViewModels;
 using VotingSystem.Core.InfrastructureAbstractions;
 using VotingSystem.Core.Models;
@@ -11,7 +11,7 @@ using VotingSystem.Core.Models;
 
 namespace VotingSystem.Application.Queries
 {
-    internal class GetMyVotesHandler : IRequestHandler<GetMyVotes, MyVotesViewModel>
+    internal class GetMyVotesHandler : IQueryHandler<GetMyVotes, MyVotesViewModel>
     {
         private readonly IMapper _mapper;
         private readonly IVotesRepository _votesRepository;
@@ -22,7 +22,7 @@ namespace VotingSystem.Application.Queries
             _mapper = mapper;
         }
 
-        public async Task<MyVotesViewModel> Handle(GetMyVotes request, CancellationToken cancellationToken)
+        public async Task<Response<MyVotesViewModel>> Handle(GetMyVotes request, CancellationToken cancellationToken)
         {
             var votes = await _votesRepository.GetByVoter(request.VoterId);
             

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using MediatR;
+using SharpDomain.Application;
 using VotingSystem.Application.ViewModels;
 
 namespace VotingSystem.Application.Commands
 {
-    public class CreateQuestion : IRequest<QuestionViewModel>
+    public class CreateQuestion : ICommand<QuestionViewModel>
     {
         public CreateQuestion(
             string questionText, 

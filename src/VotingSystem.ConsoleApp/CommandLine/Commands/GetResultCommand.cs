@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using SharpDomain.Application;
 using VotingSystem.Application.Queries;
 using VotingSystem.Application.ViewModels;
 using VotingSystem.ConsoleApp.CommandLine.ResultTracking;
@@ -49,7 +50,8 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
             QuestionResultViewModel getQuestionResultResponse;
             try
             {
-                getQuestionResultResponse = await _mediator.Send(getQuestionResult);
+                getQuestionResultResponse = await _mediator.Send(getQuestionResult)
+                    .OnError(error => throw new InvalidOperationException(error.ToString()));
             }
             catch (Exception exception)
             {

@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using SharpDomain.Application;
 using SharpDomain.Core;
-using VotingSystem.Application.Exceptions;
+using SharpDomain.Errors;
 using VotingSystem.Core.InfrastructureAbstractions;
 using VotingSystem.Core.Models;
 
@@ -11,7 +11,7 @@ using VotingSystem.Core.Models;
 
 namespace VotingSystem.Application.Commands
 {
-    internal class VoteForHandler : AsyncRequestHandler<VoteFor>
+    internal class VoteForHandler : CommandHandler<VoteFor>
     {
         private readonly IDomainEvents _domainEvents;
         private readonly IVotesRepository _votesRepository;
@@ -24,27 +24,27 @@ namespace VotingSystem.Application.Commands
             _votesRepository = votesRepository;
         }
 
-        protected override async Task Handle(VoteFor request, CancellationToken cancellationToken)
-        {
-            await ThrowIfVoterAlreadyVoted(request);
-
-            var vote = Vote.Create(request.VoterId, request.QuestionId, request.AnswerId);
-
-            await _domainEvents
-                .CollectFrom(vote)
-                .PublishCollected(cancellationToken);
-        }
-
-        private async Task ThrowIfVoterAlreadyVoted(VoteFor request)
+        public override async Task<Response<Empty>> Handle(VoteFor request, CancellationToken cancellationToken)
         {
             var voterVotes = await _votesRepository.GetByVoter(request.VoterId);
 
             var alreadyVoted = voterVotes.Any(v => v.QuestionId == request.QuestionId);
             if (alreadyVoted)
             {
-                throw new QuestionHasAlreadyBeenVotedException(
-                    request.QuestionId, request.VoterId);
+                return new UserError("this question has already been voted");
             }
+
+            var vote = Vote.Create(request.VoterId, request.QuestionId, request.AnswerId);
+
+            await _domainEvents
+                .CollectFrom(vote)
+                .PublishCollected(cancellationToken);
+            
+            var not1 = base.Nothing();
+            var not2 = this.Nothing();
+            var not3 = Nothing();
+            
+            return Nothing();
         }
     }
 }

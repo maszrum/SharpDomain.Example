@@ -44,7 +44,7 @@ namespace VotingSystem.Core.Models
             
             if (answerModels.Count < MinimumAnswers)
             {
-                throw new TooFewAnswersToQuestionException(
+                throw new TooFewAnswersInQuestionException(
                     minimumAnswers: MinimumAnswers);
             }
             

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
+using SharpDomain.Application;
 using VotingSystem.Application.Commands;
 
 namespace VotingSystem.ConsoleApp.CommandLine.Commands
@@ -49,7 +50,8 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
             
             try
             {
-                await _mediator.Send(voteFor);
+                await _mediator.Send(voteFor)
+                    .OnError(error => throw new InvalidOperationException(error.ToString()));
             }
             catch (Exception exception)
             {

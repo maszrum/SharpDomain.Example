@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using MediatR;
+using SharpDomain.Application;
 using VotingSystem.Application.Commands;
 using VotingSystem.Application.Queries;
 
@@ -24,13 +25,16 @@ namespace VotingSystem.ConsoleApp
             await using var scope = _container.BeginLifetimeScope();
             var mediator = _container.Resolve<IMediator>();
             
-            var pesel = GenerateRandomPesel();
+            var voter = await EnsureNotError(() =>
+            {
+                var pesel = GenerateRandomPesel();
+                var createVoter = new CreateVoter(pesel);
+                return mediator.Send(createVoter);
+            });
             
-            var createVoter = new CreateVoter(pesel);
-            var createVoterResponse = await mediator.Send(createVoter);
-
-            var logIn = new LogIn(createVoterResponse.Pesel);
-            var logInResponse = await mediator.Send(logIn);
+            var logIn = new LogIn(voter.Pesel);
+            var logInResponse = await mediator.Send(logIn)
+                .OnError(error => throw new InvalidOperationException(error.ToString()));
             
             _voterId = logInResponse.Id;
         }
@@ -50,8 +54,11 @@ namespace VotingSystem.ConsoleApp
             
             var getQuestions = new GetQuestions();
             var getQuestionsResponse = await mediator.Send(getQuestions);
+            
+            var questionsList = getQuestionsResponse
+                .OnError(error => throw new InvalidOperationException(error.ToString()));
 
-            foreach (var question in getQuestionsResponse.Questions)
+            foreach (var question in questionsList.Questions)
             {
                 var answerGuids = question.Answers
                     .Select(a => a.Id)
@@ -81,6 +88,28 @@ namespace VotingSystem.ConsoleApp
         {
             var index = Random.Next(0, guids.Count);
             return guids[index];
+        }
+        
+        private static async Task<TData> EnsureNotError<TData>(Func<Task<Response<TData>>> action) 
+            where TData : class
+        {
+            var tries = 0;
+            Response<TData> response;
+            TData? data;
+            do
+            {
+                if (tries == 3)
+                {
+                    throw new InvalidOperationException(
+                        $"received error {tries} times when invoking action");
+                }
+                
+                response = await action();
+                tries++;
+            }
+            while (!response.TryGet(out data));
+            
+            return data;
         }
     }
 }

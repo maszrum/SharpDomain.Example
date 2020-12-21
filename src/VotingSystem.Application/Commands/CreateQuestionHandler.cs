@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using MediatR;
+using SharpDomain.Application;
 using SharpDomain.Core;
 using VotingSystem.Application.ViewModels;
 using VotingSystem.Core.Models;
@@ -10,7 +10,7 @@ using VotingSystem.Core.Models;
 
 namespace VotingSystem.Application.Commands
 {
-    internal class CreateQuestionHandler : IRequestHandler<CreateQuestion, QuestionViewModel>
+    internal class CreateQuestionHandler : ICommandHandler<CreateQuestion, QuestionViewModel>
     {
         private readonly IMapper _mapper;
         private readonly IDomainEvents _domainEvents;
@@ -23,7 +23,7 @@ namespace VotingSystem.Application.Commands
             _domainEvents = domainEvents;
         }
 
-        public async Task<QuestionViewModel> Handle(CreateQuestion request, CancellationToken cancellationToken)
+        public async Task<Response<QuestionViewModel>> Handle(CreateQuestion request, CancellationToken cancellationToken)
         {
             var question = Question.Create(request.QuestionText, request.Answers);
             

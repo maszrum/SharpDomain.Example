@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using MediatR;
+using SharpDomain.Application;
 using VotingSystem.Application.ViewModels;
 using VotingSystem.Core.InfrastructureAbstractions;
 using VotingSystem.Core.Models;
@@ -10,7 +10,7 @@ using VotingSystem.Core.Models;
 namespace VotingSystem.Application.Queries
 {
     // ReSharper disable once UnusedType.Global
-    internal class GetQuestionsHandler : IRequestHandler<GetQuestions, QuestionsListViewModel>
+    internal class GetQuestionsHandler : IQueryHandler<GetQuestions, QuestionsListViewModel>
     {
         private readonly IMapper _mapper;
         private readonly IQuestionsRepository _questionsRepository;
@@ -23,7 +23,7 @@ namespace VotingSystem.Application.Queries
             _questionsRepository = questionsRepository;
         }
 
-        public async Task<QuestionsListViewModel> Handle(GetQuestions request, CancellationToken cancellationToken)
+        public async Task<Response<QuestionsListViewModel>> Handle(GetQuestions request, CancellationToken cancellationToken)
         {
             var questions = await _questionsRepository.GetAll();
             

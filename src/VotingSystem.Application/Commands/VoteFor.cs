@@ -1,9 +1,9 @@
 ﻿using System;
-using MediatR;
+using SharpDomain.Application;
 
 namespace VotingSystem.Application.Commands
 {
-    public class VoteFor : IRequest
+    public class VoteFor : ICommand
     {
         public VoteFor(Guid voterId, Guid questionId, Guid answerId)
         {

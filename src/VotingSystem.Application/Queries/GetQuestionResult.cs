@@ -1,10 +1,10 @@
 ﻿using System;
-using MediatR;
+using SharpDomain.Application;
 using VotingSystem.Application.ViewModels;
 
 namespace VotingSystem.Application.Queries
 {
-    public class GetQuestionResult : IRequest<QuestionResultViewModel>
+    public class GetQuestionResult : IQuery<QuestionResultViewModel>
     {
         public GetQuestionResult(Guid questionId, Guid voterId)
         {

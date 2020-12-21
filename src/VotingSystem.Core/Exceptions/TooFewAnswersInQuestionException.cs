@@ -2,9 +2,9 @@
 
 namespace VotingSystem.Core.Exceptions
 {
-    internal class TooFewAnswersToQuestionException : DomainException
+    internal class TooFewAnswersInQuestionException : DomainException
     {
-        public TooFewAnswersToQuestionException(int minimumAnswers) 
+        public TooFewAnswersInQuestionException(int minimumAnswers) 
             : base($"question must have at least {minimumAnswers} answers")
         {
         }

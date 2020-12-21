@@ -8,6 +8,8 @@
         <PackageReference Include="Autofac" Version="6.1.0" />
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+        <PackageReference Include="SharpDomain.AutoMapper" Version="0.1.4" />
+        <PackageReference Include="SharpDomain.FluentValidation" Version="0.1.4" />
     </ItemGroup>
 
     <ItemGroup>
@@ -15,27 +17,6 @@
         <ProjectReference Include="..\VotingSystem.Core\VotingSystem.Core.csproj" />
         <ProjectReference Include="..\VotingSystem.Persistence.InMemory\VotingSystem.Persistence.InMemory.csproj" />
         <ProjectReference Include="..\VotingSystem.Persistence\VotingSystem.Persistence.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Reference Include="SharpDomain.Core, Version=0.1.2.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\..\..\SharpDomain\src\SharpDomain.Core\bin\Debug\netstandard2.1\SharpDomain.Core.dll</HintPath>
-        </Reference>
-        <Reference Include="SharpDomain.Application, Version=0.1.1.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\..\..\SharpDomain\src\SharpDomain.Application\bin\Debug\netstandard2.1\SharpDomain.Application.dll</HintPath>
-        </Reference>
-        <Reference Include="SharpDomain.FluentValidation, Version=0.1.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\..\..\SharpDomain\src\Libraries\SharpDomain.FluentValidation\bin\Debug\netstandard2.1\SharpDomain.FluentValidation.dll</HintPath>
-        </Reference>
-        <Reference Include="SharpDomain.AutoMapper, Version=0.1.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\..\..\SharpDomain\src\Libraries\SharpDomain.AutoMapper\bin\Debug\netstandard2.1\SharpDomain.AutoMapper.dll</HintPath>
-        </Reference>
-        <Reference Include="SharpDomain.Persistence, Version=0.1.1.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\..\..\SharpDomain\src\SharpDomain.Persistence\bin\Debug\netstandard2.1\SharpDomain.Persistence.dll</HintPath>
-        </Reference>
-        <Reference Include="SharpDomain.AutoTransaction, Version=0.1.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\..\..\SharpDomain\src\Libraries\SharpDomain.AutoTransaction\bin\Debug\netstandard2.1\SharpDomain.AutoTransaction.dll</HintPath>
-        </Reference>
     </ItemGroup>
     
 </Project>

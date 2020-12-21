@@ -1,9 +1,8 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using MediatR;
-using VotingSystem.Application.Exceptions;
+using SharpDomain.Application;
+using SharpDomain.Errors;
 using VotingSystem.Application.ViewModels;
 using VotingSystem.Core.InfrastructureAbstractions;
 using VotingSystem.Core.Models;
@@ -13,7 +12,7 @@ using VotingSystem.Core.ValueObjects;
 
 namespace VotingSystem.Application.Queries
 {
-    internal class LogInHandler : IRequestHandler<LogIn, VoterViewModel>
+    internal class LogInHandler : IQueryHandler<LogIn, VoterViewModel>
     {
         private readonly IMapper _mapper;
         private readonly IVotersRepository _votersRepository;
@@ -24,7 +23,7 @@ namespace VotingSystem.Application.Queries
             _votersRepository = votersRepository;
         }
 
-        public async Task<VoterViewModel> Handle(LogIn request, CancellationToken cancellationToken)
+        public async Task<Response<VoterViewModel>> Handle(LogIn request, CancellationToken cancellationToken)
         {
             var pesel = Pesel.ValidateAndCreate(request.Pesel);
             
@@ -32,7 +31,8 @@ namespace VotingSystem.Application.Queries
             
             if (voter is null)
             {
-                throw new LogInFailedException();
+                return new AuthenticationError(
+                    "login with the given data has failed");
             }
             
             var viewModel = _mapper.Map<Voter, VoterViewModel>(voter);
