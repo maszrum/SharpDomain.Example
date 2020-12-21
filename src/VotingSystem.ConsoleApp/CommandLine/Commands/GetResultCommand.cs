@@ -66,12 +66,12 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
 
         private static void WriteResultToConsole(QuestionViewModel question, QuestionResultViewModel questionResult)
         {
-            var allVotes = questionResult.AnswerResults.Sum(ar => ar.Votes);
+            var allVotes = questionResult.Answers.Sum(ar => ar.Votes);
 
             Console.WriteLine();
             Console.WriteLine($"{question.QuestionText}");
             var index = 1;
-            foreach (var answerResult in questionResult.AnswerResults)
+            foreach (var answerResult in questionResult.Answers)
             {
                 var answerText = question.Answers
                     .Single(a => a.Id == answerResult.AnswerId)
@@ -91,7 +91,7 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
                 .Select(a => a.Id)
                 .ToArray();
 
-            var votesMutable = questionResult.AnswerResults
+            var votesMutable = questionResult.Answers
                 .ToDictionary(a => a.AnswerId, a => a.Votes);
 
             var subscription = _notificator.Subscribe(

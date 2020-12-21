@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using SharpDomain.Application;
 using SharpDomain.Core;
@@ -14,35 +13,33 @@ namespace VotingSystem.Application.Commands
     internal class VoteForHandler : CommandHandler<VoteFor>
     {
         private readonly IDomainEvents _domainEvents;
-        private readonly IVotesRepository _votesRepository;
+        private readonly IVotersRepository _votersRepository;
 
         public VoteForHandler(
             IDomainEvents domainEvents, 
-            IVotesRepository votesRepository)
+            IVotersRepository votersRepository)
         {
             _domainEvents = domainEvents;
-            _votesRepository = votesRepository;
+            _votersRepository = votersRepository;
         }
 
         public override async Task<Response<Empty>> Handle(VoteFor request, CancellationToken cancellationToken)
         {
-            var voterVotes = await _votesRepository.GetByVoter(request.VoterId);
-
-            var alreadyVoted = voterVotes.Any(v => v.QuestionId == request.QuestionId);
-            if (alreadyVoted)
+            var voter = await _votersRepository.Get(request.VoterId);
+            if (voter is null)
             {
-                return new UserError("this question has already been voted");
+                return ObjectNotFoundError.CreateFor<Voter>(request.VoterId);
             }
-
-            var vote = Vote.Create(request.VoterId, request.QuestionId, request.AnswerId);
-
+            
+            var vote = voter.Vote(
+                request.VoterId, 
+                request.QuestionId, 
+                request.AnswerId);
+            
             await _domainEvents
                 .CollectFrom(vote)
+                .CollectFrom(voter)
                 .PublishCollected(cancellationToken);
-            
-            var not1 = base.Nothing();
-            var not2 = this.Nothing();
-            var not3 = Nothing();
             
             return Nothing();
         }

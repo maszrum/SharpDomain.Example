@@ -15,16 +15,16 @@ namespace VotingSystem.Application.Queries
     internal class GetQuestionResultHandler : IQueryHandler<GetQuestionResult, QuestionResultViewModel>
     {
         private readonly IMapper _mapper;
-        private readonly IQuestionResultsRepository _questionResultsRepository;
+        private readonly IQuestionsRepository _questionsRepository;
         private readonly IVotesRepository _votesRepository;
 
         public GetQuestionResultHandler(
             IMapper mapper, 
-            IQuestionResultsRepository questionResultsRepository, 
+            IQuestionsRepository questionsRepository, 
             IVotesRepository votesRepository)
         {
             _mapper = mapper;
-            _questionResultsRepository = questionResultsRepository;
+            _questionsRepository = questionsRepository;
             _votesRepository = votesRepository;
         }
 
@@ -34,18 +34,17 @@ namespace VotingSystem.Application.Queries
             var userVoted = userVotes.Any(v => v.QuestionId == request.QuestionId);
             if (!userVoted)
             {
-                return new AuthorizationError("results are only visible after voting");
+                return new AuthorizationError(
+                    "results are only visible after voting");
             }
             
-            var questionResult = await _questionResultsRepository.GetQuestionResultByQuestionId(request.QuestionId);
-            
-            if (questionResult is null)
+            var question = await _questionsRepository.Get(request.QuestionId);
+            if(question is null)
             {
                 return ObjectNotFoundError.CreateFor<Question>(request.QuestionId);
             }
             
-            var viewModel = _mapper.Map<QuestionResult, QuestionResultViewModel>(questionResult);
-            
+            var viewModel = _mapper.Map<Question, QuestionResultViewModel>(question);
             return viewModel;
         }
     }

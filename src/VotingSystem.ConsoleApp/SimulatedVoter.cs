@@ -70,7 +70,9 @@ namespace VotingSystem.ConsoleApp
                     voterId: _voterId.Value, 
                     questionId: question.Id,
                     answerId: selectedAnswerId);
-                await mediator.Send(voteFor);
+                
+                await mediator.Send(voteFor)
+                    .OnError(error => throw new InvalidOperationException(error.ToString()));
             }
         }
         

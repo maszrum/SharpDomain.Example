@@ -22,6 +22,26 @@ namespace VotingSystem.Persistence.InMemory.Repositories
             _datastore = datastore;
         }
 
+        public Task<Question?> Get(Guid questionId)
+        {
+            if (_datastore.Questions.TryGetValue(questionId, out var entity))
+            {
+                var answers = _datastore.Answers.Values
+                    .Where(e => e.QuestionId == questionId)
+                    .Select(a => new Answer(a.Id, a.QuestionId, a.Order, a.Text, a.Votes))
+                    .ToList();
+                
+                var question = new Question(
+                    entity.Id, 
+                    entity.QuestionText, 
+                    answers);
+                
+                return Task.FromResult((Question?)question);
+            }
+            
+            return Task.FromResult(default(Question));
+        }
+
         public Task<IReadOnlyList<Question>> GetAll()
         {
             Dictionary<Guid, List<AnswerEntity>> answerEntitiesGrouped = _datastore.Answers.Values
@@ -39,7 +59,12 @@ namespace VotingSystem.Persistence.InMemory.Repositories
                 .Select(qe =>
                 {
                     var answerEntities = GetAnswersInQuestion(qe.Id);
-                    var answers = answerEntities.Select(ae => new Answer(ae.Id, ae.QuestionId, ae.Order, ae.Text));
+                    var answers = answerEntities.Select(ae => new Answer(
+                        ae.Id, 
+                        ae.QuestionId, 
+                        ae.Order, 
+                        ae.Text, 
+                        ae.Votes));
                     
                     return new Question(qe.Id, qe.QuestionText, answers);
                 })

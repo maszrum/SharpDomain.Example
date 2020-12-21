@@ -5,13 +5,13 @@ namespace VotingSystem.Core.Events
 {
     public class AnswerResultIncremented : EventBase
     {
-        public AnswerResultIncremented(Guid answerResultId, Guid answerId)
+        public AnswerResultIncremented(Guid answerId, Guid questionId)
         {
-            AnswerResultId = answerResultId;
             AnswerId = answerId;
+            QuestionId = questionId;
         }
         
-        public Guid AnswerResultId { get; }
         public Guid AnswerId { get; }
+        public Guid QuestionId { get; }
     }
 }

@@ -4,8 +4,8 @@ using VotingSystem.Core.Models;
 
 namespace VotingSystem.Core.InfrastructureAbstractions
 {
-    public interface IQuestionResultsRepository
+    public interface IAnswersRepository
     {
-        Task<QuestionResult?> GetQuestionResultByQuestionId(Guid questionId);
+        Task<Answer?> Get(Guid answerId);
     }
 }

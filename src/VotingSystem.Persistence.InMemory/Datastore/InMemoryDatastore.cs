@@ -10,18 +10,14 @@ namespace VotingSystem.Persistence.InMemory.Datastore
         public InMemoryDatastore()
         {
             _answers = new EntityDatastore<AnswerEntity>();
-            _answerResults = new EntityDatastore<AnswerResultEntity>();
             _questions = new EntityDatastore<QuestionEntity>();
-            _questionResults = new EntityDatastore<QuestionResultEntity>();
             _votes = new EntityDatastore<VoteEntity>();
             _voters = new EntityDatastore<VoterEntity>();
             
             _dataStores = new IEntityDatastore[] 
             {
                 _answers,
-                _answerResults,
                 _questions,
-                _questionResults,
                 _votes,
                 _voters
             };
@@ -31,17 +27,9 @@ namespace VotingSystem.Persistence.InMemory.Datastore
         private readonly EntityDatastore<AnswerEntity> _answers;
         public IDictionary<Guid, AnswerEntity> Answers => _answers.Models;
         
-        // answer results
-        private readonly EntityDatastore<AnswerResultEntity> _answerResults;
-        public IDictionary<Guid, AnswerResultEntity> AnswerResults => _answerResults.Models;
-        
         // questions
         private readonly EntityDatastore<QuestionEntity> _questions;
         public IDictionary<Guid, QuestionEntity> Questions => _questions.Models;
-        
-        // question results
-        private readonly EntityDatastore<QuestionResultEntity> _questionResults;
-        public IDictionary<Guid, QuestionResultEntity> QuestionResults => _questionResults.Models;
         
         // votes
         private readonly EntityDatastore<VoteEntity> _votes;
