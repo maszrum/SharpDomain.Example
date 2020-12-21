@@ -5,18 +5,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Autofac" Version="6.1.0" />
+        <PackageReference Include="SharpDomain.IoC" Version="0.2.0" />
+        <PackageReference Include="SharpDomain.AutoMapper" Version="0.2.0" />
+        <PackageReference Include="SharpDomain.FluentValidation" Version="0.2.0" />
+    </ItemGroup>
+    
+    <ItemGroup>
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
-        <PackageReference Include="SharpDomain.AutoMapper" Version="0.1.4" />
-        <PackageReference Include="SharpDomain.FluentValidation" Version="0.1.4" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\VotingSystem.Application\VotingSystem.Application.csproj" />
-        <ProjectReference Include="..\VotingSystem.Core\VotingSystem.Core.csproj" />
         <ProjectReference Include="..\VotingSystem.Persistence.InMemory\VotingSystem.Persistence.InMemory.csproj" />
-        <ProjectReference Include="..\VotingSystem.Persistence\VotingSystem.Persistence.csproj" />
     </ItemGroup>
     
 </Project>

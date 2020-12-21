@@ -1,10 +1,10 @@
 ﻿using Autofac;
-using SharpDomain.Application;
 using SharpDomain.AutoMapper;
 using SharpDomain.AutoTransaction;
-using SharpDomain.Core;
 using SharpDomain.FluentValidation;
-using SharpDomain.Persistence;
+using SharpDomain.IoC.Application;
+using SharpDomain.IoC.Core;
+using SharpDomain.IoC.Persistence;
 using VotingSystem.Application.Commands;
 using VotingSystem.Core.Models;
 using VotingSystem.Persistence.Entities;

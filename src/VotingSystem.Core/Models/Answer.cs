@@ -1,5 +1,6 @@
 ﻿using System;
 using SharpDomain.Core;
+using SharpDomain.Core.ModelStateTracking;
 using VotingSystem.Core.Events;
 
 namespace VotingSystem.Core.Models
