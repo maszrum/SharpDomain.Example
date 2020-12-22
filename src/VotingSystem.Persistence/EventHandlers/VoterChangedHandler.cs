@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using SharpDomain.Core;
-using SharpDomain.Persistence;
+using SharpDomain.Infrastructure;
 using VotingSystem.Core.Models;
 using VotingSystem.Persistence.Entities;
 using VotingSystem.Persistence.RepositoryInterfaces;

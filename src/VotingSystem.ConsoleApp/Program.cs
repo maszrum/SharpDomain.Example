@@ -19,6 +19,8 @@ using VotingSystem.Persistence.InMemory;
 
 namespace VotingSystem.ConsoleApp
 {
+    // TODO: add authentication service
+
     internal class Program
     {
         private static async Task Main(string[] args)
