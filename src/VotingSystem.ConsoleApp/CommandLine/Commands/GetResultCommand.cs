@@ -46,7 +46,7 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
                 return;
             }
 
-            var getQuestionResult = new GetQuestionResult(selectedQuestion.Id, _consoleState.VoterId);
+            var getQuestionResult = new GetQuestionResult(selectedQuestion.Id);
             QuestionResultViewModel getQuestionResultResponse;
             try
             {

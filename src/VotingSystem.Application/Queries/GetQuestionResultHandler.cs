@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using SharpDomain.Application;
 using SharpDomain.Errors;
+using VotingSystem.Application.Identity;
 using VotingSystem.Application.ViewModels;
 using VotingSystem.Core.InfrastructureAbstractions;
 using VotingSystem.Core.Models;
@@ -17,20 +18,27 @@ namespace VotingSystem.Application.Queries
         private readonly IMapper _mapper;
         private readonly IQuestionsRepository _questionsRepository;
         private readonly IVotesRepository _votesRepository;
+        private readonly IIdentityService<VoterIdentity> _identityService;
 
         public GetQuestionResultHandler(
             IMapper mapper, 
             IQuestionsRepository questionsRepository, 
-            IVotesRepository votesRepository)
+            IVotesRepository votesRepository, 
+            IIdentityService<VoterIdentity> identityService)
         {
             _mapper = mapper;
             _questionsRepository = questionsRepository;
             _votesRepository = votesRepository;
+            _identityService = identityService;
         }
 
         public async Task<Response<QuestionResultViewModel>> Handle(GetQuestionResult request, CancellationToken cancellationToken)
         {
-            var userVotes = await _votesRepository.GetByVoter(request.VoterId);
+            // TODO: authorization (must be logged in)
+            
+            var identity = _identityService.GetIdentity();
+            var userVotes = await _votesRepository.GetByVoter(identity.Id);
+            
             var userVoted = userVotes.Any(v => v.QuestionId == request.QuestionId);
             if (!userVoted)
             {

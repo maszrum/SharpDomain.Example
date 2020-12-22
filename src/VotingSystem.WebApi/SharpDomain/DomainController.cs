@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SharpDomain.Application;
@@ -26,7 +27,7 @@ namespace VotingSystem.WebApi.SharpDomain
                 onSuccess);
         }
         
-        private static bool IsDomainError(ErrorBase error, out string exceptionType)
+        private static bool IsDomainError(ErrorBase error, [NotNullWhen(true)] out string? exceptionType)
         {
             var errorType = error.GetType();
             

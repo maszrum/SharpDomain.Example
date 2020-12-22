@@ -67,7 +67,6 @@ namespace VotingSystem.ConsoleApp
                 var selectedAnswerId = GetRandomGuid(answerGuids);
                 
                 var voteFor = new VoteFor(
-                    voterId: _voterId.Value, 
                     questionId: question.Id,
                     answerId: selectedAnswerId);
                 

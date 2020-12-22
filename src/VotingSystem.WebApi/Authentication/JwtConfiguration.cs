@@ -1,4 +1,8 @@
-﻿namespace VotingSystem.WebApi.Authentication
+﻿#pragma warning disable 8618
+
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+
+namespace VotingSystem.WebApi.Authentication
 {
     internal class JwtConfiguration
     {

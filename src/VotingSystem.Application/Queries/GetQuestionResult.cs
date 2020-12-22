@@ -6,13 +6,11 @@ namespace VotingSystem.Application.Queries
 {
     public class GetQuestionResult : IQuery<QuestionResultViewModel>
     {
-        public GetQuestionResult(Guid questionId, Guid voterId)
+        public GetQuestionResult(Guid questionId)
         {
             QuestionId = questionId;
-            VoterId = voterId;
         }
 
         public Guid QuestionId { get; }
-        public Guid VoterId { get; }
     }
 }

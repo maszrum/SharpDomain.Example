@@ -44,7 +44,6 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
             }
             
             var voteFor = new VoteFor(
-                _consoleState.VoterId, 
                 selectedQuestion.Id, 
                 selectedAnswer.Id);
             

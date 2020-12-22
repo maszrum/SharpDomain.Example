@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using VotingSystem.Core.InfrastructureAbstractions;
 
 namespace VotingSystem.WebApi.Authentication
 {
@@ -24,9 +25,9 @@ namespace VotingSystem.WebApi.Authentication
         }
         
         public string GenerateToken<TIdentity>(TIdentity identity) 
-            where TIdentity : class
+            where TIdentity : IIdentity
         {
-            var claims = _claimsProvider.GetFor(identity);
+            var claims = _claimsProvider.GetClaims(identity);
             
             var signingCredentials = new SigningCredentials(
                 key: new SymmetricSecurityKey(_secretCached), 

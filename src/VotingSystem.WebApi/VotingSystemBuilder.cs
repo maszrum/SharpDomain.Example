@@ -10,9 +10,9 @@ using VotingSystem.Core.Models;
 using VotingSystem.Persistence.Entities;
 using VotingSystem.Persistence.InMemory;
 
-namespace VotingSystem.WebApi
+namespace VotingSystem.WebApi.VotingSystem
 {
-    public static class VotingSystemBuilder
+    internal static class VotingSystemBuilder
     {
         public static ContainerBuilder BuildVotingSystem(this ContainerBuilder containerBuilder)
         {

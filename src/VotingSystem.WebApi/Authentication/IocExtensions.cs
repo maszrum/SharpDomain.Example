@@ -37,7 +37,7 @@ namespace VotingSystem.WebApi.Authentication
         
         private static IServiceCollection AddClaimsProvider(this IServiceCollection services)
         {
-            return services.AddScoped<ClaimsProvider>();
+            return services.AddSingleton<ClaimsProvider>();
         }
         
         private static IServiceCollection AddAuthenticationService(
@@ -57,8 +57,8 @@ namespace VotingSystem.WebApi.Authentication
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         IssuerSigningKey = new SymmetricSecurityKey(secretBytes),
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
                         ValidIssuer = jwtConfiguration.ValidIssuer,
                         ValidAudience = jwtConfiguration.ValidAudience
                     };

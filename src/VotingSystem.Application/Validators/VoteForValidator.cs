@@ -1,5 +1,4 @@
-﻿using System;
-using FluentValidation;
+﻿using FluentValidation;
 using VotingSystem.Application.Commands;
 
 // ReSharper disable once UnusedType.Global
@@ -10,11 +9,8 @@ namespace VotingSystem.Application.Validators
     {
         public VoteForValidator()
         {
-            RuleFor(x => x.AnswerId).Must(NotBeEmpty);
-            RuleFor(x => x.QuestionId).Must(NotBeEmpty);
-            RuleFor(x => x.VoterId).Must(NotBeEmpty);
+            RuleFor(x => x.AnswerId).NotEmpty();
+            RuleFor(x => x.QuestionId).NotEmpty();
         }
-        
-        private static bool NotBeEmpty(Guid guid) => guid != Guid.Empty;
     }
 }

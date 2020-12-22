@@ -25,6 +25,8 @@ namespace VotingSystem.Application.Commands
 
         public async Task<Response<QuestionViewModel>> Handle(CreateQuestion request, CancellationToken cancellationToken)
         {
+            // TODO: add authorization (must be administrator)
+            
             var question = Question.Create(request.QuestionText, request.Answers);
             
             await _domainEvents

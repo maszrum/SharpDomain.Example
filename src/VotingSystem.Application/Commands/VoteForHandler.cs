@@ -1,10 +1,10 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using SharpDomain.Application;
 using SharpDomain.Core;
-using SharpDomain.Errors;
+using VotingSystem.Application.Identity;
 using VotingSystem.Core.InfrastructureAbstractions;
-using VotingSystem.Core.Models;
 
 // ReSharper disable once UnusedType.Global
 
@@ -14,25 +14,33 @@ namespace VotingSystem.Application.Commands
     {
         private readonly IDomainEvents _domainEvents;
         private readonly IVotersRepository _votersRepository;
+        private readonly IIdentityService<VoterIdentity> _identityService;
 
         public VoteForHandler(
             IDomainEvents domainEvents, 
-            IVotersRepository votersRepository)
+            IVotersRepository votersRepository, 
+            IIdentityService<VoterIdentity> identityService)
         {
             _domainEvents = domainEvents;
             _votersRepository = votersRepository;
+            _identityService = identityService;
         }
 
         public override async Task<Response<Empty>> Handle(VoteFor request, CancellationToken cancellationToken)
         {
-            var voter = await _votersRepository.Get(request.VoterId);
+            // TODO: authorization (must be logged in)
+            
+            var identity = _identityService.GetIdentity();
+            
+            var voter = await _votersRepository.Get(identity.Id);
             if (voter is null)
             {
-                return ObjectNotFoundError.CreateFor<Voter>(request.VoterId);
+                throw new NullReferenceException(
+                    "cannot find voter with specified id");
             }
             
             var vote = voter.Vote(
-                request.VoterId, 
+                voter.Id, 
                 request.QuestionId, 
                 request.AnswerId);
             

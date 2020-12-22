@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using SharpDomain.Application;
+using VotingSystem.Application.Identity;
 using VotingSystem.Application.ViewModels;
 using VotingSystem.Core.InfrastructureAbstractions;
 using VotingSystem.Core.Models;
@@ -15,16 +16,24 @@ namespace VotingSystem.Application.Queries
     {
         private readonly IMapper _mapper;
         private readonly IVotesRepository _votesRepository;
+        private readonly IIdentityService<VoterIdentity> _identityService;
 
-        public GetMyVotesHandler(IMapper mapper, IVotesRepository votesRepository)
+        public GetMyVotesHandler(
+            IMapper mapper, 
+            IVotesRepository votesRepository, 
+            IIdentityService<VoterIdentity> identityService)
         {
             _votesRepository = votesRepository;
+            _identityService = identityService;
             _mapper = mapper;
         }
 
         public async Task<Response<MyVotesViewModel>> Handle(GetMyVotes request, CancellationToken cancellationToken)
         {
-            var votes = await _votesRepository.GetByVoter(request.VoterId);
+            // TODO: add authorization (must be logged in)
+            
+            var identity = _identityService.GetIdentity();
+            var votes = await _votesRepository.GetByVoter(identity.Id);
             
             var viewModel = _mapper.Map<IEnumerable<Vote>, MyVotesViewModel>(votes);
             

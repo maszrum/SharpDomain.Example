@@ -36,13 +36,10 @@ namespace VotingSystem.WebApi.Controllers
             return HandleErrors(response, Ok);
         }
         
-        // TODO: remove voterId param and get it from jwt
-        [HttpGet("result/{questionId}/{voterId}")]
-        public async Task<IActionResult> Get(
-            [FromRoute] Guid questionId, 
-            [FromRoute] Guid voterId)
+        [HttpGet("result/{questionId}")]
+        public async Task<IActionResult> Get([FromRoute] Guid questionId)
         {
-            var request = new GetQuestionResult(questionId, voterId);
+            var request = new GetQuestionResult(questionId);
             var response = await _mediator.Send(request);
             
             return HandleErrors(response, Ok);
