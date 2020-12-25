@@ -11,7 +11,7 @@ namespace VotingSystem.Core.InfrastructureAbstractions
     
     public interface IIdentity
     {
-        public Guid Id { get; }
+        Guid Id { get; }
         bool IsValid();
     }
 }
