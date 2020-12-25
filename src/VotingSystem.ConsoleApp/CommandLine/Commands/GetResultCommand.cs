@@ -11,34 +11,23 @@ using VotingSystem.ConsoleApp.CommandLine.ResultTracking;
 
 namespace VotingSystem.ConsoleApp.CommandLine.Commands
 {
-    internal class GetResultCommand : IConsoleCommand
+    internal class GetResultCommand : AuthenticatedCommand
     {
-        private readonly ConsoleState _consoleState;
         private readonly IMediator _mediator;
         private readonly AnswerResultChangedNotificator _notificator;
 
         public GetResultCommand(
-            ConsoleState consoleState, 
-            IMediator mediator, 
-            AnswerResultChangedNotificator notificator)
+            IMediator mediator,
+            AnswerResultChangedNotificator notificator,
+            AuthenticationService authenticationService,
+            ConsoleState consoleState) 
+            : base(authenticationService, consoleState)
         {
-            _consoleState = consoleState;
             _mediator = mediator;
             _notificator = notificator;
         }
 
-        public Task Execute(IReadOnlyList<string> args)
-        {
-            if (string.IsNullOrEmpty(_consoleState.VoterPesel))
-            {
-                Console.WriteLine("Log in before using this command.");
-                return Task.CompletedTask;
-            }
-            
-            return GetResult();
-        }
-
-        private async Task GetResult()
+        public override async Task Execute(IReadOnlyList<string> args)
         {
             var selectedQuestion = await CommandLineHelper.AskToSelectQuestion(_mediator);
             if (selectedQuestion is null)
@@ -117,7 +106,7 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
             Console.Write(message);
         }
 
-        public string GetDefinition() => "get-result";
+        public override string GetDefinition() => "get-result";
 
         private static string GetPercentage(int votes, int allVotes)
         {

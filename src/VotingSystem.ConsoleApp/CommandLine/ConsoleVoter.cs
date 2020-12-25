@@ -15,7 +15,7 @@ namespace VotingSystem.ConsoleApp.CommandLine
         public ConsoleVoter(IContainer container)
         {
             _container = container;
-            _consoleState = container.Resolve<ConsoleState>();
+            _consoleState = _container.Resolve<ConsoleState>();
             SetupCommands(container);
         }
         
@@ -99,9 +99,9 @@ namespace VotingSystem.ConsoleApp.CommandLine
 
         private string GetReadLinePrefix()
         {
-            return string.IsNullOrEmpty(_consoleState.VoterPesel) 
+            return _consoleState.Identity is null
                 ? "<not-logged>: " 
-                : $"<{_consoleState.VoterPesel}>: ";
+                : $"<{_consoleState.Identity.Pesel}>: ";
         }
         
         private static bool TryReadLine(out string line)

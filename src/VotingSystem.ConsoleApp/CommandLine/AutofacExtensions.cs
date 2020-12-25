@@ -1,9 +1,11 @@
 ﻿using System;
 using Autofac;
 using MediatR;
+using VotingSystem.Application.Identity;
 using VotingSystem.ConsoleApp.CommandLine.Commands;
 using VotingSystem.ConsoleApp.CommandLine.ResultTracking;
 using VotingSystem.Core.Events;
+using VotingSystem.Core.InfrastructureAbstractions;
 
 namespace VotingSystem.ConsoleApp.CommandLine
 {
@@ -32,8 +34,7 @@ namespace VotingSystem.ConsoleApp.CommandLine
                 .AsSelf()
                 .SingleInstance();
 
-            containerBuilder
-                .RegisterType<ConsoleState>()
+            containerBuilder.RegisterType<ConsoleState>()
                 .AsSelf()
                 .SingleInstance();
 

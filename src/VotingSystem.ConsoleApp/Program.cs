@@ -19,8 +19,6 @@ using VotingSystem.Persistence.InMemory;
 
 namespace VotingSystem.ConsoleApp
 {
-    // TODO: add authentication service
-
     internal class Program
     {
         private static async Task Main(string[] args)
@@ -46,6 +44,7 @@ namespace VotingSystem.ConsoleApp
                 .RegisterAutoTransaction(inMemoryPersistenceAssembly);
 
             containerBuilder
+                .RegisterAuthentication()
                 .RegisterClientDependencies()
                 .SeedOnBuild();
 
@@ -84,7 +83,7 @@ namespace VotingSystem.ConsoleApp
             
             while (!cancellationToken.IsCancellationRequested)
             {
-                await simulatedVoter.LogAsRandomVoter();
+                await simulatedVoter.LogInAsRandomVoter();
                 await simulatedVoter.VoteRandomly();
                 simulatedVoter.Logout();
                 

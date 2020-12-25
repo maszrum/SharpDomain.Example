@@ -8,16 +8,20 @@ using VotingSystem.Application.ViewModels;
 
 namespace VotingSystem.ConsoleApp.CommandLine.Commands
 {
-    internal class GetQuestionsCommand : IConsoleCommand
+    internal class GetQuestionsCommand : AuthenticatedCommand
     {
         private readonly IMediator _mediator;
 
-        public GetQuestionsCommand(IMediator mediator)
+        public GetQuestionsCommand(
+            IMediator mediator, 
+            AuthenticationService authenticationService, 
+            ConsoleState consoleState) 
+            : base(authenticationService, consoleState)
         {
             _mediator = mediator;
         }
 
-        public async Task Execute(IReadOnlyList<string> args)
+        public override async Task Execute(IReadOnlyList<string> args)
         {
             var getQuestions = new GetQuestions();
             
@@ -38,6 +42,6 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
             Console.WriteLine();
         }
 
-        public string GetDefinition() => "get-questions";
+        public override string GetDefinition() => "get-questions";
     }
 }

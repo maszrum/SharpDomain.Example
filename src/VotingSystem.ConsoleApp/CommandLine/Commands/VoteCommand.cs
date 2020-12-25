@@ -7,46 +7,37 @@ using VotingSystem.Application.Commands;
 
 namespace VotingSystem.ConsoleApp.CommandLine.Commands
 {
-    internal class VoteCommand : IConsoleCommand
+    internal class VoteCommand : AuthenticatedCommand
     {
-        private readonly ConsoleState _consoleState;
         private readonly IMediator _mediator;
 
-        public VoteCommand(ConsoleState consoleState, IMediator mediator)
+        public VoteCommand(
+            IMediator mediator, 
+            AuthenticationService authenticationService, 
+            ConsoleState consoleState) 
+            : base(authenticationService, consoleState)
         {
-            _consoleState = consoleState;
             _mediator = mediator;
         }
 
-        public Task Execute(IReadOnlyList<string> args)
-        {
-            if (string.IsNullOrEmpty(_consoleState.VoterPesel))
-            {
-                Console.WriteLine("Log in before using this command.");
-                return Task.CompletedTask;
-            }
-            
-            return DoVote();
-        }
-
-        private async Task DoVote()
+        public override async Task Execute(IReadOnlyList<string> args)
         {
             var selectedQuestion = await CommandLineHelper.AskToSelectQuestion(_mediator);
             if (selectedQuestion is null)
             {
                 return;
             }
-            
+
             var selectedAnswer = CommandLineHelper.AskToSelectAnswer(selectedQuestion);
             if (selectedAnswer is null)
             {
                 return;
             }
-            
+
             var voteFor = new VoteFor(
-                selectedQuestion.Id, 
+                selectedQuestion.Id,
                 selectedAnswer.Id);
-            
+
             try
             {
                 await _mediator.Send(voteFor)
@@ -61,6 +52,6 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
             Console.WriteLine($"Voted for: {selectedAnswer.Text}");
         }
 
-        public string GetDefinition() => "vote";
+        public override string GetDefinition() => "vote";
     }
 }

@@ -8,16 +8,20 @@ using VotingSystem.Application.ViewModels;
 
 namespace VotingSystem.ConsoleApp.CommandLine.Commands
 {
-    internal class AddQuestionCommand : IConsoleCommand
+    internal class AddQuestionCommand : AuthenticatedCommand
     {
         private readonly IMediator _mediator;
 
-        public AddQuestionCommand(IMediator mediator)
+        public AddQuestionCommand(
+            IMediator mediator, 
+            AuthenticationService authenticationService, 
+            ConsoleState consoleState) 
+            : base(authenticationService, consoleState)
         {
             _mediator = mediator;
         }
 
-        public Task Execute(IReadOnlyList<string> args)
+        public override Task Execute(IReadOnlyList<string> args)
         {
             if (!TryParseArgs(args, out string text))
             {
@@ -83,7 +87,7 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
             Console.WriteLine();
         }
 
-        public string GetDefinition() => "add-question [text]";
+        public override string GetDefinition() => "add-question [text]";
         
         private static bool TryParseArgs(IReadOnlyCollection<string> args, out string text)
         {

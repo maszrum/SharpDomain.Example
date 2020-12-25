@@ -1,10 +1,9 @@
-﻿using System;
+﻿using VotingSystem.Application.Identity;
 
 namespace VotingSystem.ConsoleApp.CommandLine
 {
     internal class ConsoleState
     {
-        public Guid VoterId { get; set; }
-        public string? VoterPesel { get; set; }
+        public VoterIdentity? Identity { get; set; }
     }
 }

@@ -10,18 +10,20 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
 {
     internal class RegisterCommand : IConsoleCommand
     {
-        private readonly ConsoleState _consoleState;
         private readonly IMediator _mediator;
+        private readonly AuthenticationService _authenticationService;
 
-        public RegisterCommand(ConsoleState consoleState, IMediator mediator)
+        public RegisterCommand(
+            IMediator mediator, 
+            AuthenticationService authenticationService)
         {
-            _consoleState = consoleState;
             _mediator = mediator;
+            _authenticationService = authenticationService;
         }
 
         public Task Execute(IReadOnlyList<string> args)
         {
-            if (!string.IsNullOrEmpty(_consoleState.VoterPesel))
+            if (_authenticationService.IsSignedIn)
             {
                 Console.WriteLine("Log out before using this command.");
                 return Task.CompletedTask;

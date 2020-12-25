@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using SharpDomain.Application;
+using VotingSystem.Application.Identity;
 using VotingSystem.Application.Queries;
 using VotingSystem.Application.ViewModels;
 
@@ -10,18 +11,23 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
 {
     internal class LogInCommand : IConsoleCommand
     {
-        private readonly ConsoleState _consoleState;
         private readonly IMediator _mediator;
+        private readonly AuthenticationService _authenticationService;
+        private readonly ConsoleState _consoleState;
 
-        public LogInCommand(ConsoleState consoleState, IMediator mediator)
+        public LogInCommand(
+            IMediator mediator, 
+            AuthenticationService authenticationService,
+            ConsoleState consoleState)
         {
-            _consoleState = consoleState;
             _mediator = mediator;
+            _authenticationService = authenticationService;
+            _consoleState = consoleState;
         }
 
         public Task Execute(IReadOnlyList<string> args)
         {
-            if (!string.IsNullOrEmpty(_consoleState.VoterPesel))
+            if (_consoleState.Identity is not null)
             {
                 Console.WriteLine("Log out before using this command.");
                 return Task.CompletedTask;
@@ -51,9 +57,15 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
                 exception.WriteToConsole();
                 return;
             }
-            
-            _consoleState.VoterId = logInResult.Id;
-            _consoleState.VoterPesel = logInResult.Pesel;
+
+            var identity = new VoterIdentity(
+                logInResult.Id, 
+                logInResult.Pesel, 
+                logInResult.IsAdministrator);
+
+            _authenticationService.SetIdentity(identity);
+
+            _consoleState.Identity = identity;
         }
 
         public string GetDefinition() => "login [pesel]";

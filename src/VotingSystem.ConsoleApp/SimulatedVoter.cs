@@ -6,6 +6,7 @@ using Autofac;
 using MediatR;
 using SharpDomain.Application;
 using VotingSystem.Application.Commands;
+using VotingSystem.Application.Identity;
 using VotingSystem.Application.Queries;
 
 namespace VotingSystem.ConsoleApp
@@ -13,14 +14,14 @@ namespace VotingSystem.ConsoleApp
     internal class SimulatedVoter
     {
         private readonly IContainer _container;
-        private Guid? _voterId;
+        private VoterIdentity? _voterIdentity;
 
         public SimulatedVoter(IContainer container)
         {
             _container = container;
         }
         
-        public async Task LogAsRandomVoter()
+        public async Task LogInAsRandomVoter()
         {
             await using var scope = _container.BeginLifetimeScope();
             var mediator = _container.Resolve<IMediator>();
@@ -35,23 +36,29 @@ namespace VotingSystem.ConsoleApp
             var logIn = new LogIn(voter.Pesel);
             var logInResponse = await mediator.Send(logIn)
                 .OnError(error => throw new InvalidOperationException(error.ToString()));
-            
-            _voterId = logInResponse.Id;
+
+            _voterIdentity = new VoterIdentity(
+                logInResponse.Id, 
+                logInResponse.Pesel, 
+                logInResponse.IsAdministrator);
         }
-        
-        public void Logout() => _voterId = default;
+
+        public void Logout() => _voterIdentity = default;
 
         public async Task VoteRandomly()
         {
-            if (!_voterId.HasValue)
+            if (_voterIdentity is null)
             {
                 throw new InvalidOperationException(
-                    $"call {nameof(LogAsRandomVoter)} before");
+                    $"call {nameof(LogInAsRandomVoter)} before");
             }
-            
+
             await using var scope = _container.BeginLifetimeScope();
-            var mediator = _container.Resolve<IMediator>();
-            
+            var mediator = scope.Resolve<IMediator>();
+
+            var authenticationService = scope.Resolve<AuthenticationService>();
+            authenticationService.SetIdentity(_voterIdentity);
+
             var getQuestions = new GetQuestions();
             var getQuestionsResponse = await mediator.Send(getQuestions);
             
@@ -69,7 +76,7 @@ namespace VotingSystem.ConsoleApp
                 var voteFor = new VoteFor(
                     questionId: question.Id,
                     answerId: selectedAnswerId);
-                
+
                 await mediator.Send(voteFor)
                     .OnError(error => throw new InvalidOperationException(error.ToString()));
             }
