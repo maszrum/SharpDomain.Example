@@ -2,8 +2,10 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using SharpDomain.AccessControl;
 using SharpDomain.Application;
-using SharpDomain.Errors;
+using SharpDomain.Responses;
+using VotingSystem.Application.Authorization;
 using VotingSystem.Application.Identity;
 using VotingSystem.Application.ViewModels;
 using VotingSystem.Core.InfrastructureAbstractions;
@@ -13,7 +15,7 @@ using VotingSystem.Core.Models;
 
 namespace VotingSystem.Application.Queries
 {
-    internal class GetQuestionResultHandler : IQueryHandler<GetQuestionResult, QuestionResultViewModel>
+    internal class GetQuestionResultHandler : IQueryHandler<GetQuestionResult, QuestionResultViewModel>, IAuthorizable
     {
         private readonly IMapper _mapper;
         private readonly IQuestionsRepository _questionsRepository;
@@ -32,10 +34,11 @@ namespace VotingSystem.Application.Queries
             _identityService = identityService;
         }
 
+        public void ConfigureAuthorization(AuthorizationConfiguration configuration) =>
+            configuration.UseRequirement<VoterMustBeLoggedInRequirement>();
+
         public async Task<Response<QuestionResultViewModel>> Handle(GetQuestionResult request, CancellationToken cancellationToken)
         {
-            // TODO: authorization (must be logged in)
-            
             var identity = _identityService.GetIdentity();
             var userVotes = await _votesRepository.GetByVoter(identity.Id);
             

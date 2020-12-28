@@ -4,7 +4,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using VotingSystem.Application.Commands;
 using VotingSystem.Application.Queries;
-using VotingSystem.WebApi.SharpDomain;
 
 namespace VotingSystem.WebApi.Controllers
 {

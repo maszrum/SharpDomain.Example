@@ -2,7 +2,7 @@
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
-namespace VotingSystem.WebApi.Authentication
+namespace VotingSystem.WebApi.Jwt
 {
     internal class JwtConfiguration
     {

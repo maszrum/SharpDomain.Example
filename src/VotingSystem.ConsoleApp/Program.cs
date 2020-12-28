@@ -3,6 +3,7 @@ using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
+using SharpDomain.AccessControl;
 using SharpDomain.AutoMapper;
 using SharpDomain.AutoTransaction;
 using SharpDomain.FluentValidation;
@@ -39,6 +40,7 @@ namespace VotingSystem.ConsoleApp
                     })
                 .RegisterFluentValidation(applicationAssembly)
                 .RegisterAutoMapper(applicationAssembly, persistenceAssembly)
+                .RegisterAuthorization(applicationAssembly)
                 .RegisterPersistenceLayer(persistenceAssembly)
                 .RegisterInMemoryPersistence()
                 .RegisterAutoTransaction(inMemoryPersistenceAssembly);

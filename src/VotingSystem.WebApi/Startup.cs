@@ -6,9 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using VotingSystem.AccessControl.AspNetCore;
 using VotingSystem.Application.Identity;
-using VotingSystem.WebApi.Authentication;
-using VotingSystem.WebApi.SharpDomain;
+using VotingSystem.WebApi.Jwt;
 using VotingSystem.WebApi.VoterAuthentication;
 using VotingSystem.WebApi.VotingSystem;
 
@@ -28,8 +28,8 @@ namespace VotingSystem.WebApi
         {
             services.AddControllers();
             
-            services.AddJwtAuthentication(Configuration);
-            services.AddVoterAuthentication();
+            services.AddJwt(Configuration);
+            services.AddAuthenticationService();
             
             services.AddSwaggerGen(c =>
             {
@@ -61,7 +61,7 @@ namespace VotingSystem.WebApi
             app.UseAuthorization();
             
             app.ConfigureJwt();
-            app.UseMiddleware<JwtAuthenticationMiddleware<VoterIdentity>>();
+            app.UseIdentity<VoterIdentity>();
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());
         }

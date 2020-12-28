@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using VotingSystem.AccessControl.AspNetCore;
 
-namespace VotingSystem.WebApi.Authentication
+namespace VotingSystem.WebApi.Jwt
 {
     internal static class IocExtensions
     {
-        public static void AddJwtAuthentication(
+        public static void AddJwt(
             this IServiceCollection services, 
             IConfiguration configuration)
         {
@@ -19,7 +20,7 @@ namespace VotingSystem.WebApi.Authentication
             services
                 .AddJwtConfiguration(jwtConfiguration)
                 .AddJwtEncryptor()
-                .AddClaimsProvider()
+                .AddClaimsIdentityConverter()
                 .AddAuthenticationService(jwtConfiguration);
         }
         
@@ -35,9 +36,9 @@ namespace VotingSystem.WebApi.Authentication
             return services.AddScoped<JwtEncryptor>();
         }
         
-        private static IServiceCollection AddClaimsProvider(this IServiceCollection services)
+        private static IServiceCollection AddClaimsIdentityConverter(this IServiceCollection services)
         {
-            return services.AddSingleton<ClaimsProvider>();
+            return services.AddSingleton<IClaimsIdentityConverter, ClaimsIdentityConverter>();
         }
         
         private static IServiceCollection AddAuthenticationService(

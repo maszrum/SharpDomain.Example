@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Autofac;
 using MediatR;
 using SharpDomain.Application;
+using SharpDomain.Responses;
 using VotingSystem.Application.Commands;
 using VotingSystem.Application.Identity;
 using VotingSystem.Application.Queries;

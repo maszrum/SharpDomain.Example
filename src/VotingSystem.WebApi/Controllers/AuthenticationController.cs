@@ -2,10 +2,10 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SharpDomain.Application;
+using VotingSystem.AccessControl.AspNetCore;
 using VotingSystem.Application.Commands;
 using VotingSystem.Application.Identity;
 using VotingSystem.Application.Queries;
-using VotingSystem.WebApi.SharpDomain;
 
 namespace VotingSystem.WebApi.Controllers
 {

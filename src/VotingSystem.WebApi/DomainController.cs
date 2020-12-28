@@ -2,10 +2,9 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SharpDomain.Application;
-using SharpDomain.Errors;
+using SharpDomain.Responses;
 
-namespace VotingSystem.WebApi.SharpDomain
+namespace VotingSystem.WebApi
 {
     public abstract class DomainController : ControllerBase
     {

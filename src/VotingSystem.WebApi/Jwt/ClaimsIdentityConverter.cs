@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Claims;
-using VotingSystem.Core.InfrastructureAbstractions;
+using SharpDomain.AccessControl;
+using VotingSystem.AccessControl.AspNetCore;
 
-namespace VotingSystem.WebApi.Authentication
+namespace VotingSystem.WebApi.Jwt
 {
-    internal class ClaimsProvider
+    internal class ClaimsIdentityConverter : IClaimsIdentityConverter
     {
         private readonly Dictionary<Type, object> _claimsFactories = new();
         private readonly Dictionary<Type, object> _identityFactories = new();
@@ -32,7 +33,7 @@ namespace VotingSystem.WebApi.Authentication
         {
             if (_identityFactories.TryGetValue(typeof(TIdentity), out var factory))
             {
-                var factoryTyped = (Func<IReadOnlyList<Claim>, TIdentity?>)factory;
+                var factoryTyped = (Func<IReadOnlyList<Claim>, TIdentity>)factory;
                 
                 var identityNullable = factoryTyped(claims.ToArray());
                 if (identityNullable is null || !identityNullable.IsValid())
@@ -49,12 +50,12 @@ namespace VotingSystem.WebApi.Authentication
                 $"cannot create identity for type {typeof(TIdentity).FullName}");
         }
         
-        public void ConfigureClaimsFactory<TIdentity>(Func<TIdentity, IEnumerable<Claim>> claimsFactory)
+        public void ConfigureClaimsConverter<TIdentity>(Func<TIdentity, IEnumerable<Claim>> claimsFactory)
         {
             _claimsFactories.Add(typeof(TIdentity), claimsFactory);
         }
         
-        public void ConfigureIdentityFactory<TIdentity>(Func<IReadOnlyList<Claim>, TIdentity?> identityFactory)
+        public void ConfigureIdentityConverter<TIdentity>(Func<IReadOnlyList<Claim>, TIdentity> identityFactory)
         {
             _identityFactories.Add(typeof(TIdentity), identityFactory);
         }

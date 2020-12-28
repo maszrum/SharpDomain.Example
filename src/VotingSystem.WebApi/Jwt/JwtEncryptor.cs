@@ -3,23 +3,24 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using VotingSystem.Core.InfrastructureAbstractions;
+using SharpDomain.AccessControl;
+using VotingSystem.AccessControl.AspNetCore;
 
-namespace VotingSystem.WebApi.Authentication
+namespace VotingSystem.WebApi.Jwt
 {
     internal class JwtEncryptor
     {
         private readonly JwtConfiguration _configuration;
-        private readonly ClaimsProvider _claimsProvider;
+        private readonly IClaimsIdentityConverter _claimsIdentityConverter;
         
         private readonly byte[] _secretCached;
 
         public JwtEncryptor(
-            JwtConfiguration configuration, 
-            ClaimsProvider claimsProvider)
+            JwtConfiguration configuration,
+            IClaimsIdentityConverter claimsProvider)
         {
             _configuration = configuration;
-            _claimsProvider = claimsProvider;
+            _claimsIdentityConverter = claimsProvider;
             
             _secretCached = Encoding.UTF8.GetBytes(configuration.Secret);
         }
@@ -27,7 +28,7 @@ namespace VotingSystem.WebApi.Authentication
         public string GenerateToken<TIdentity>(TIdentity identity) 
             where TIdentity : IIdentity
         {
-            var claims = _claimsProvider.GetClaims(identity);
+            var claims = _claimsIdentityConverter.GetClaims(identity);
             
             var signingCredentials = new SigningCredentials(
                 key: new SymmetricSecurityKey(_secretCached), 

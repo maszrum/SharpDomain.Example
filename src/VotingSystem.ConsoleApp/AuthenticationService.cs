@@ -1,7 +1,7 @@
 ﻿using System;
 using Autofac;
+using SharpDomain.AccessControl;
 using VotingSystem.Application.Identity;
-using VotingSystem.Core.InfrastructureAbstractions;
 
 namespace VotingSystem.ConsoleApp
 {

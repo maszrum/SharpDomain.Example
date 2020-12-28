@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using SharpDomain.Application;
 using SharpDomain.Core;
-using SharpDomain.Errors;
+using SharpDomain.Responses;
 using VotingSystem.Application.ViewModels;
 using VotingSystem.Core.InfrastructureAbstractions;
 using VotingSystem.Core.Models;

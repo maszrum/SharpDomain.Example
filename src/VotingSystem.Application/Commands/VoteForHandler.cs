@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using SharpDomain.AccessControl;
 using SharpDomain.Application;
 using SharpDomain.Core;
+using SharpDomain.Responses;
+using VotingSystem.Application.Authorization;
 using VotingSystem.Application.Identity;
 using VotingSystem.Core.InfrastructureAbstractions;
 
@@ -10,7 +13,7 @@ using VotingSystem.Core.InfrastructureAbstractions;
 
 namespace VotingSystem.Application.Commands
 {
-    internal class VoteForHandler : CommandHandler<VoteFor>
+    internal class VoteForHandler : CommandHandler<VoteFor>, IAuthorizable
     {
         private readonly IDomainEvents _domainEvents;
         private readonly IVotersRepository _votersRepository;
@@ -26,10 +29,11 @@ namespace VotingSystem.Application.Commands
             _identityService = identityService;
         }
 
+        public void ConfigureAuthorization(AuthorizationConfiguration configuration) =>
+            configuration.UseRequirement<VoterMustBeLoggedInRequirement>();
+
         public override async Task<Response<Empty>> Handle(VoteFor request, CancellationToken cancellationToken)
         {
-            // TODO: authorization (must be logged in)
-            
             var identity = _identityService.GetIdentity();
             
             var voter = await _votersRepository.Get(identity.Id);

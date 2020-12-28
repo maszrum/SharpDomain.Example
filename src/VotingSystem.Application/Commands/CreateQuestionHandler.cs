@@ -1,8 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using SharpDomain.AccessControl;
 using SharpDomain.Application;
 using SharpDomain.Core;
+using SharpDomain.Responses;
+using VotingSystem.Application.Authorization;
 using VotingSystem.Application.ViewModels;
 using VotingSystem.Core.Models;
 
@@ -10,7 +13,7 @@ using VotingSystem.Core.Models;
 
 namespace VotingSystem.Application.Commands
 {
-    internal class CreateQuestionHandler : ICommandHandler<CreateQuestion, QuestionViewModel>
+    internal class CreateQuestionHandler : ICommandHandler<CreateQuestion, QuestionViewModel>, IAuthorizable
     {
         private readonly IMapper _mapper;
         private readonly IDomainEvents _domainEvents;
@@ -23,10 +26,11 @@ namespace VotingSystem.Application.Commands
             _domainEvents = domainEvents;
         }
 
+        public void ConfigureAuthorization(AuthorizationConfiguration configuration) =>
+            configuration.UseRequirement<VoterMustBeAdministratorRequirement>();
+
         public async Task<Response<QuestionViewModel>> Handle(CreateQuestion request, CancellationToken cancellationToken)
         {
-            // TODO: add authorization (must be administrator)
-            
             var question = Question.Create(request.QuestionText, request.Answers);
             
             await _domainEvents

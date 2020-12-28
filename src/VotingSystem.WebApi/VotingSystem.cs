@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using SharpDomain.AccessControl;
 using SharpDomain.AutoMapper;
 using SharpDomain.AutoTransaction;
 using SharpDomain.FluentValidation;
@@ -12,7 +13,7 @@ using VotingSystem.Persistence.InMemory;
 
 namespace VotingSystem.WebApi.VotingSystem
 {
-    internal static class VotingSystemBuilder
+    internal static class VotingSystem
     {
         public static ContainerBuilder BuildVotingSystem(this ContainerBuilder containerBuilder)
         {
@@ -32,6 +33,7 @@ namespace VotingSystem.WebApi.VotingSystem
                     })
                 .RegisterFluentValidation(applicationAssembly)
                 .RegisterAutoMapper(applicationAssembly, persistenceAssembly)
+                .RegisterAuthorization(applicationAssembly)
                 .RegisterPersistenceLayer(persistenceAssembly)
                 .RegisterInMemoryPersistence()
                 .RegisterAutoTransaction(inMemoryPersistenceAssembly);

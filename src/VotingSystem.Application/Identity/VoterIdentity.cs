@@ -1,5 +1,5 @@
 ﻿using System;
-using VotingSystem.Core.InfrastructureAbstractions;
+using SharpDomain.AccessControl;
 
 namespace VotingSystem.Application.Identity
 {
