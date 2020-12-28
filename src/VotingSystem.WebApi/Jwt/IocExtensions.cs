@@ -38,7 +38,11 @@ namespace VotingSystem.WebApi.Jwt
         
         private static IServiceCollection AddClaimsIdentityConverter(this IServiceCollection services)
         {
-            return services.AddSingleton<IClaimsIdentityConverter, ClaimsIdentityConverter>();
+            services.AddSingleton<ClaimsIdentityConverter>();
+            services.AddSingleton<IClaimsIdentityConverter>(
+                serviceProvider => serviceProvider.GetRequiredService<ClaimsIdentityConverter>());
+
+            return services;
         }
         
         private static IServiceCollection AddAuthenticationService(

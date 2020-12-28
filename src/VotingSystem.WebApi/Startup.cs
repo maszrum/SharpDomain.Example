@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using VotingSystem.AccessControl.AspNetCore;
 using VotingSystem.Application.Identity;
 using VotingSystem.WebApi.Jwt;
@@ -27,19 +26,11 @@ namespace VotingSystem.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            
+
             services.AddJwt(Configuration);
             services.AddAuthenticationService();
-            
-            services.AddSwaggerGen(c =>
-            {
-                var apiInfo = new OpenApiInfo
-                {
-                    Title = "VotingSystem.WebApi", 
-                    Version = "v1"
-                };
-                c.SwaggerDoc("v1", apiInfo);
-            });
+
+            services.AddSwagger();
         }
 
         public void ConfigureContainer(ContainerBuilder builder) => 
