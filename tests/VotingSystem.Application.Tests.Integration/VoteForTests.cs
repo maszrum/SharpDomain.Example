@@ -11,6 +11,27 @@ namespace VotingSystem.Application.Tests.Integration
     public class VoteForTests : IntegrationTestBase
     {
         [Test]
+        public async Task Should_Return_Error_When_Not_Logged()
+        {
+            await LogInAsAdministrator();
+            
+            var createQuestion = new CreateQuestion(
+                questionText: "Some question?", 
+                answers: new[] {"First answer", "Second answer"});
+            var createQuestionResponse = await Mediator.Send(createQuestion);
+            var createdQuestion = AssertNotError.Of(createQuestionResponse);
+            
+            LogOut();
+            
+            var voteFor = new VoteFor(
+                questionId: createdQuestion.Id, 
+                answerId: createdQuestion.Answers[1].Id);
+            var voteForResponse = await Mediator.Send(voteFor);
+            
+            AssertError<AuthorizationError>.Of(voteForResponse);
+        }
+    
+        [Test]
         public async Task Check_If_Votes_Incremented()
         {
             await LogInAsAdministrator();
@@ -64,8 +85,7 @@ namespace VotingSystem.Application.Tests.Integration
                 answerId: createdQuestion.Answers[0].Id);
             var voteForResponseDuplicate = await Mediator.Send(voteForDuplicate);
             
-            Assert.Fail();
-            // AssertError<DomainError<TwiceVoteAttemptException>>.Of(voteForResponseDuplicate);
+            AssertError<DomainError>.Of(voteForResponseDuplicate);
         }
     }
 }
