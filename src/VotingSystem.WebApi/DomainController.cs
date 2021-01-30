@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SharpDomain.Responses;
@@ -20,24 +19,10 @@ namespace VotingSystem.WebApi
                     ObjectNotFoundError onfe => NotFound(onfe),
                     UserError ue => UnprocessableEntity(ue),
                     ValidationError ve => BadRequest(ve),
-                    _ when IsDomainError(error, out var exceptionType) => UnprocessableEntity(new { exceptionType, error.Message }),
+                    DomainError de => UnprocessableEntity(new { de.ExceptionType.Name, error.Message }),
                     _ => StatusCode(StatusCodes.Status500InternalServerError, error)
                 },
                 onSuccess);
-        }
-        
-        private static bool IsDomainError(ErrorBase error, [NotNullWhen(true)] out string? exceptionType)
-        {
-            var errorType = error.GetType();
-            
-            if (errorType.GetGenericTypeDefinition() == typeof(DomainError<>))
-            {
-                exceptionType = errorType.Name;
-                return true;
-            }
-            
-            exceptionType = default;
-            return false;
         }
     }
 }
