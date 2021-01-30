@@ -10,7 +10,7 @@ using SharpDomain.FluentValidation;
 using SharpDomain.IoC.Application;
 using SharpDomain.IoC.Core;
 using SharpDomain.IoC.Persistence;
-using VotingSystem.Application.Commands;
+using VotingSystem.Application.Question;
 using VotingSystem.ConsoleApp.CommandLine;
 using VotingSystem.Core.Models;
 using VotingSystem.Persistence.Entities;
@@ -24,7 +24,7 @@ namespace VotingSystem.ConsoleApp
     {
         private static async Task Main(string[] args)
         {
-            var domainAssembly = typeof(Question).Assembly;
+            var domainAssembly = typeof(QuestionModel).Assembly;
             var applicationAssembly = typeof(CreateQuestion).Assembly;
             var persistenceAssembly = typeof(QuestionEntity).Assembly;
             var inMemoryPersistenceAssembly = typeof(Persistence.InMemory.AutofacExtensions).Assembly;

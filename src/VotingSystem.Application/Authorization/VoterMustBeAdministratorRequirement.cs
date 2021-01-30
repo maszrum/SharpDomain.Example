@@ -2,6 +2,8 @@
 using SharpDomain.AccessControl;
 using VotingSystem.Application.Identity;
 
+// ReSharper disable once ClassNeverInstantiated.Global
+
 namespace VotingSystem.Application.Authorization
 {
     internal class VoterMustBeAdministratorRequirement : IAuthorizationRequirement

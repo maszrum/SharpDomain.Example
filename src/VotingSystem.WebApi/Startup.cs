@@ -9,7 +9,6 @@ using VotingSystem.AccessControl.AspNetCore;
 using VotingSystem.Application.Identity;
 using VotingSystem.WebApi.Jwt;
 using VotingSystem.WebApi.VoterAuthentication;
-using VotingSystem.WebApi.VotingSystem;
 
 namespace VotingSystem.WebApi
 {

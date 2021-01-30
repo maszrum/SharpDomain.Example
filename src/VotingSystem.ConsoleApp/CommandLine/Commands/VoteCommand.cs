@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using SharpDomain.Application;
-using VotingSystem.Application.Commands;
+using VotingSystem.Application.Voter;
 
 namespace VotingSystem.ConsoleApp.CommandLine.Commands
 {

@@ -2,8 +2,9 @@
 using Autofac;
 using MediatR;
 using SharpDomain.Application;
-using VotingSystem.Application.Commands;
 using VotingSystem.Application.Identity;
+using VotingSystem.Application.Question;
+using VotingSystem.Application.Voter;
 
 namespace VotingSystem.ConsoleApp
 {

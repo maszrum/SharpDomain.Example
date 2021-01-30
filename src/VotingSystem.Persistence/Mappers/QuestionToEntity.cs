@@ -10,7 +10,7 @@ namespace VotingSystem.Persistence.Mappers
     {
         public QuestionToEntity()
         {
-            CreateMap<Question, QuestionEntity>();
+            CreateMap<QuestionModel, QuestionEntity>();
         }
     }
 }

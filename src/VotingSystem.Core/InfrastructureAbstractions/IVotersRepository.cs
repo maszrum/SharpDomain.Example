@@ -7,8 +7,8 @@ namespace VotingSystem.Core.InfrastructureAbstractions
 {
     public interface IVotersRepository
     {
-        Task<Voter?> Get(Guid voterId);
-        Task<Voter?> GetByPesel(Pesel pesel);
+        Task<VoterModel?> Get(Guid voterId);
+        Task<VoterModel?> GetByPesel(Pesel pesel);
         Task<bool> Exists(string pesel);
         Task<int> GetCount();
     }

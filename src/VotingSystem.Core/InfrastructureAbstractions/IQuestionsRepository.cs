@@ -7,7 +7,7 @@ namespace VotingSystem.Core.InfrastructureAbstractions
 {
     public interface IQuestionsRepository
     {
-        Task<Question?> Get(Guid questionId);
-        Task<IReadOnlyList<Question>> GetAll();
+        Task<QuestionModel?> Get(Guid questionId);
+        Task<IReadOnlyList<QuestionModel>> GetAll();
     }
 }

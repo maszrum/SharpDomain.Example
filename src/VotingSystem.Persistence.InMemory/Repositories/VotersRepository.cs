@@ -22,37 +22,37 @@ namespace VotingSystem.Persistence.InMemory.Repositories
             _datastore = datastore;
         }
 
-        public Task<Voter?> Get(Guid voterId)
+        public Task<VoterModel?> Get(Guid voterId)
         {
             if (_datastore.Voters.TryGetValue(voterId, out var entity))
             {
                 var votes = _datastore.Votes.Values
                     .Where(e => e.VoterId == voterId)
-                    .Select(e => new Vote(e.Id, e.VoterId, e.QuestionId))
+                    .Select(e => new VoteModel(e.Id, e.VoterId, e.QuestionId))
                     .ToList();
                 
                 var pesel = new Pesel(entity.Pesel);
                 
-                var voter = new Voter(
+                var voter = new VoterModel(
                     entity.Id, 
                     pesel, 
                     entity.IsAdministrator, 
                     votes);
                 
-                return Task.FromResult((Voter?)voter);
+                return Task.FromResult((VoterModel?)voter);
             }
             
-            return Task.FromResult(default(Voter));
+            return Task.FromResult(default(VoterModel));
         }
 
-        public Task<Voter?> GetByPesel(Pesel pesel)
+        public Task<VoterModel?> GetByPesel(Pesel pesel)
         {
             var voterEntity = _datastore.Voters.Values
                 .SingleOrDefault(e => pesel.Equals(e.Pesel));
             
             return voterEntity is not null 
                 ? Get(voterEntity.Id) 
-                : Task.FromResult(default(Voter));
+                : Task.FromResult(default(VoterModel));
         }
 
         public Task<bool> Exists(string pesel)

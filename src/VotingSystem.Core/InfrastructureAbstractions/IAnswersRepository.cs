@@ -6,6 +6,6 @@ namespace VotingSystem.Core.InfrastructureAbstractions
 {
     public interface IAnswersRepository
     {
-        Task<Answer?> Get(Guid answerId);
+        Task<AnswerModel?> Get(Guid answerId);
     }
 }

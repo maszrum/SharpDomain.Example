@@ -2,8 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using VotingSystem.Application.Commands;
-using VotingSystem.Application.Queries;
+using VotingSystem.Application.Question;
 
 namespace VotingSystem.WebApi.Controllers
 {
