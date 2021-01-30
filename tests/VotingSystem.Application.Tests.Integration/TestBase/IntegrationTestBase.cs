@@ -56,6 +56,12 @@ namespace VotingSystem.Application.Tests.Integration.TestBase
             return voter;
         }
         
+        protected void LogOut()
+        {
+            var authenticationService = Container.Resolve<AuthenticationService>();
+            authenticationService.ResetIdentity();
+        }
+        
         private void SetIdentity(VoterViewModel user)
         {
             var identity = new VoterIdentity(user.Id, user.Pesel, user.IsAdministrator);
