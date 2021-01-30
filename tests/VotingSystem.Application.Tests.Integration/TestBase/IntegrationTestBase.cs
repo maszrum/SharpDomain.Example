@@ -1,19 +1,12 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Autofac;
 using MediatR;
 using NUnit.Framework;
-using SharpDomain.AccessControl;
-using SharpDomain.AutoMapper;
-using SharpDomain.AutoTransaction;
-using SharpDomain.FluentValidation;
-using SharpDomain.IoC.Application;
-using SharpDomain.IoC.Core;
-using SharpDomain.IoC.Persistence;
+using SharpDomain.Application;
 using VotingSystem.Application.Identity;
-using VotingSystem.Application.Question;
-using VotingSystem.Core.Question;
-using VotingSystem.Persistence.Entities;
-using VotingSystem.Persistence.InMemory;
+using VotingSystem.Application.Voter;
+using VotingSystem.Application.Voter.ViewModels;
 
 namespace VotingSystem.Application.Tests.Integration.TestBase
 {
@@ -36,46 +29,66 @@ namespace VotingSystem.Application.Tests.Integration.TestBase
         [SetUp]
         public void InitApplication()
         {
-            var domainAssembly = typeof(QuestionModel).Assembly;
-            var applicationAssembly = typeof(CreateQuestion).Assembly;
-            var persistenceAssembly = typeof(QuestionEntity).Assembly;
-            var inMemoryPersistenceAssembly = typeof(Persistence.InMemory.AutofacExtensions).Assembly;
-            
-            var containerBuilder = new ContainerBuilder()
-                .RegisterDomainLayer(domainAssembly)
-                .RegisterApplicationLayer(
-                    assembly: applicationAssembly,
-                    configurationAction: config =>
-                    {
-                        config.ForbidMediatorInHandlers = true;
-                        config.ForbidWriteRepositoriesInHandlersExceptIn(persistenceAssembly);
-                    })
-                .RegisterFluentValidation(applicationAssembly)
-                .RegisterAutoMapper(applicationAssembly, persistenceAssembly)
-                .RegisterAuthorization(applicationAssembly)
-                .RegisterPersistenceLayer(persistenceAssembly)
-                .RegisterInMemoryPersistence()
-                .RegisterAutoTransaction(inMemoryPersistenceAssembly);
-            
-            RegisterAuthenticationService(containerBuilder);
-            
-            Container = containerBuilder.Build();
+            Container = ApplicationBuilder.Build();
             
             Mediator = Container.Resolve<IMediator>();
-        }
-        
-        private static void RegisterAuthenticationService(ContainerBuilder containerBuilder)
-        {
-            containerBuilder.RegisterType<AuthenticationService>()
-                .AsSelf()
-                .As<IIdentityService<VoterIdentity>>()
-                .InstancePerLifetimeScope();
         }
         
         [TearDown]
         protected void DisposeApplication()
         {
             Container.Dispose();
+        }
+        
+        protected async Task<VoterViewModel> LogInAsAdministrator()
+        {
+            var admin = await CreateAdministrator();
+            SetIdentity(admin);
+            
+            return admin;
+        }
+        
+        protected async Task<VoterViewModel> LogInAsVoter()
+        {
+            var voter = await CreateVoter();
+            SetIdentity(voter);
+            
+            return voter;
+        }
+        
+        private void SetIdentity(VoterViewModel user)
+        {
+            var identity = new VoterIdentity(user.Id, user.Pesel, user.IsAdministrator);
+            
+            var authenticationService = Container.Resolve<AuthenticationService>();
+            authenticationService.SetIdentity(identity);
+        }
+        
+        private async Task<VoterViewModel> CreateAdministrator()
+        {
+            // first registered user is admin
+            var createAdmin = new CreateVoter("71102117282");
+            var adminResponse = await Mediator.Send(createAdmin);
+            
+            var admin = adminResponse.OnError(
+                error => throw new Exception($"cannot create admin: {error}"));
+            
+            return admin;
+        }
+        
+        private async Task<VoterViewModel> CreateVoter()
+        {
+            // first is admin, I don't care
+            _ = await CreateAdministrator();
+            
+            // second is not admin
+            var createVoter = new CreateVoter("99041878149");
+            var voterResponse = await Mediator.Send(createVoter);
+            
+            var voter = voterResponse.OnError(
+                error => throw new Exception($"cannot create voter: {error}"));
+            
+            return voter;
         }
     }
 }
