@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using VotingSystem.Application.Voter.ViewModels;
-using VotingSystem.Core.Models;
+using VotingSystem.Core.Voter;
 
 // ReSharper disable once UnusedType.Global
 

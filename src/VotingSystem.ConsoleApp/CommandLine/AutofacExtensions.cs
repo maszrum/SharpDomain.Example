@@ -1,11 +1,9 @@
 ﻿using System;
 using Autofac;
 using MediatR;
-using VotingSystem.Application.Identity;
 using VotingSystem.ConsoleApp.CommandLine.Commands;
 using VotingSystem.ConsoleApp.CommandLine.ResultTracking;
-using VotingSystem.Core.Events;
-using VotingSystem.Core.InfrastructureAbstractions;
+using VotingSystem.Core.Answer;
 
 namespace VotingSystem.ConsoleApp.CommandLine
 {
@@ -26,7 +24,7 @@ namespace VotingSystem.ConsoleApp.CommandLine
         {
             containerBuilder
                 .RegisterType<AnswerResultIncrementedHandler>()
-                .As<INotificationHandler<AnswerResultIncremented>>()
+                .As<INotificationHandler<AnswerVotesIncremented>>()
                 .InstancePerLifetimeScope();
 
             containerBuilder

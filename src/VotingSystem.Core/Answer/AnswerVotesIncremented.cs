@@ -1,11 +1,11 @@
 ﻿using System;
 using SharpDomain.Core;
 
-namespace VotingSystem.Core.Events
+namespace VotingSystem.Core.Answer
 {
-    public class AnswerResultIncremented : EventBase
+    public class AnswerVotesIncremented : EventBase
     {
-        public AnswerResultIncremented(Guid answerId, Guid questionId)
+        public AnswerVotesIncremented(Guid answerId, Guid questionId)
         {
             AnswerId = answerId;
             QuestionId = questionId;

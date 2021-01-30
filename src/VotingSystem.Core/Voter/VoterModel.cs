@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using SharpDomain.Core;
-using VotingSystem.Core.Events;
-using VotingSystem.Core.Exceptions;
-using VotingSystem.Core.ValueObjects;
+using VotingSystem.Core.Vote;
 
-namespace VotingSystem.Core.Models
+namespace VotingSystem.Core.Voter
 {
     public class VoterModel : AggregateRoot
     {

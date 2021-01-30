@@ -7,7 +7,7 @@ using SharpDomain.IoC.Application;
 using SharpDomain.IoC.Core;
 using SharpDomain.IoC.Persistence;
 using VotingSystem.Application.Question;
-using VotingSystem.Core.Models;
+using VotingSystem.Core.Question;
 using VotingSystem.Persistence.Entities;
 using VotingSystem.Persistence.InMemory;
 

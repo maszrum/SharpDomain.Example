@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using SharpDomain.Core;
-using VotingSystem.Core.Events;
-using VotingSystem.Core.Exceptions;
+using VotingSystem.Core.Answer;
 
-namespace VotingSystem.Core.Models
+namespace VotingSystem.Core.Question
 {
     public class QuestionModel : AggregateRoot
     {

@@ -1,7 +1,6 @@
 ﻿using System;
-using VotingSystem.Core.Exceptions;
 
-namespace VotingSystem.Core.ValueObjects
+namespace VotingSystem.Core.Voter
 {
     public class Pesel : IEquatable<Pesel>, IEquatable<string>
     {

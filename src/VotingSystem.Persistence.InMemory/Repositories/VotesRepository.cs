@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VotingSystem.Core.InfrastructureAbstractions;
-using VotingSystem.Core.Models;
+using VotingSystem.Core.Vote;
 using VotingSystem.Persistence.Entities;
 using VotingSystem.Persistence.InMemory.Datastore;
 using VotingSystem.Persistence.InMemory.Exceptions;

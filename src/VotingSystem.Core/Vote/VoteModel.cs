@@ -1,7 +1,7 @@
 ﻿using System;
 using SharpDomain.Core;
 
-namespace VotingSystem.Core.Models
+namespace VotingSystem.Core.Vote
 {
     public class VoteModel : Aggregate
     {

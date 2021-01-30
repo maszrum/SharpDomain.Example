@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using VotingSystem.Core.Models;
+using VotingSystem.Core.Question;
 
 namespace VotingSystem.Core.InfrastructureAbstractions
 {

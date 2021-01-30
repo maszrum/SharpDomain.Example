@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using VotingSystem.Core.Models;
+using VotingSystem.Core.Question;
 
 namespace VotingSystem.Application.Question.ViewModels
 {

@@ -1,6 +1,6 @@
 ﻿using SharpDomain.Core;
 
-namespace VotingSystem.Core.Exceptions
+namespace VotingSystem.Core.Voter
 {
     internal class EmptyPeselException : DomainException
     {

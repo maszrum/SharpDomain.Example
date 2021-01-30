@@ -2,13 +2,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using SharpDomain.Core;
-using VotingSystem.Core.Events;
 using VotingSystem.Core.InfrastructureAbstractions;
-using VotingSystem.Core.Models;
+using VotingSystem.Core.Voter;
 
 // ReSharper disable once UnusedType.Global
 
-namespace VotingSystem.Core.EventHandlers
+namespace VotingSystem.Core.Answer
 {
     internal class IncrementAnswerVotesOnVotePosted : DomainEventHandler<VotePosted, VoterModel>
     {
@@ -25,7 +24,7 @@ namespace VotingSystem.Core.EventHandlers
         
         public override async Task Handle(VotePosted @event, VoterModel model, CancellationToken cancellationToken)
         {
-            var answer = await _answersRepository.Get(@event.AnswerId);
+            var answer = await _answersRepository.Get(@event.AnswerId)!;
             
             if (answer is null)
             {

@@ -1,13 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using SharpDomain.Core;
-using VotingSystem.Core.Events;
 using VotingSystem.Core.InfrastructureAbstractions;
-using VotingSystem.Core.Models;
 
 // ReSharper disable once UnusedType.Global
 
-namespace VotingSystem.Core.EventHandlers
+namespace VotingSystem.Core.Voter
 {
     internal class GiveAdminRightsOnFirstVoterCreated : DomainEventHandler<VoterCreated, VoterModel>
     {

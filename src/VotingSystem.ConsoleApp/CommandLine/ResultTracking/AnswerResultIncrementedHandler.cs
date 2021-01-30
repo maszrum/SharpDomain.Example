@@ -1,11 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using VotingSystem.Core.Events;
+using VotingSystem.Core.Answer;
 
 namespace VotingSystem.ConsoleApp.CommandLine.ResultTracking
 {
-    internal class AnswerResultIncrementedHandler : INotificationHandler<AnswerResultIncremented>
+    internal class AnswerResultIncrementedHandler : INotificationHandler<AnswerVotesIncremented>
     {
         private readonly AnswerResultChangedNotificator _notificator;
 
@@ -14,7 +14,7 @@ namespace VotingSystem.ConsoleApp.CommandLine.ResultTracking
             _notificator = notificator;
         }
 
-        public Task Handle(AnswerResultIncremented notification, CancellationToken cancellationToken)
+        public Task Handle(AnswerVotesIncremented notification, CancellationToken cancellationToken)
         {
             _notificator.Publish(notification.AnswerId);
 

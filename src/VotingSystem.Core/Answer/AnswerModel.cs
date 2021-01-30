@@ -1,9 +1,10 @@
 ﻿using System;
 using SharpDomain.Core;
 using SharpDomain.Core.ModelStateTracking;
-using VotingSystem.Core.Events;
 
-namespace VotingSystem.Core.Models
+// ReSharper disable once ClassNeverInstantiated.Global
+
+namespace VotingSystem.Core.Answer
 {
     public class AnswerModel : Aggregate
     {
@@ -36,7 +37,7 @@ namespace VotingSystem.Core.Models
             var changedEvent = this.CaptureChangedEvent(
                 model => model.Votes++);
             
-            var incrementedEvent = new AnswerResultIncremented(Id, QuestionId);
+            var incrementedEvent = new AnswerVotesIncremented(Id, QuestionId);
             
             Events.Add(
                 changedEvent, 

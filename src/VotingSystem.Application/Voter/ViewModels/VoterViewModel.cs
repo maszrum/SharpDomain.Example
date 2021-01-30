@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text;
-using VotingSystem.Core.Models;
+using VotingSystem.Core.Voter;
 
 namespace VotingSystem.Application.Voter.ViewModels
 {

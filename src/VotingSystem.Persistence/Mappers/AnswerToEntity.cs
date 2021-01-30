@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using VotingSystem.Core.Models;
+using VotingSystem.Core.Answer;
 using VotingSystem.Persistence.Entities;
 
 // ReSharper disable once UnusedType.Global

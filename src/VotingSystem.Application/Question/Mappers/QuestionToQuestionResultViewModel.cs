@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using AutoMapper;
 using VotingSystem.Application.Question.ViewModels;
+using VotingSystem.Core.Question;
 
 // ReSharper disable once UnusedType.Global
 
@@ -10,7 +11,7 @@ namespace VotingSystem.Application.Question.Mappers
     {
         public QuestionToQuestionResultViewModel()
         {
-            CreateMap<Core.Models.QuestionModel, QuestionResultViewModel>()
+            CreateMap<QuestionModel, QuestionResultViewModel>()
                 .ForMember(
                     dest => dest.QuestionId, 
                     opt => opt.MapFrom(src => src.Id))

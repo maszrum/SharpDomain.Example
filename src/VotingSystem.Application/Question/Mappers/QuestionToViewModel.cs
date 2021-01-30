@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using VotingSystem.Application.Question.ViewModels;
-using VotingSystem.Core.Models;
+using VotingSystem.Core.Answer;
+using VotingSystem.Core.Question;
 
 // ReSharper disable once UnusedType.Global
 
@@ -11,7 +12,7 @@ namespace VotingSystem.Application.Question.Mappers
         public QuestionToViewModel()
         {
             CreateMap<AnswerModel, QuestionViewModel.AnswerViewModel>();
-            CreateMap<Core.Models.QuestionModel, QuestionViewModel>();
+            CreateMap<QuestionModel, QuestionViewModel>();
         }
     }
 }

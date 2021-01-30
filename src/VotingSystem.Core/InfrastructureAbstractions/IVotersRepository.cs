@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using VotingSystem.Core.Models;
-using VotingSystem.Core.ValueObjects;
+using VotingSystem.Core.Voter;
 
 namespace VotingSystem.Core.InfrastructureAbstractions
 {
