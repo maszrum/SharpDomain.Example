@@ -7,7 +7,12 @@ namespace VotingSystem.Application.Tests.Integration.TestBase
     {
         public static TData Of<TData>(Response<TData> response) where TData : class
         {
-            Assert.That(response.IsError, Is.False);
+            if (response.IsError)
+            {
+                var message = $"expected not error, received error {response.Error!.GetType().Name}";
+                Assert.Fail(message);
+                return default!;
+            }
             
             return response.Data!;
         }

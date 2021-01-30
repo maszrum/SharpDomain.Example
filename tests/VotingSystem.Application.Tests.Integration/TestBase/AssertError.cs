@@ -10,7 +10,12 @@ namespace VotingSystem.Application.Tests.Integration.TestBase
         public static TError Of<TData>(Response<TData> response) 
             where TData : class 
         {
-            Assert.That(response.IsError, Is.True);
+            if (!response.IsError)
+            {
+                var message = $"expected error {typeof(TError).Name}, received no error";
+                Assert.Fail(message);
+                return default!;
+            }
             
             var error = response.Error as TError;
             

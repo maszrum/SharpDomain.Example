@@ -26,12 +26,18 @@ namespace VotingSystem.Application.Tests.Integration.TestBase
             private set => _mediator = value;
         }
         
+        private VoterViewModel? _administrator;
+        private VoterViewModel? _voter;
+        
         [SetUp]
         public void InitApplication()
         {
             Container = ApplicationBuilder.Build();
             
             Mediator = Container.Resolve<IMediator>();
+            
+            _administrator = default;
+            _voter = default;
         }
         
         [TearDown]
@@ -40,20 +46,40 @@ namespace VotingSystem.Application.Tests.Integration.TestBase
             Container.Dispose();
         }
         
-        protected async Task<VoterViewModel> LogInAsAdministrator()
+        protected Task<VoterViewModel> LogInAsAdministrator()
         {
-            var admin = await CreateAdministrator();
-            SetIdentity(admin);
+            async Task<VoterViewModel> CreateAndLogIn()
+            {
+                var admin = await CreateAdministrator();
+                SetIdentity(admin);
+                return admin;
+            }
             
-            return admin;
+            if (_administrator is null)
+            {
+                return CreateAndLogIn();
+            }
+            
+            SetIdentity(_administrator);
+            return Task.FromResult(_administrator);
         }
         
-        protected async Task<VoterViewModel> LogInAsVoter()
+        protected Task<VoterViewModel> LogInAsVoter()
         {
-            var voter = await CreateVoter();
-            SetIdentity(voter);
+            async Task<VoterViewModel> CreateAndLogIn()
+            {
+                var voter = await CreateVoter();
+                SetIdentity(voter);
+                return voter;
+            }
             
-            return voter;
+            if (_voter is null)
+            {
+                return CreateAndLogIn();
+            }
+            
+            SetIdentity(_voter);
+            return Task.FromResult(_voter);
         }
         
         protected void LogOut()
@@ -79,13 +105,18 @@ namespace VotingSystem.Application.Tests.Integration.TestBase
             var admin = adminResponse.OnError(
                 error => throw new Exception($"cannot create admin: {error}"));
             
+            _administrator = admin;
+            
             return admin;
         }
         
         private async Task<VoterViewModel> CreateVoter()
         {
-            // first is admin, I don't care
-            _ = await CreateAdministrator();
+            if (_administrator is null)
+            {
+                // first is admin, I don't care
+                _ = await CreateAdministrator();
+            }
             
             // second is not admin
             var createVoter = new CreateVoter("99041878149");
@@ -93,6 +124,8 @@ namespace VotingSystem.Application.Tests.Integration.TestBase
             
             var voter = voterResponse.OnError(
                 error => throw new Exception($"cannot create voter: {error}"));
+            
+            _voter = voter;
             
             return voter;
         }
