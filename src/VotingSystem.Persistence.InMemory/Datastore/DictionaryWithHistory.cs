@@ -12,8 +12,7 @@ namespace VotingSystem.Persistence.InMemory.Datastore
         }
         
         private readonly Dictionary<Guid, TEntity> _dictionary;
-        private readonly List<Action<IDictionary<Guid, TEntity>>> _actions = 
-            new List<Action<IDictionary<Guid, TEntity>>>();
+        private readonly List<Action<IDictionary<Guid, TEntity>>> _actions = new();
 
         public IReadOnlyList<Action<IDictionary<Guid, TEntity>>> Actions => _actions;
         

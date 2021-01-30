@@ -8,7 +8,8 @@ using VotingSystem.Persistence.InMemory.Datastore;
 
 namespace VotingSystem.Persistence.InMemory.AutoTransaction
 {
-    internal class InMemoryTransactionHandler<TRequest, TResponse> : TransactionHandler<TRequest, TResponse> where TRequest : notnull
+    internal class InMemoryTransactionHandler<TRequest, TResponse> : TransactionHandler<TRequest, TResponse> 
+        where TRequest : notnull
     {
         public InMemoryTransactionHandler(InMemoryDatastore datastore)
         {
@@ -17,7 +18,10 @@ namespace VotingSystem.Persistence.InMemory.AutoTransaction
         
         private readonly InMemoryDatastore _datastore;
         
-        public override async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+        public override async Task<TResponse> Handle(
+            TRequest request, 
+            CancellationToken cancellationToken, 
+            RequestHandlerDelegate<TResponse> next)
         {
             Exception? exceptionThrown = default;
             TResponse response = default;

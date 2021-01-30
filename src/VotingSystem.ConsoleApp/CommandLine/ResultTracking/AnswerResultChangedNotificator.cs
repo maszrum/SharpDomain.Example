@@ -21,11 +21,11 @@ namespace VotingSystem.ConsoleApp.CommandLine.ResultTracking
 
         public IDisposable Subscribe(Predicate<Guid> filter, Action<Guid> onNext)
         {
-            void OnUnsubscribe(NotificatorSubscription subscription)
+            void OnUnsubscribe(NotificatorSubscription s)
             {
                 lock (_lock)
                 {
-                    _subscriptions.Remove(subscription);
+                    _subscriptions.Remove(s);
                 }
             }
 

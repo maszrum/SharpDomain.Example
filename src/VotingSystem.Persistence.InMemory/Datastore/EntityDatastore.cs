@@ -8,7 +8,7 @@ namespace VotingSystem.Persistence.InMemory.Datastore
         private static class TypeLock<T>
         {
             // ReSharper disable once StaticMemberInGenericType
-            public static readonly object Lock = new object();
+            public static readonly object Lock = new();
         }
         
         private static readonly Dictionary<Guid, TEntity> DataStore  =
