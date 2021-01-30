@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1DAF91A5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VotingSystem.Application.Tests.Unit", "tests\VotingSystem.Application.Tests.Unit\VotingSystem.Application.Tests.Unit.csproj", "{3B4C5011-4543-4D90-B36A-2D7EC1B5120F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VotingSystem.Application.Tests.Integration", "tests\VotingSystem.Application.Tests.Integration\VotingSystem.Application.Tests.Integration.csproj", "{00D93C3F-09B6-40F5-9CC3-EB24015D32AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{3B4C5011-4543-4D90-B36A-2D7EC1B5120F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B4C5011-4543-4D90-B36A-2D7EC1B5120F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B4C5011-4543-4D90-B36A-2D7EC1B5120F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00D93C3F-09B6-40F5-9CC3-EB24015D32AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00D93C3F-09B6-40F5-9CC3-EB24015D32AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00D93C3F-09B6-40F5-9CC3-EB24015D32AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00D93C3F-09B6-40F5-9CC3-EB24015D32AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{EE7E068F-10EA-48C6-99C2-3495A4BED07F} = {24446358-2F28-4E64-9EF2-1E48CE201DF1}
 		{559C222F-B922-4A9F-B91C-C57218F1516B} = {24446358-2F28-4E64-9EF2-1E48CE201DF1}
 		{3B4C5011-4543-4D90-B36A-2D7EC1B5120F} = {1DAF91A5-F39F-478C-AFD7-5CFAF34C16C8}
+		{00D93C3F-09B6-40F5-9CC3-EB24015D32AF} = {1DAF91A5-F39F-478C-AFD7-5CFAF34C16C8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {98B487C3-8082-44AA-9628-213640AE11FA}
