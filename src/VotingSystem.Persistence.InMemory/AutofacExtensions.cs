@@ -33,6 +33,11 @@ namespace VotingSystem.Persistence.InMemory
         private static ContainerBuilder RegisterInMemoryDatasource(this ContainerBuilder containerBuilder)
         {
             containerBuilder
+                .RegisterGeneric(typeof(PersistentDatastore<>))
+                .AsSelf()
+                .SingleInstance();
+            
+            containerBuilder
                 .RegisterType<InMemoryDatastore>()
                 .AsSelf()
                 .InstancePerLifetimeScope();

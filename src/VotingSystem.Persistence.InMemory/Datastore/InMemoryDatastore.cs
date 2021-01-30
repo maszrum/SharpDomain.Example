@@ -7,12 +7,16 @@ namespace VotingSystem.Persistence.InMemory.Datastore
 {
     internal class InMemoryDatastore
     {
-        public InMemoryDatastore()
+        public InMemoryDatastore(
+            PersistentDatastore<AnswerEntity> answersDatastore,
+            PersistentDatastore<QuestionEntity> questionsDatastore,
+            PersistentDatastore<VoteEntity> voteDatastore,
+            PersistentDatastore<VoterEntity> voterDatastore)
         {
-            _answers = new EntityDatastore<AnswerEntity>();
-            _questions = new EntityDatastore<QuestionEntity>();
-            _votes = new EntityDatastore<VoteEntity>();
-            _voters = new EntityDatastore<VoterEntity>();
+            _answers = new EntityDatastore<AnswerEntity>(answersDatastore);
+            _questions = new EntityDatastore<QuestionEntity>(questionsDatastore);
+            _votes = new EntityDatastore<VoteEntity>(voteDatastore);
+            _voters = new EntityDatastore<VoterEntity>(voterDatastore);
             
             _dataStores = new IEntityDatastore[] 
             {

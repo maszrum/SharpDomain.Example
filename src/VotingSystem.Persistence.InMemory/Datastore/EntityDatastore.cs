@@ -5,18 +5,15 @@ namespace VotingSystem.Persistence.InMemory.Datastore
 {
     internal class EntityDatastore<TEntity> : IEntityDatastore where TEntity : class
     {
-        private static class TypeLock<T>
-        {
-            // ReSharper disable once StaticMemberInGenericType
-            public static readonly object Lock = new();
-        }
-        
-        private static readonly Dictionary<Guid, TEntity> DataStore  =
-            new Dictionary<Guid, TEntity>();
-        
+        private readonly PersistentDatastore<TEntity> _persistentDatastore;
         private DictionaryWithHistory<TEntity>? _models;
-        
-        public IDictionary<Guid, TEntity> Models => _models ?? (IDictionary<Guid, TEntity>) DataStore;
+
+        public EntityDatastore(PersistentDatastore<TEntity> persistentDatastore)
+        {
+            _persistentDatastore = persistentDatastore;
+        }
+
+        public IDictionary<Guid, TEntity> Models => _models ?? (IDictionary<Guid, TEntity>) _persistentDatastore.Data;
         
         public void Commit()
         {
@@ -26,17 +23,17 @@ namespace VotingSystem.Persistence.InMemory.Datastore
                     "data source is origin, change to copy before");
             }
             
-            lock (TypeLock<TEntity>.Lock)
+            _persistentDatastore.DoWithLock(ds =>
             {
                 foreach (var action in _models.Actions)
                 {
-                    action(DataStore);
+                    action(ds);
                 }
-            }
+            });
         }
         
         public void Rollback() => 
-            _models = new DictionaryWithHistory<TEntity>(DataStore);
+            _models = new DictionaryWithHistory<TEntity>(_persistentDatastore.Data);
         
         public void SetSourceToOrigin()
         {
@@ -45,7 +42,7 @@ namespace VotingSystem.Persistence.InMemory.Datastore
         
         public void SetSourceToCopy()
         {
-            _models = new DictionaryWithHistory<TEntity>(DataStore);
+            _models = new DictionaryWithHistory<TEntity>(_persistentDatastore.Data);
         }
     }
 }
