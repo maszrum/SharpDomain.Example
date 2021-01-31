@@ -7,7 +7,7 @@ using VotingSystem.Core.InfrastructureAbstractions;
 
 namespace VotingSystem.Core.Voter
 {
-    internal class GiveAdminRightsOnFirstVoterCreated : DomainEventHandler<VoterCreated, VoterModel>
+    internal class GiveAdminRightsOnFirstVoterCreated : DomainEventHandler<VoterCreated, Voter>
     {
         private readonly IDomainEvents _domainEvents;
         private readonly IVotersRepository _votersRepository;
@@ -18,7 +18,7 @@ namespace VotingSystem.Core.Voter
             _votersRepository = votersRepository;
         }
 
-        public override async Task Handle(VoterCreated @event, VoterModel model, CancellationToken cancellationToken)
+        public override async Task Handle(VoterCreated @event, Voter model, CancellationToken cancellationToken)
         {
             var votersCount = await _votersRepository.GetCount();
             if (votersCount == 1)

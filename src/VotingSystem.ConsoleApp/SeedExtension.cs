@@ -3,8 +3,8 @@ using Autofac;
 using MediatR;
 using SharpDomain.Application;
 using VotingSystem.Application.Identity;
-using VotingSystem.Application.Question;
-using VotingSystem.Application.Voter;
+using VotingSystem.Application.Questions;
+using VotingSystem.Application.Voters;
 
 namespace VotingSystem.ConsoleApp
 {

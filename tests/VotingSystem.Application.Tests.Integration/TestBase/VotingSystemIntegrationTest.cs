@@ -6,8 +6,8 @@ using SharpDomain.AccessControl;
 using SharpDomain.Application;
 using SharpDomain.NUnit;
 using VotingSystem.Application.Identity;
-using VotingSystem.Application.Voter;
-using VotingSystem.Application.Voter.ViewModels;
+using VotingSystem.Application.Voters;
+using VotingSystem.Application.Voters.ViewModels;
 using VotingSystem.IoC;
 
 namespace VotingSystem.Application.Tests.Integration.TestBase

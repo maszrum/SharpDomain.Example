@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpDomain.NUnit;
-using VotingSystem.Application.Question;
+using VotingSystem.Application.Questions;
 using VotingSystem.Application.Tests.Integration.TestBase;
 
 namespace VotingSystem.Application.Tests.Integration

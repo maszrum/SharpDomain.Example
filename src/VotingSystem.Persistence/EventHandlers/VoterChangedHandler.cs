@@ -13,9 +13,9 @@ using VotingSystem.Persistence.RepositoryInterfaces;
 
 namespace VotingSystem.Persistence.EventHandlers
 {
-    internal class VoterChangedHandler : InfrastructureHandler<ModelChanged<VoterModel>, VoterModel>
+    internal class VoterChangedHandler : InfrastructureHandler<ModelChanged<Voter>, Voter>
     {
-        private static readonly string[] ValidPropertiesChange = { nameof(VoterModel.IsAdministrator) };
+        private static readonly string[] ValidPropertiesChange = { nameof(Voter.IsAdministrator) };
         
         private readonly IMapper _mapper;
         private readonly IVotersWriteRepository _votersWriteRepository;
@@ -28,7 +28,7 @@ namespace VotingSystem.Persistence.EventHandlers
             _votersWriteRepository = votersWriteRepository;
         }
 
-        public override Task Handle(ModelChanged<VoterModel> @event, VoterModel model, CancellationToken cancellationToken)
+        public override Task Handle(ModelChanged<Voter> @event, Voter model, CancellationToken cancellationToken)
         {
             var invalidPropertyChanged = @event.PropertiesChanged
                 .FirstOrDefault(p => !ValidPropertiesChange.Contains(p));
@@ -36,10 +36,10 @@ namespace VotingSystem.Persistence.EventHandlers
             if (!string.IsNullOrEmpty(invalidPropertyChanged))
             {
                 throw new InvalidOperationException(
-                    $"invalid property changed in {nameof(VoterModel)}: {invalidPropertyChanged}");
+                    $"invalid property changed in {nameof(Voter)}: {invalidPropertyChanged}");
             }
             
-            var voterEntity = _mapper.Map<VoterModel, VoterEntity>(model);
+            var voterEntity = _mapper.Map<Voter, VoterEntity>(model);
             
             return _votersWriteRepository.Update(voterEntity);
         }

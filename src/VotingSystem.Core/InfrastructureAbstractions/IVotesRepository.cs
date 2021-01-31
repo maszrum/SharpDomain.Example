@@ -7,6 +7,6 @@ namespace VotingSystem.Core.InfrastructureAbstractions
 {
     public interface IVotesRepository
     {
-        Task<IReadOnlyList<VoteModel>> GetByVoter(Guid voterId);
+        Task<IReadOnlyList<Vote.Vote>> GetByVoter(Guid voterId);
     }
 }

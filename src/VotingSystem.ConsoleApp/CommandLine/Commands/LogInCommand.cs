@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using MediatR;
 using SharpDomain.Application;
 using VotingSystem.Application.Identity;
-using VotingSystem.Application.Voter;
-using VotingSystem.Application.Voter.ViewModels;
+using VotingSystem.Application.Voters;
+using VotingSystem.Application.Voters.ViewModels;
 
 namespace VotingSystem.ConsoleApp.CommandLine.Commands
 {

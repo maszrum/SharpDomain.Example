@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SharpDomain.AccessControl.AspNetCore;
 using SharpDomain.Application;
 using VotingSystem.Application.Identity;
-using VotingSystem.Application.Voter;
+using VotingSystem.Application.Voters;
 
 namespace VotingSystem.WebApi.Controllers
 {

@@ -10,7 +10,7 @@ using VotingSystem.Persistence.RepositoryInterfaces;
 
 namespace VotingSystem.Persistence.EventHandlers
 {
-    internal class VoterCreatedHandler : InfrastructureHandler<VoterCreated, VoterModel>
+    internal class VoterCreatedHandler : InfrastructureHandler<VoterCreated, Voter>
     {
         private readonly IMapper _mapper;
         private readonly IVotersWriteRepository _votersWriteRepository;
@@ -23,9 +23,9 @@ namespace VotingSystem.Persistence.EventHandlers
             _votersWriteRepository = votersWriteRepository;
         }
 
-        public override Task Handle(VoterCreated @event, VoterModel model, CancellationToken cancellationToken)
+        public override Task Handle(VoterCreated @event, Voter model, CancellationToken cancellationToken)
         {
-            var voterEntity = _mapper.Map<VoterModel, VoterEntity>(model);
+            var voterEntity = _mapper.Map<Voter, VoterEntity>(model);
             
             return _votersWriteRepository.Create(voterEntity);
         }

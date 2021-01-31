@@ -12,7 +12,7 @@ using VotingSystem.Persistence.RepositoryInterfaces;
 
 namespace VotingSystem.Persistence.EventHandlers
 {
-    internal class VotePostedHandler : InfrastructureHandler<VotePosted, VoterModel>
+    internal class VotePostedHandler : InfrastructureHandler<VotePosted, Voter>
     {
         private readonly IMapper _mapper;
         private readonly IVotesWriteRepository _votesWriteRepository;
@@ -23,12 +23,12 @@ namespace VotingSystem.Persistence.EventHandlers
             _votesWriteRepository = votesWriteRepository;
         }
 
-        public override Task Handle(VotePosted @event, VoterModel model, CancellationToken cancellationToken)
+        public override Task Handle(VotePosted @event, Voter model, CancellationToken cancellationToken)
         {
             var vote = model.Votes
                 .Single(v => v.Id == @event.VoteId);
             
-            var voteEntity = _mapper.Map<VoteModel, VoteEntity>(vote);
+            var voteEntity = _mapper.Map<Vote, VoteEntity>(vote);
             
             return _votesWriteRepository.Create(voteEntity);
         }

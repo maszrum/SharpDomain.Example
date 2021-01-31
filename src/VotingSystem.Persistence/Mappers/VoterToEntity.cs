@@ -10,7 +10,7 @@ namespace VotingSystem.Persistence.Mappers
     {
         public VoterToEntity()
         {
-            CreateMap<VoterModel, VoterEntity>();
+            CreateMap<Voter, VoterEntity>();
         }
     }
 }

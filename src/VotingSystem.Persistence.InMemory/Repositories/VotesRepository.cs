@@ -22,16 +22,16 @@ namespace VotingSystem.Persistence.InMemory.Repositories
             _datastore = datastore;
         }
 
-        public Task<IReadOnlyList<VoteModel>> GetByVoter(Guid voterId)
+        public Task<IReadOnlyList<Vote>> GetByVoter(Guid voterId)
         {
             var votesEntities = _datastore.Votes.Values
                 .Where(v => v.VoterId == voterId);
             
             var votes = votesEntities
-                .Select(e => new VoteModel(e.Id, e.VoterId, e.QuestionId))
+                .Select(e => new Vote(e.Id, e.VoterId, e.QuestionId))
                 .ToList();
             
-            return Task.FromResult((IReadOnlyList<VoteModel>)votes);
+            return Task.FromResult((IReadOnlyList<Vote>)votes);
         }
 
         public Task Create(VoteEntity vote)

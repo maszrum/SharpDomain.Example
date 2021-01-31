@@ -6,7 +6,7 @@ using SharpDomain.IoC;
 using SharpDomain.IoC.Application;
 using SharpDomain.IoC.Core;
 using SharpDomain.IoC.Persistence;
-using VotingSystem.Application.Question;
+using VotingSystem.Application.Questions;
 using VotingSystem.Core.Question;
 using VotingSystem.Persistence.Entities;
 using VotingSystem.Persistence.InMemory;
@@ -17,7 +17,7 @@ namespace VotingSystem.IoC
     {
         public override SystemBuilder WireUpApplication()
         {
-            var domainAssembly = typeof(QuestionModel).Assembly;
+            var domainAssembly = typeof(Question).Assembly;
             var applicationAssembly = typeof(CreateQuestion).Assembly;
             var persistenceAssembly = typeof(QuestionEntity).Assembly;
             var inMemoryPersistenceAssembly = typeof(Persistence.InMemory.AutofacExtensions).Assembly;

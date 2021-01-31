@@ -12,7 +12,7 @@ using VotingSystem.Persistence.RepositoryInterfaces;
 
 namespace VotingSystem.Persistence.EventHandlers
 {
-    internal class QuestionCreatedHandler : InfrastructureHandler<QuestionCreated, QuestionModel>
+    internal class QuestionCreatedHandler : InfrastructureHandler<QuestionCreated, Question>
     {
         private readonly IMapper _mapper;
         private readonly IQuestionsWriteRepository _questionsWriteRepository;
@@ -28,17 +28,17 @@ namespace VotingSystem.Persistence.EventHandlers
             _answersWriteRepository = answersWriteRepository;
         }
 
-        public override async Task Handle(QuestionCreated @event, QuestionModel model, CancellationToken cancellationToken)
+        public override async Task Handle(QuestionCreated @event, Question model, CancellationToken cancellationToken)
         {
             // add question
-            var questionEntity = _mapper.Map<QuestionModel, QuestionEntity>(model);
+            var questionEntity = _mapper.Map<Question, QuestionEntity>(model);
             
             await _questionsWriteRepository.Create(questionEntity);
             
             // add answers
             var answers = model.Answers;
             var answerEntities = answers
-                .Select(a => _mapper.Map<AnswerModel, AnswerEntity>(a))
+                .Select(a => _mapper.Map<Answer, AnswerEntity>(a))
                 .ToArray();
             
             await _answersWriteRepository.Create(answerEntities);

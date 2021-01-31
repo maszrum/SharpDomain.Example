@@ -9,7 +9,7 @@ using VotingSystem.Core.Voter;
 
 namespace VotingSystem.Core.Answer
 {
-    internal class IncrementAnswerVotesOnVotePosted : DomainEventHandler<VotePosted, VoterModel>
+    internal class IncrementAnswerVotesOnVotePosted : DomainEventHandler<VotePosted, Voter.Voter>
     {
         private readonly IDomainEvents _domainEvents;
         private readonly IAnswersRepository _answersRepository;
@@ -22,7 +22,7 @@ namespace VotingSystem.Core.Answer
             _answersRepository = answersRepository;
         }
         
-        public override async Task Handle(VotePosted @event, VoterModel model, CancellationToken cancellationToken)
+        public override async Task Handle(VotePosted @event, Voter.Voter model, CancellationToken cancellationToken)
         {
             var answer = await _answersRepository.Get(@event.AnswerId)!;
             

@@ -3,7 +3,7 @@ using NUnit.Framework;
 using SharpDomain.NUnit;
 using SharpDomain.Responses;
 using VotingSystem.Application.Tests.Integration.TestBase;
-using VotingSystem.Application.Voter;
+using VotingSystem.Application.Voters;
 
 namespace VotingSystem.Application.Tests.Integration
 {

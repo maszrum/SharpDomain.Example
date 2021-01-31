@@ -21,21 +21,21 @@ namespace VotingSystem.Persistence.InMemory.Repositories
             _datastore = datastore;
         }
 
-        public Task<AnswerModel?> Get(Guid answerId)
+        public Task<Answer?> Get(Guid answerId)
         {
             if (_datastore.Answers.TryGetValue(answerId, out var entity))
             {
-                var answer = new AnswerModel(
+                var answer = new Answer(
                     entity.Id,
                     entity.QuestionId, 
                     entity.Order, 
                     entity.Text, 
                     entity.Votes);
                 
-                return Task.FromResult((AnswerModel?)answer);
+                return Task.FromResult((Answer?)answer);
             }
             
-            return Task.FromResult(default(AnswerModel));
+            return Task.FromResult(default(Answer));
         }
         
         public Task Create(params AnswerEntity[] answers)
