@@ -1,8 +1,8 @@
-﻿using Autofac;
-using SharpDomain.AccessControl;
+﻿using SharpDomain.AccessControl;
 using SharpDomain.AutoMapper;
 using SharpDomain.AutoTransaction;
 using SharpDomain.FluentValidation;
+using SharpDomain.IoC;
 using SharpDomain.IoC.Application;
 using SharpDomain.IoC.Core;
 using SharpDomain.IoC.Persistence;
@@ -11,18 +11,18 @@ using VotingSystem.Core.Question;
 using VotingSystem.Persistence.Entities;
 using VotingSystem.Persistence.InMemory;
 
-namespace VotingSystem.WebApi
+namespace VotingSystem.IoC
 {
-    internal static class VotingSystem
+    public class VotingSystemBuilder : SystemBuilder
     {
-        public static ContainerBuilder BuildVotingSystem(this ContainerBuilder containerBuilder)
+        public override SystemBuilder WireUpApplication()
         {
             var domainAssembly = typeof(QuestionModel).Assembly;
             var applicationAssembly = typeof(CreateQuestion).Assembly;
             var persistenceAssembly = typeof(QuestionEntity).Assembly;
             var inMemoryPersistenceAssembly = typeof(Persistence.InMemory.AutofacExtensions).Assembly;
-
-            containerBuilder
+            
+            ContainerBuilder
                 .RegisterDomainLayer(domainAssembly)
                 .RegisterApplicationLayer(
                     assembly: applicationAssembly,
@@ -38,7 +38,7 @@ namespace VotingSystem.WebApi
                 .RegisterInMemoryPersistence()
                 .RegisterAutoTransaction(inMemoryPersistenceAssembly);
             
-            return containerBuilder;
+            return this;
         }
     }
 }

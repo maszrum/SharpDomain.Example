@@ -4,17 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using SharpDomain.AccessControl;
-using SharpDomain.AutoMapper;
-using SharpDomain.AutoTransaction;
-using SharpDomain.FluentValidation;
-using SharpDomain.IoC.Application;
-using SharpDomain.IoC.Core;
-using SharpDomain.IoC.Persistence;
-using VotingSystem.Application.Question;
+using VotingSystem.Application.Identity;
 using VotingSystem.ConsoleApp.CommandLine;
-using VotingSystem.Core.Question;
-using VotingSystem.Persistence.Entities;
-using VotingSystem.Persistence.InMemory;
+using VotingSystem.IoC;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 
@@ -24,53 +16,35 @@ namespace VotingSystem.ConsoleApp
     {
         private static async Task Main(string[] args)
         {
-            var domainAssembly = typeof(QuestionModel).Assembly;
-            var applicationAssembly = typeof(CreateQuestion).Assembly;
-            var persistenceAssembly = typeof(QuestionEntity).Assembly;
-            var inMemoryPersistenceAssembly = typeof(Persistence.InMemory.AutofacExtensions).Assembly;
-
-            var containerBuilder = new ContainerBuilder()
-                .RegisterDomainLayer(domainAssembly)
-                .RegisterApplicationLayer(
-                    assembly: applicationAssembly,
-                    configurationAction: config =>
-                    {
-                        config.ForbidMediatorInHandlers = true;
-                        config.ForbidWriteRepositoriesInHandlersExceptIn(persistenceAssembly);
-                    })
-                .RegisterFluentValidation(applicationAssembly)
-                .RegisterAutoMapper(applicationAssembly, persistenceAssembly)
-                .RegisterAuthorization(applicationAssembly)
-                .RegisterPersistenceLayer(persistenceAssembly)
-                .RegisterInMemoryPersistence()
-                .RegisterAutoTransaction(inMemoryPersistenceAssembly);
-
-            containerBuilder
-                .RegisterAuthentication()
-                .RegisterClientDependencies()
-                .SeedOnBuild();
-
-            await using var container = containerBuilder.Build();
-
-            var tcs = new CancellationTokenSource();
-            var consoleTask = RunConsole(container)
-                .ContinueWith(task =>
-                {
-                    tcs.Cancel();
-                    
-                    if (task.IsFaulted && task.Exception != default)
-                    {
-                        ExceptionDispatchInfo.Capture(task.Exception).Throw();
-                    }
-                }, CancellationToken.None);
+            var container = new VotingSystemBuilder()
+                .WireUpApplication()
+                .WithIdentityService<AuthenticationService, VoterIdentity>()
+                .With(containerBuilder => containerBuilder.RegisterClientDependencies())
+                .With(containerBuilder => containerBuilder.SeedOnBuild())
+                .Build();
             
-            var simulationTask = SimulateVoting(container, tcs.Token);
-            
-            try
+            await using (container)
             {
-                await Task.WhenAll(consoleTask, simulationTask);
+                var tcs = new CancellationTokenSource();
+                var consoleTask = RunConsole(container)
+                    .ContinueWith(task =>
+                    {
+                        tcs.Cancel();
+                        
+                        if (task.IsFaulted && task.Exception != default)
+                        {
+                            ExceptionDispatchInfo.Capture(task.Exception).Throw();
+                        }
+                    }, CancellationToken.None);
+                
+                var simulationTask = SimulateVoting(container, tcs.Token);
+                
+                try
+                {
+                    await Task.WhenAll(consoleTask, simulationTask);
+                }
+                catch (OperationCanceledException) {}
             }
-            catch (OperationCanceledException) {}
         }
 
         private static Task RunConsole(IContainer container)

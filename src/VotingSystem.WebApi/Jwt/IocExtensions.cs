@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using VotingSystem.AccessControl.AspNetCore;
+using SharpDomain.AccessControl.AspNetCore;
 
 namespace VotingSystem.WebApi.Jwt
 {

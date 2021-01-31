@@ -1,13 +1,14 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using SharpDomain.NUnit;
 using VotingSystem.Application.Question;
 using VotingSystem.Application.Tests.Integration.TestBase;
 
 namespace VotingSystem.Application.Tests.Integration
 {
     [TestFixture]
-    public class GetQuestionsTests : IntegrationTestBase
+    public class GetQuestionsTests : VotingSystemIntegrationTest
     {
         [Test]
         public async Task Create_3_Questions_And_Check_If_Added()

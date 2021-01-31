@@ -5,8 +5,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using VotingSystem.AccessControl.AspNetCore;
+using SharpDomain.AccessControl.AspNetCore;
 using VotingSystem.Application.Identity;
+using VotingSystem.IoC;
 using VotingSystem.WebApi.Jwt;
 using VotingSystem.WebApi.VoterAuthentication;
 
@@ -32,9 +33,11 @@ namespace VotingSystem.WebApi
             services.AddSwagger();
         }
 
-        public void ConfigureContainer(ContainerBuilder builder) => 
-            builder.BuildVotingSystem();
-        
+        public void ConfigureContainer(ContainerBuilder builder) =>
+            new VotingSystemBuilder()
+                .UseContainerBuilder(builder)
+                .WireUpApplication();
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

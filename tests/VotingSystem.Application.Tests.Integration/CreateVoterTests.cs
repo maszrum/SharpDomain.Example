@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using NUnit.Framework;
+using SharpDomain.NUnit;
 using SharpDomain.Responses;
 using VotingSystem.Application.Tests.Integration.TestBase;
 using VotingSystem.Application.Voter;
@@ -7,7 +8,7 @@ using VotingSystem.Application.Voter;
 namespace VotingSystem.Application.Tests.Integration
 {
     [TestFixture]
-    public class CreateVoterTests : IntegrationTestBase
+    public class CreateVoterTests : VotingSystemIntegrationTest
     {
         [Test]
         public async Task Check_If_Voter_Was_Created()

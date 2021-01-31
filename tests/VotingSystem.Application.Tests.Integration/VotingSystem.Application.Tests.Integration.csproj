@@ -7,21 +7,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="SharpDomain.AutoMapper" Version="0.2.3" />
-      <PackageReference Include="SharpDomain.FluentValidation" Version="0.2.3" />
-      <PackageReference Include="SharpDomain.IoC" Version="0.2.3" />
+        <PackageReference Include="SharpDomain.NUnit" Version="0.2.6" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Autofac" Version="6.1.0" />
-      <PackageReference Include="MediatR" Version="9.0.0" />
-      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
-      <PackageReference Include="NUnit" Version="3.13.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\VotingSystem.Application\VotingSystem.Application.csproj" />
-      <ProjectReference Include="..\..\src\VotingSystem.Persistence.InMemory\VotingSystem.Persistence.InMemory.csproj" />
+      <ProjectReference Include="..\..\src\VotingSystem.IoC\VotingSystem.IoC.csproj" />
     </ItemGroup>
 
 </Project>

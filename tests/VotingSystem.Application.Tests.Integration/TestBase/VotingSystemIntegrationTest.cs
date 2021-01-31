@@ -1,50 +1,31 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Autofac;
-using MediatR;
 using NUnit.Framework;
+using SharpDomain.AccessControl;
 using SharpDomain.Application;
+using SharpDomain.NUnit;
 using VotingSystem.Application.Identity;
 using VotingSystem.Application.Voter;
 using VotingSystem.Application.Voter.ViewModels;
+using VotingSystem.IoC;
 
 namespace VotingSystem.Application.Tests.Integration.TestBase
 {
-    public abstract class IntegrationTestBase
+    public abstract class VotingSystemIntegrationTest : IntegrationTest<VotingSystemBuilder>
     {
-        private IContainer? _container;
-        private IContainer Container
-        {
-            get => _container ?? throw new NullReferenceException();
-            set => _container = value;
-        }
-        
-        private IMediator? _mediator;
-        protected IMediator Mediator
-        {
-            get => _mediator ?? throw new NullReferenceException();
-            private set => _mediator = value;
-        }
-        
         private VoterViewModel? _administrator;
         private VoterViewModel? _voter;
-        
+
         [SetUp]
-        public void InitApplication()
+        public void ResetVoters()
         {
-            Container = ApplicationBuilder.Build();
-            
-            Mediator = Container.Resolve<IMediator>();
-            
             _administrator = default;
             _voter = default;
         }
-        
-        [TearDown]
-        protected void DisposeApplication()
-        {
-            Container.Dispose();
-        }
+
+        protected override void ConfigureSystem(VotingSystemBuilder systemBuilder) => 
+            systemBuilder.WithIdentityService<AuthenticationService, VoterIdentity>();
         
         protected Task<VoterViewModel> LogInAsAdministrator()
         {

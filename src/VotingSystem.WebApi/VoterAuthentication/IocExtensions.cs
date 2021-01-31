@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using SharpDomain.AccessControl;
-using VotingSystem.AccessControl.AspNetCore;
+using SharpDomain.AccessControl.AspNetCore;
 using VotingSystem.Application.Identity;
 using VotingSystem.WebApi.Jwt;
 

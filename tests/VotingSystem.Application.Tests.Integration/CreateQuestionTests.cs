@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using SharpDomain.NUnit;
 using SharpDomain.Responses;
 using VotingSystem.Application.Question;
 using VotingSystem.Application.Tests.Integration.TestBase;
@@ -8,7 +9,7 @@ using VotingSystem.Application.Tests.Integration.TestBase;
 namespace VotingSystem.Application.Tests.Integration
 {
     [TestFixture]
-    public class CreateQuestionTests : IntegrationTestBase
+    public class CreateQuestionTests : VotingSystemIntegrationTest
     {
         [Test]
         public async Task Should_Return_Error_On_Not_Logged_In()

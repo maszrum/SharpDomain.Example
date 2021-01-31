@@ -1,5 +1,5 @@
 ﻿using System;
-using VotingSystem.AccessControl.AspNetCore;
+using SharpDomain.AccessControl.AspNetCore;
 using VotingSystem.Application.Identity;
 using VotingSystem.WebApi.Jwt;
 

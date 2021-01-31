@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Claims;
 using SharpDomain.AccessControl;
-using VotingSystem.AccessControl.AspNetCore;
+using SharpDomain.AccessControl.AspNetCore;
 
 namespace VotingSystem.WebApi.Jwt
 {
@@ -28,7 +28,7 @@ namespace VotingSystem.WebApi.Jwt
                 $"cannot create claims for type {typeof(TIdentity).FullName}");
         }
         
-        public bool TryGetIdentity<TIdentity>(IEnumerable<Claim> claims, [NotNullWhen(true)] out TIdentity? identity)
+        public bool TryGetIdentity<TIdentity>(IEnumerable<Claim> claims, [NotNullWhen(true)] out TIdentity identity)
             where TIdentity : IIdentity
         {
             if (_identityFactories.TryGetValue(typeof(TIdentity), out var factory))
@@ -36,9 +36,9 @@ namespace VotingSystem.WebApi.Jwt
                 var factoryTyped = (Func<IReadOnlyList<Claim>, TIdentity>)factory;
                 
                 var identityNullable = factoryTyped(claims.ToArray());
-                if (identityNullable is null || !identityNullable.IsValid())
+                if (!identityNullable.IsValid())
                 {
-                    identity = default;
+                    identity = default!;
                     return false;
                 }
                 

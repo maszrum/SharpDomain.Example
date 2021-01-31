@@ -1,8 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
-        <OutputType>Exe</OutputType>
+        <TargetFramework>netstandard2.1</TargetFramework>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
@@ -12,10 +11,9 @@
         <PackageReference Include="SharpDomain.AutoMapper" Version="0.2.6" />
         <PackageReference Include="SharpDomain.FluentValidation" Version="0.2.6" />
     </ItemGroup>
-    
+
     <ItemGroup>
         <ProjectReference Include="..\VotingSystem.Application\VotingSystem.Application.csproj" />
-        <ProjectReference Include="..\VotingSystem.IoC\VotingSystem.IoC.csproj" />
         <ProjectReference Include="..\VotingSystem.Persistence\VotingSystem.Persistence.csproj" />
         <ProjectReference Include="..\VotingSystem.Persistence.InMemory\VotingSystem.Persistence.InMemory.csproj" />
     </ItemGroup>

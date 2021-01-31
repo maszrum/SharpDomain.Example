@@ -1,23 +1,11 @@
 ﻿using System;
-using Autofac;
 using SharpDomain.AccessControl;
 using VotingSystem.Application.Identity;
 
+// ReSharper disable once ClassNeverInstantiated.Global
+
 namespace VotingSystem.ConsoleApp
 {
-    internal static class AuthenticationAutofacExtension
-    {
-        public static ContainerBuilder RegisterAuthentication(this ContainerBuilder containerBuilder)
-        {
-            containerBuilder.RegisterType<AuthenticationService>()
-                .AsSelf()
-                .As<IIdentityService<VoterIdentity>>()
-                .InstancePerLifetimeScope();
-
-            return containerBuilder;
-        }
-    }
-
     internal class AuthenticationService : IIdentityService<VoterIdentity>
     {
         private VoterIdentity? _identity;

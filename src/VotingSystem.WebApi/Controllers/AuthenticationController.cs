@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SharpDomain.AccessControl.AspNetCore;
 using SharpDomain.Application;
-using VotingSystem.AccessControl.AspNetCore;
 using VotingSystem.Application.Identity;
 using VotingSystem.Application.Voter;
 
