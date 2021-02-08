@@ -28,7 +28,7 @@ namespace VotingSystem.Persistence.InMemory.Repositories
                 var answer = new Answer(
                     entity.Id,
                     entity.QuestionId, 
-                    entity.Order, 
+                    entity.AnswerOrder, 
                     entity.Text, 
                     entity.Votes);
                 

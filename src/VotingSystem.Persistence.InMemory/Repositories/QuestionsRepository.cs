@@ -29,7 +29,7 @@ namespace VotingSystem.Persistence.InMemory.Repositories
             {
                 var answers = _datastore.Answers.Values
                     .Where(e => e.QuestionId == questionId)
-                    .Select(a => new Answer(a.Id, a.QuestionId, a.Order, a.Text, a.Votes))
+                    .Select(a => new Answer(a.Id, a.QuestionId, a.AnswerOrder, a.Text, a.Votes))
                     .ToList();
                 
                 var question = new Question(
@@ -63,7 +63,7 @@ namespace VotingSystem.Persistence.InMemory.Repositories
                     var answers = answerEntities.Select(ae => new Answer(
                         ae.Id, 
                         ae.QuestionId, 
-                        ae.Order, 
+                        ae.AnswerOrder, 
                         ae.Text, 
                         ae.Votes));
                     
