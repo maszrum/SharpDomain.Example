@@ -29,12 +29,12 @@ namespace VotingSystem.Persistence.Dapper
                 .SingleInstance();
             
             containerBuilder
-                .Register(context =>
+                .Register<SchemaProvider>(context =>
                 {
                     var configuration = context.Resolve<DatabaseConfiguration>();
-                    return configuration.Schema;
+                    return () => configuration.Schema;
                 })
-                .As<SchemaProvider>()
+                .AsSelf()
                 .SingleInstance();
             
             return containerBuilder;
@@ -48,7 +48,11 @@ namespace VotingSystem.Persistence.Dapper
                 .InstancePerLifetimeScope();
             
             containerBuilder
-                .Register(context => new NpgsqlConnection()) // TODO: provide connection string
+                .Register(context =>
+                {
+                    var configuration = context.Resolve<DatabaseConfiguration>();
+                    return new NpgsqlConnection(configuration.ConnectionString);
+                })
                 .AsSelf()
                 .InstancePerLifetimeScope();
             
