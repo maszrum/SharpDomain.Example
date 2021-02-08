@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Npgsql;
 using VotingSystem.Core.InfrastructureAbstractions;
 using VotingSystem.Core.Voter;
+using VotingSystem.Persistence.Dapper.AutoTransaction;
 using VotingSystem.Persistence.Entities;
 using VotingSystem.Persistence.RepositoryInterfaces;
 
@@ -13,10 +14,14 @@ namespace VotingSystem.Persistence.Dapper.Repositories
     internal class VotersRepository : IVotersRepository, IVotersWriteRepository
     {
         private readonly NpgsqlConnection _connection;
+        private readonly ITransactionProvider _transactionProvider;
 
-        public VotersRepository(NpgsqlConnection connection)
+        public VotersRepository(
+            NpgsqlConnection connection, 
+            ITransactionProvider transactionProvider)
         {
             _connection = connection;
+            _transactionProvider = transactionProvider;
         }
 
         public Task<Voter?> Get(Guid voterId)
