@@ -11,6 +11,11 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Dapper" Version="2.0.78" />
+        <PackageReference Include="Npgsql" Version="5.0.3" />
+    </ItemGroup>
+    
+    <ItemGroup>
         <ProjectReference Include="..\VotingSystem.Persistence\VotingSystem.Persistence.csproj" />
     </ItemGroup>
 
