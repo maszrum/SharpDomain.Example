@@ -41,7 +41,7 @@ namespace VotingSystem.Persistence.EventHandlers
             
             var voterEntity = _mapper.Map<Voter, VoterEntity>(model);
             
-            return _votersWriteRepository.Update(voterEntity);
+            return _votersWriteRepository.Update(voterEntity, @event.PropertiesChanged);
         }
     }
 }
