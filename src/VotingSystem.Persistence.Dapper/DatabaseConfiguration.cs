@@ -1,8 +1,8 @@
 ﻿namespace VotingSystem.Persistence.Dapper
 {
-    internal delegate string SchemaProvider();
+    // ReSharper disable once ClassNeverInstantiated.Global
     
-    internal class DatabaseConfiguration
+    public class DatabaseConfiguration
     {
         public string ConnectionString { get; init; } = 
             "Server=localhost;Port=5432;Database=voting_system;User Id=db_user;Password=db_pass;";
@@ -10,4 +10,6 @@
         public string Schema { get; init; } = 
             "public";
     }
+    
+    internal delegate string SchemaProvider();
 }
