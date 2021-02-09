@@ -2,7 +2,7 @@
 (
     id uuid NOT NULL,
     question_id uuid NOT NULL,
-    "order" integer NOT NULL,
+    answer_order integer NOT NULL,
     text character varying(256) NOT NULL,
     votes integer NOT NULL,
     PRIMARY KEY (id),
