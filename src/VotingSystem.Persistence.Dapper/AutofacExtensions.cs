@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Autofac;
+using Dapper;
 using Npgsql;
 using VotingSystem.Persistence.Dapper.AutoTransaction;
 
@@ -12,6 +13,8 @@ namespace VotingSystem.Persistence.Dapper
             this ContainerBuilder containerBuilder, 
             Func<IComponentContext, DatabaseConfiguration> configurationProvider)
         {
+            DefaultTypeMap.MatchNamesWithUnderscores = true;
+            
             return containerBuilder
                 .RegisterConfiguration(configurationProvider)
                 .RegisterConnection()
