@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Dapper;
 using Npgsql;
 using VotingSystem.Core.InfrastructureAbstractions;
 using VotingSystem.Core.Vote;
@@ -16,25 +18,43 @@ namespace VotingSystem.Persistence.Dapper.Repositories
     {
         private readonly NpgsqlConnection _connection;
         private readonly ITransactionProvider _transactionProvider;
+        private readonly SchemaProvider _schemaProvider;
     
+        private string Schema => _schemaProvider();
+        
         public VotesRepository(
             NpgsqlConnection connection, 
-            ITransactionProvider transactionProvider)
+            ITransactionProvider transactionProvider, 
+            SchemaProvider schemaProvider)
         {
             _connection = connection;
             _transactionProvider = transactionProvider;
+            _schemaProvider = schemaProvider;
         }
 
-        public Task<IReadOnlyList<Vote>> GetByVoter(Guid voterId)
+        public async Task<IReadOnlyList<Vote>> GetByVoter(Guid voterId)
         {
-            // TODO
-            throw new NotImplementedException();
+            var voteEntities = await _connection.QueryAsync<VoteEntity>(
+                sql: "SELECT * FROM @Schema.vote WHERE voter_id = @VoterId"
+                    .InjectSchema(Schema),
+                param: new { VoterId = voterId },
+                transaction: _transactionProvider.Get());
+            
+            return voteEntities
+                .Select(e => new Vote(
+                    id: e.Id, 
+                    voterId: e.VoterId, 
+                    questionId: e.QuestionId))
+                .ToArray();
         }
 
         public Task Create(VoteEntity vote)
         {
-            // TODO
-            throw new NotImplementedException();
+            return _connection.ExecuteAsync(
+                sql: "INSERT INTO @Schema.vote(id, voter_id, question_id) VALUES (@Id, @VoterId, @QuestionId)"
+                    .InjectSchema(Schema), 
+                param: vote, 
+                transaction: _transactionProvider.Get());
         }
     }
 }
