@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VotingSystem.Application.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VotingSystem.IoC", "src\VotingSystem.IoC\VotingSystem.IoC.csproj", "{81C2AAD5-194A-4FCF-9C02-06C6EC017C36}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VotingSystem.Persistence.Dapper", "src\VotingSystem.Persistence.Dapper\VotingSystem.Persistence.Dapper.csproj", "{806C8A31-8691-496B-BDD9-72975B5C4DE7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{81C2AAD5-194A-4FCF-9C02-06C6EC017C36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81C2AAD5-194A-4FCF-9C02-06C6EC017C36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81C2AAD5-194A-4FCF-9C02-06C6EC017C36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{806C8A31-8691-496B-BDD9-72975B5C4DE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{806C8A31-8691-496B-BDD9-72975B5C4DE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{806C8A31-8691-496B-BDD9-72975B5C4DE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{806C8A31-8691-496B-BDD9-72975B5C4DE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +87,7 @@ Global
 		{3B4C5011-4543-4D90-B36A-2D7EC1B5120F} = {1DAF91A5-F39F-478C-AFD7-5CFAF34C16C8}
 		{00D93C3F-09B6-40F5-9CC3-EB24015D32AF} = {1DAF91A5-F39F-478C-AFD7-5CFAF34C16C8}
 		{81C2AAD5-194A-4FCF-9C02-06C6EC017C36} = {24446358-2F28-4E64-9EF2-1E48CE201DF1}
+		{806C8A31-8691-496B-BDD9-72975B5C4DE7} = {24446358-2F28-4E64-9EF2-1E48CE201DF1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {98B487C3-8082-44AA-9628-213640AE11FA}

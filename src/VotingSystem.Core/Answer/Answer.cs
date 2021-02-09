@@ -11,13 +11,13 @@ namespace VotingSystem.Core.Answer
         public Answer(
             Guid id, 
             Guid questionId,
-            int order,
+            int answerOrder,
             string text,
             int votes)
         {
             Id = id;
             QuestionId = questionId;
-            Order = order;
+            AnswerOrder = answerOrder;
             Text = text;
             Votes = votes;
         }
@@ -26,7 +26,7 @@ namespace VotingSystem.Core.Answer
         
         public Guid QuestionId { get; }
         
-        public int Order { get; }
+        public int AnswerOrder { get; }
         
         public string Text { get; }
         
@@ -44,6 +44,6 @@ namespace VotingSystem.Core.Answer
                 incrementedEvent);
         }
 
-        public override string ToString() => $"{Order}. {Text}";
+        public override string ToString() => $"{AnswerOrder}. {Text}";
     }
 }

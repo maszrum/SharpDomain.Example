@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VotingSystem.Core.Answer;
@@ -28,7 +29,7 @@ namespace VotingSystem.Persistence.InMemory.Repositories
                 var answer = new Answer(
                     entity.Id,
                     entity.QuestionId, 
-                    entity.Order, 
+                    entity.AnswerOrder, 
                     entity.Text, 
                     entity.Votes);
                 
@@ -55,7 +56,7 @@ namespace VotingSystem.Persistence.InMemory.Repositories
             return Task.CompletedTask;
         }
 
-        public Task Update(AnswerEntity answer)
+        public Task Update(AnswerEntity answer, IReadOnlyList<string> changedProperties)
         {
             if (!_datastore.Answers.ContainsKey(answer.Id))
             {

@@ -18,6 +18,12 @@ namespace VotingSystem.Core.Question
             Id = id;
             QuestionText = questionText;
             _answers = answers as List<Answer.Answer> ?? answers.ToList();
+            
+            if (_answers.Count < MinimumAnswers)
+            {
+                throw new TooFewAnswersInQuestionException(
+                    minimumAnswers: MinimumAnswers);
+            }
         }
         
         public override Guid Id { get; }

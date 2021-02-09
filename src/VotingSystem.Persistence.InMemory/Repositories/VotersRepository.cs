@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VotingSystem.Core.InfrastructureAbstractions;
@@ -85,7 +86,7 @@ namespace VotingSystem.Persistence.InMemory.Repositories
             return Task.CompletedTask;
         }
 
-        public Task Update(VoterEntity voter)
+        public Task Update(VoterEntity voter, IReadOnlyList<string> changedProperties)
         {
             if (!_datastore.Voters.ContainsKey(voter.Id))
             {
