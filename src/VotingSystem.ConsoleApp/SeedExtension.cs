@@ -21,14 +21,13 @@ namespace VotingSystem.ConsoleApp
                 var authenticationService = scope.Resolve<AuthenticationService>();
 
                 var logIn = new LogIn("12312312312");
-                VoterViewModel? voter = default;
-                voter = mediator.Send(logIn).GetAwaiter().GetResult()
-                    .OnError(_ =>
-                    {
-                        var createVoter = new CreateVoter("12312312312");
-                        voter = mediator.Send(createVoter).GetAwaiter().GetResult()
-                            .OnError(error => throw new InvalidOperationException($"cannot create voter while seeding: {error}"));
-                    });
+                var logInResult = mediator.Send(logIn).GetAwaiter().GetResult();
+                if (!logInResult.TryGet(out var voter))
+                {
+                    var createVoter = new CreateVoter("12312312312");
+                    voter = mediator.Send(createVoter).GetAwaiter().GetResult()
+                        .OnError(error => throw new InvalidOperationException($"cannot create voter while seeding: {error}"));
+                }
                 
                 var identity = new VoterIdentity(voter.Id, voter.Pesel, voter.IsAdministrator);
                 authenticationService.SetIdentity(identity);
