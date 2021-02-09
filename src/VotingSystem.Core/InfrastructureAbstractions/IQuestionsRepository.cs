@@ -9,5 +9,6 @@ namespace VotingSystem.Core.InfrastructureAbstractions
     {
         Task<Question.Question?> Get(Guid questionId);
         Task<IReadOnlyList<Question.Question>> GetAll();
+        Task<int> GetCount();
     }
 }

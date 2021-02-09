@@ -74,6 +74,9 @@ namespace VotingSystem.Persistence.InMemory.Repositories
             return Task.FromResult((IReadOnlyList<Question>)questions);
         }
 
+        public Task<int> GetCount() => 
+            Task.FromResult(_datastore.Questions.Count);
+
         public Task Create(QuestionEntity question)
         {
             if (_datastore.Questions.ContainsKey(question.Id))
