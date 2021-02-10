@@ -8,9 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="SharpDomain.IoC" Version="0.2.6" />
-        <PackageReference Include="SharpDomain.AutoMapper" Version="0.2.6" />
-        <PackageReference Include="SharpDomain.FluentValidation" Version="0.2.6" />
+        <PackageReference Include="SharpDomain.IoC" Version="0.2.7" />
+        <PackageReference Include="SharpDomain.AutoMapper" Version="0.2.7" />
+        <PackageReference Include="SharpDomain.FluentValidation" Version="0.2.7" />
     </ItemGroup>
     
     <ItemGroup>

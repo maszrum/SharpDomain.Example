@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using SharpDomain.AccessControl;
+using SharpDomain.IoC;
 using VotingSystem.Application.Identity;
 using VotingSystem.ConsoleApp.CommandLine;
 using VotingSystem.IoC;
@@ -16,10 +17,11 @@ namespace VotingSystem.ConsoleApp
     {
         private static async Task Main(string[] args)
         {
-            var container = new VotingSystemBuilder()
+            var container = await new VotingSystemBuilder()
                 .WireUpApplication()
                 .WithIdentityService<AuthenticationService, VoterIdentity>()
                 .With(containerBuilder => containerBuilder.RegisterClientDependencies())
+                .InitializeIfNeed()
                 .Build();
             
             await container.Seed();
