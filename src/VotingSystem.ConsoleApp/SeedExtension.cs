@@ -1,50 +1,44 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Autofac;
 using MediatR;
 using SharpDomain.Application;
 using VotingSystem.Application.Identity;
 using VotingSystem.Application.Questions;
 using VotingSystem.Application.Voters;
-using VotingSystem.Application.Voters.ViewModels;
 
 namespace VotingSystem.ConsoleApp
 {
     public static class SeedExtension
     {
-        // TODO: remove GetAwaiter().GetResult()
-        public static ContainerBuilder SeedOnBuild(this ContainerBuilder containerBuilder)
+        public static async Task Seed(this IContainer container)
         {
-            containerBuilder.RegisterBuildCallback(container =>
+            await using var scope = container.BeginLifetimeScope();
+            var mediator = scope.Resolve<IMediator>();
+            var authenticationService = scope.Resolve<AuthenticationService>();
+
+            var logIn = new LogIn("12312312312");
+            var logInResult = await mediator.Send(logIn);
+            if (!logInResult.TryGet(out var voter))
             {
-                using var scope = container.BeginLifetimeScope();
-                var mediator = scope.Resolve<IMediator>();
-                var authenticationService = scope.Resolve<AuthenticationService>();
-
-                var logIn = new LogIn("12312312312");
-                var logInResult = mediator.Send(logIn).GetAwaiter().GetResult();
-                if (!logInResult.TryGet(out var voter))
-                {
-                    var createVoter = new CreateVoter("12312312312");
-                    voter = mediator.Send(createVoter).GetAwaiter().GetResult()
-                        .OnError(error => throw new InvalidOperationException($"cannot create voter while seeding: {error}"));
-                }
+                var createVoter = new CreateVoter("12312312312");
+                voter = await mediator.Send(createVoter)
+                    .OnError(error => throw new InvalidOperationException($"cannot create voter while seeding: {error}"));
+            }
                 
-                var identity = new VoterIdentity(voter.Id, voter.Pesel, voter.IsAdministrator);
-                authenticationService.SetIdentity(identity);
+            var identity = new VoterIdentity(voter.Id, voter.Pesel, voter.IsAdministrator);
+            authenticationService.SetIdentity(identity);
 
-                var getQuestionsCount = new GetQuestionsCount();
-                var questionsCount = mediator.Send(getQuestionsCount).GetAwaiter().GetResult()
-                    .OnError(error => throw new InvalidOperationException($"cannot get questions count while seeding: {error}"));
+            var getQuestionsCount = new GetQuestionsCount();
+            var questionsCount = await mediator.Send(getQuestionsCount)
+                .OnError(error => throw new InvalidOperationException($"cannot get questions count while seeding: {error}"));
                 
-                if (questionsCount.Count == 0)
-                {
-                    var createQuestion = new CreateQuestion("Some question?", new[] { "Answer 1", "Answer 2", "Answer 3" });
-                    mediator.Send(createQuestion).GetAwaiter().GetResult()
-                        .OnError(error => throw new InvalidOperationException($"cannot create question while seeding: {error}"));
-                }
-            });
-
-            return containerBuilder;
+            if (questionsCount.Count == 0)
+            {
+                var createQuestion = new CreateQuestion("Some question?", new[] { "Answer 1", "Answer 2", "Answer 3" });
+                await mediator.Send(createQuestion)
+                    .OnError(error => throw new InvalidOperationException($"cannot create question while seeding: {error}"));
+            }
         }
     }
 }

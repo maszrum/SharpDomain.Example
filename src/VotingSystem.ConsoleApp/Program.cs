@@ -20,8 +20,9 @@ namespace VotingSystem.ConsoleApp
                 .WireUpApplication()
                 .WithIdentityService<AuthenticationService, VoterIdentity>()
                 .With(containerBuilder => containerBuilder.RegisterClientDependencies())
-                .With(containerBuilder => containerBuilder.SeedOnBuild())
                 .Build();
+            
+            await container.Seed();
             
             await using (container)
             {
