@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SharpDomain.AccessControl.AspNetCore;
+using SharpDomain.IoC;
 using VotingSystem.Application.Identity;
 using VotingSystem.IoC;
 using VotingSystem.WebApi.Jwt;
@@ -36,7 +37,8 @@ namespace VotingSystem.WebApi
         public void ConfigureContainer(ContainerBuilder builder) =>
             new VotingSystemBuilder()
                 .UseContainerBuilder(builder)
-                .WireUpApplication();
+                .WireUpApplication()
+                .InitializeIfNeed();
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

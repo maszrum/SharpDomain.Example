@@ -3,6 +3,7 @@ using System.Reflection;
 using Autofac;
 using Dapper;
 using Npgsql;
+using SharpDomain.IoC;
 using VotingSystem.Persistence.Dapper.AutoTransaction;
 
 namespace VotingSystem.Persistence.Dapper
@@ -19,7 +20,8 @@ namespace VotingSystem.Persistence.Dapper
                 .RegisterConfiguration(configurationProvider)
                 .RegisterConnection()
                 .RegisterRepositories()
-                .RegisterTransactionProvider();
+                .RegisterTransactionProvider()
+                .RegisterInitializer();
         }
         
         private static ContainerBuilder RegisterConfiguration(
@@ -84,6 +86,16 @@ namespace VotingSystem.Persistence.Dapper
                 .RegisterType<TransactionWrapper>()
                 .AsSelf()
                 .As<ITransactionProvider>()
+                .InstancePerLifetimeScope();
+            
+            return containerBuilder;
+        }
+        
+        private static ContainerBuilder RegisterInitializer(this ContainerBuilder containerBuilder)
+        {
+            containerBuilder
+                .RegisterType<DatabaseInitializer>()
+                .As<ISystemInitializer>()
                 .InstancePerLifetimeScope();
             
             return containerBuilder;

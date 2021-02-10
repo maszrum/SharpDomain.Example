@@ -4,6 +4,7 @@ using Autofac;
 using NUnit.Framework;
 using SharpDomain.AccessControl;
 using SharpDomain.Application;
+using SharpDomain.IoC;
 using SharpDomain.NUnit;
 using VotingSystem.Application.Identity;
 using VotingSystem.Application.Voters;
@@ -25,7 +26,9 @@ namespace VotingSystem.Application.Tests.Integration.TestBase
         }
 
         protected override void ConfigureSystem(VotingSystemBuilder systemBuilder) => 
-            systemBuilder.WithIdentityService<AuthenticationService, VoterIdentity>();
+            systemBuilder
+                .WithIdentityService<AuthenticationService, VoterIdentity>()
+                .InitializeForcefully();
         
         protected Task<VoterViewModel> LogInAsAdministrator()
         {
