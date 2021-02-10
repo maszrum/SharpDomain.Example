@@ -38,7 +38,7 @@ namespace VotingSystem.WebApi
             new VotingSystemBuilder()
                 .UseContainerBuilder(builder)
                 .WireUpApplication()
-                .InitializeIfNeed();
+                .Initialize(InitializationType.IfNeed);
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

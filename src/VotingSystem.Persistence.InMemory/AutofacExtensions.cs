@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using Autofac;
-using SharpDomain.IoC;
 using VotingSystem.Persistence.InMemory.Datastore;
 
 namespace VotingSystem.Persistence.InMemory
@@ -51,7 +50,7 @@ namespace VotingSystem.Persistence.InMemory
         {
             containerBuilder
                 .RegisterType<DatastoreInitializer>()
-                .As<ISystemInitializer>()
+                .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
             
             return containerBuilder;

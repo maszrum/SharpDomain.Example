@@ -21,7 +21,7 @@ namespace VotingSystem.ConsoleApp
                 .WireUpApplication()
                 .WithIdentityService<AuthenticationService, VoterIdentity>()
                 .With(containerBuilder => containerBuilder.RegisterClientDependencies())
-                .InitializeIfNeed()
+                .Initialize(InitializationType.IfNeed)
                 .Build();
             
             await container.Seed();

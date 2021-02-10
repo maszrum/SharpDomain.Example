@@ -28,7 +28,7 @@ namespace VotingSystem.Application.Tests.Integration.TestBase
         protected override void ConfigureSystem(VotingSystemBuilder systemBuilder) => 
             systemBuilder
                 .WithIdentityService<AuthenticationService, VoterIdentity>()
-                .InitializeForcefully();
+                .Initialize(InitializationType.Forcefully);
         
         protected Task<VoterViewModel> LogInAsAdministrator()
         {

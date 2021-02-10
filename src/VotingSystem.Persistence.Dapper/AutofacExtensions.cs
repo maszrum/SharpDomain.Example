@@ -3,7 +3,6 @@ using System.Reflection;
 using Autofac;
 using Dapper;
 using Npgsql;
-using SharpDomain.IoC;
 using VotingSystem.Persistence.Dapper.AutoTransaction;
 
 namespace VotingSystem.Persistence.Dapper
@@ -95,7 +94,7 @@ namespace VotingSystem.Persistence.Dapper
         {
             containerBuilder
                 .RegisterType<DatabaseInitializer>()
-                .As<ISystemInitializer>()
+                .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
             
             return containerBuilder;
