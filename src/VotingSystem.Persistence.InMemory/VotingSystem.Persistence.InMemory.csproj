@@ -8,6 +8,7 @@
 
     <ItemGroup>
         <PackageReference Include="SharpDomain.AutoTransaction" Version="0.2.7" />
+        <PackageReference Include="SharpDomain.IoC" Version="0.2.7" />
     </ItemGroup>
 
     <ItemGroup>
