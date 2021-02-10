@@ -1,4 +1,4 @@
-﻿CREATE TABLE public.vote
+﻿CREATE TABLE @Schema.vote
 (
     id uuid NOT NULL,
     voter_id uuid NOT NULL,
@@ -15,6 +15,3 @@
         ON DELETE NO ACTION
         NOT VALID
 );
-
-ALTER TABLE public.vote
-    OWNER to db_user;

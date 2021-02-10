@@ -1,4 +1,4 @@
-﻿CREATE TABLE public.answer
+﻿CREATE TABLE @Schema.answer
 (
     id uuid NOT NULL,
     question_id uuid NOT NULL,
@@ -12,6 +12,3 @@
         ON DELETE NO ACTION
         NOT VALID
 );
-
-ALTER TABLE public.answer
-    OWNER to db_user;
