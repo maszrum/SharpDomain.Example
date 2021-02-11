@@ -38,7 +38,7 @@ namespace VotingSystem.Persistence.Dapper.Repositories
         {
             var sqlQuery = new StringBuilder()
                 .AppendLine("SELECT * FROM @Schema.question WHERE id = @Id;")
-                .AppendLine("SELECT * FROM @Schema.answer WHERE question_id = @Id;")
+                .AppendLine("SELECT * FROM @Schema.answer WHERE question_id = @Id ORDER BY answer_order ASC;")
                 .ToString()
                 .InjectSchema(Schema);
             
