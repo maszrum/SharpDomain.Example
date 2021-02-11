@@ -1,4 +1,4 @@
-﻿using VotingSystem.Core.Question;
+﻿using VotingSystem.Core.Questions;
 
 namespace VotingSystem.Application.Questions.ViewModels
 {

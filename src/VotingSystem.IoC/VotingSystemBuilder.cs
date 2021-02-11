@@ -10,7 +10,7 @@ using SharpDomain.IoC.Application;
 using SharpDomain.IoC.Core;
 using SharpDomain.IoC.Persistence;
 using VotingSystem.Application.Questions;
-using VotingSystem.Core.Question;
+using VotingSystem.Core.Questions;
 using VotingSystem.Persistence.Entities;
 
 #if IN_MEMORY_PERSISTENCE

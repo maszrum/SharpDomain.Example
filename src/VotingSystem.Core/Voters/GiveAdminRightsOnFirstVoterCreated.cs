@@ -5,7 +5,7 @@ using VotingSystem.Core.InfrastructureAbstractions;
 
 // ReSharper disable once UnusedType.Global
 
-namespace VotingSystem.Core.Voter
+namespace VotingSystem.Core.Voters
 {
     internal class GiveAdminRightsOnFirstVoterCreated : DomainEventHandler<VoterCreated, Voter>
     {

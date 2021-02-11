@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using VotingSystem.Core.Vote;
+using VotingSystem.Core.Votes;
 
 namespace VotingSystem.Application.Voters.ViewModels
 {

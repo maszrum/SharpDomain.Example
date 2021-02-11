@@ -4,7 +4,7 @@ using SharpDomain.Core.ModelStateTracking;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 
-namespace VotingSystem.Core.Answer
+namespace VotingSystem.Core.Answers
 {
     public class Answer : Aggregate
     {

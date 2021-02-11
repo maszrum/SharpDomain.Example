@@ -9,7 +9,7 @@ using VotingSystem.Application.Authorization;
 using VotingSystem.Application.Identity;
 using VotingSystem.Application.Voters.ViewModels;
 using VotingSystem.Core.InfrastructureAbstractions;
-using VotingSystem.Core.Vote;
+using VotingSystem.Core.Votes;
 
 // ReSharper disable once UnusedType.Global
 

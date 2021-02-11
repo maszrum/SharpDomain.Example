@@ -3,13 +3,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using SharpDomain.Core;
 using VotingSystem.Core.InfrastructureAbstractions;
-using VotingSystem.Core.Voter;
+using VotingSystem.Core.Voters;
 
 // ReSharper disable once UnusedType.Global
 
-namespace VotingSystem.Core.Answer
+namespace VotingSystem.Core.Answers
 {
-    internal class IncrementAnswerVotesOnVotePosted : DomainEventHandler<VotePosted, Voter.Voter>
+    internal class IncrementAnswerVotesOnVotePosted : DomainEventHandler<VotePosted, Voter>
     {
         private readonly IDomainEvents _domainEvents;
         private readonly IAnswersRepository _answersRepository;
@@ -22,7 +22,7 @@ namespace VotingSystem.Core.Answer
             _answersRepository = answersRepository;
         }
         
-        public override async Task Handle(VotePosted @event, Voter.Voter model, CancellationToken cancellationToken)
+        public override async Task Handle(VotePosted @event, Voter model, CancellationToken cancellationToken)
         {
             var answer = await _answersRepository.Get(@event.AnswerId)!;
             

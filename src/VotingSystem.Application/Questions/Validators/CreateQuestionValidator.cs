@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using VotingSystem.Core.Question;
+using VotingSystem.Core.Questions;
 
 // ReSharper disable once UnusedType.Global
 

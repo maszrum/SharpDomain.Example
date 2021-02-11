@@ -1,6 +1,6 @@
 ﻿using SharpDomain.Core;
 
-namespace VotingSystem.Core.Voter
+namespace VotingSystem.Core.Voters
 {
     internal class TwiceVoteAttemptException : DomainException
     {

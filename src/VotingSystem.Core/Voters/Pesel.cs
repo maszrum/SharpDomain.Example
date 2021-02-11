@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VotingSystem.Core.Voter
+namespace VotingSystem.Core.Voters
 {
     public class Pesel : IEquatable<Pesel>, IEquatable<string>
     {

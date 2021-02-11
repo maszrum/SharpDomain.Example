@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using VotingSystem.Core.Question;
+using VotingSystem.Core.Questions;
 
 namespace VotingSystem.Core.InfrastructureAbstractions
 {
     public interface IQuestionsRepository
     {
-        Task<Question.Question?> Get(Guid questionId);
-        Task<IReadOnlyList<Question.Question>> GetAll();
+        Task<Question?> Get(Guid questionId);
+        Task<IReadOnlyList<Question>> GetAll();
         Task<int> GetCount();
     }
 }

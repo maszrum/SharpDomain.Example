@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VotingSystem.Core.Answer;
+using VotingSystem.Core.Answers;
 using VotingSystem.Core.InfrastructureAbstractions;
-using VotingSystem.Core.Question;
+using VotingSystem.Core.Questions;
 using VotingSystem.Persistence.Entities;
 using VotingSystem.Persistence.InMemory.Datastore;
 using VotingSystem.Persistence.InMemory.Exceptions;

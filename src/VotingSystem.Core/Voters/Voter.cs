@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using SharpDomain.Core;
+using VotingSystem.Core.Votes;
 
-namespace VotingSystem.Core.Voter
+namespace VotingSystem.Core.Voters
 {
     public class Voter : AggregateRoot
     {
@@ -11,7 +12,7 @@ namespace VotingSystem.Core.Voter
             Guid id, 
             Pesel pesel,
             bool isAdministrator,
-            List<Vote.Vote> votes)
+            List<Vote> votes)
         {
             Id = id;
             Pesel = pesel;
@@ -19,7 +20,7 @@ namespace VotingSystem.Core.Voter
             _votes = votes;
         }
 
-        private readonly List<Vote.Vote> _votes;
+        private readonly List<Vote> _votes;
         
         public override Guid Id { get; }
         
@@ -27,9 +28,9 @@ namespace VotingSystem.Core.Voter
         
         public bool IsAdministrator { get; set; }
         
-        public IReadOnlyList<Vote.Vote> Votes => _votes;
+        public IReadOnlyList<Vote> Votes => _votes;
         
-        public Vote.Vote Vote(Guid voterId, Guid questionId, Guid answerId)
+        public Vote Vote(Guid voterId, Guid questionId, Guid answerId)
         {
             var alreadyVoted = Votes.Any(v => v.QuestionId == questionId);
             if (alreadyVoted)
@@ -38,7 +39,7 @@ namespace VotingSystem.Core.Voter
             }
             
             var voteId = Guid.NewGuid();
-            var vote = new Vote.Vote(voteId, voterId, questionId);
+            var vote = new Vote(voteId, voterId, questionId);
             
             _votes.Add(vote);
             
@@ -57,7 +58,7 @@ namespace VotingSystem.Core.Voter
                 id :voterId, 
                 pesel: peselValue, 
                 isAdministrator: false, 
-                votes: new List<Vote.Vote>());
+                votes: new List<Vote>());
             
             var createdEvent = new VoterCreated(voterId);
             voter.Events.Add(createdEvent);

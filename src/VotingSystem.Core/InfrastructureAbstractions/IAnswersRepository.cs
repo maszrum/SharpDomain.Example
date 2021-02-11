@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using VotingSystem.Core.Answer;
+using VotingSystem.Core.Answers;
 
 namespace VotingSystem.Core.InfrastructureAbstractions
 {
     public interface IAnswersRepository
     {
-        Task<Answer.Answer?> Get(Guid answerId);
+        Task<Answer?> Get(Guid answerId);
     }
 }

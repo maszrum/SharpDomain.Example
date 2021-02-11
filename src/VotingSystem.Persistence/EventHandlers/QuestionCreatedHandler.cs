@@ -3,8 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using SharpDomain.Infrastructure;
-using VotingSystem.Core.Answer;
-using VotingSystem.Core.Question;
+using VotingSystem.Core.Answers;
+using VotingSystem.Core.Questions;
 using VotingSystem.Persistence.Entities;
 using VotingSystem.Persistence.RepositoryInterfaces;
 

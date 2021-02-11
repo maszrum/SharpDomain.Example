@@ -1,7 +1,7 @@
 ﻿using System;
 using SharpDomain.Core;
 
-namespace VotingSystem.Core.Voter
+namespace VotingSystem.Core.Voters
 {
     public class VoterCreated : EventBase
     {

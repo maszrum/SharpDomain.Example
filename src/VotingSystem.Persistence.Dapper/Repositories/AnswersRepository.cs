@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Npgsql;
-using VotingSystem.Core.Answer;
+using VotingSystem.Core.Answers;
 using VotingSystem.Core.InfrastructureAbstractions;
 using VotingSystem.Persistence.Dapper.AutoTransaction;
 using VotingSystem.Persistence.Entities;

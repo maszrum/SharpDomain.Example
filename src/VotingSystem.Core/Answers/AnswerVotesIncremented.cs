@@ -1,7 +1,7 @@
 ﻿using System;
 using SharpDomain.Core;
 
-namespace VotingSystem.Core.Answer
+namespace VotingSystem.Core.Answers
 {
     public class AnswerVotesIncremented : EventBase
     {

@@ -1,6 +1,6 @@
 ﻿using SharpDomain.Core;
 
-namespace VotingSystem.Core.Question
+namespace VotingSystem.Core.Questions
 {
     internal class TooFewAnswersInQuestionException : DomainException
     {

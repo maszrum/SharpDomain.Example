@@ -6,7 +6,7 @@ using SharpDomain.Application;
 using SharpDomain.Responses;
 using VotingSystem.Application.Questions.ViewModels;
 using VotingSystem.Core.InfrastructureAbstractions;
-using VotingSystem.Core.Question;
+using VotingSystem.Core.Questions;
 
 // ReSharper disable once UnusedType.Global
 

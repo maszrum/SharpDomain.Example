@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VotingSystem.Core.Answer;
+using VotingSystem.Core.Answers;
 using VotingSystem.Core.InfrastructureAbstractions;
 using VotingSystem.Persistence.Entities;
 using VotingSystem.Persistence.InMemory.Datastore;

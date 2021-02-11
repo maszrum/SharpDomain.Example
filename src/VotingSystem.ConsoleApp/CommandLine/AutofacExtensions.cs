@@ -3,7 +3,7 @@ using Autofac;
 using MediatR;
 using VotingSystem.ConsoleApp.CommandLine.Commands;
 using VotingSystem.ConsoleApp.CommandLine.ResultTracking;
-using VotingSystem.Core.Answer;
+using VotingSystem.Core.Answers;
 
 namespace VotingSystem.ConsoleApp.CommandLine
 {
