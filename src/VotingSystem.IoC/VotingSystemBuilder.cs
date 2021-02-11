@@ -1,5 +1,5 @@
-﻿// #define IN_MEMORY_PERSISTENCE
-#define DAPPER_PERSISTENCE
+﻿#define IN_MEMORY_PERSISTENCE
+// #define DAPPER_PERSISTENCE
 
 using SharpDomain.AccessControl;
 using SharpDomain.AutoMapper;
