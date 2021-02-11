@@ -8,6 +8,7 @@
 
     <ItemGroup>
         <PackageReference Include="SharpDomain.NUnit" Version="0.2.8" />
+        <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
     </ItemGroup>
 
     <ItemGroup>
