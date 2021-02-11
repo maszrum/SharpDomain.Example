@@ -53,7 +53,7 @@ namespace VotingSystem.ConsoleApp
         private static Task RunConsole(IContainer container)
         {
             var consoleVoter = new ConsoleVoter(container);
-            return Task.Run(() => consoleVoter.RunBlocking());
+            return Task.Run(consoleVoter.RunBlocking);
         }
         
         private static async Task SimulateVoting(IContainer container, CancellationToken cancellationToken)

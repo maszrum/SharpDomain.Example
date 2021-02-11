@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac;
 
 namespace VotingSystem.ConsoleApp.CommandLine
@@ -19,7 +20,7 @@ namespace VotingSystem.ConsoleApp.CommandLine
             SetupCommands(container);
         }
         
-        public void RunBlocking()
+        public async Task RunBlocking()
         {
             ShowWelcomeMessage();
             
@@ -45,9 +46,10 @@ namespace VotingSystem.ConsoleApp.CommandLine
                     }
                     else if (_commandsFactory.TryGetValue(command, out var commandFactory))
                     {
-                        using var scope = _container.BeginLifetimeScope();
+                        await using var scope = _container.BeginLifetimeScope();
                         var commandHandler = commandFactory(scope);
-                        commandHandler.Execute(args).GetAwaiter().GetResult();
+                        
+                        await commandHandler.Execute(args);
                     }
                     else if (!IsQuitCommand(command))
                     {
