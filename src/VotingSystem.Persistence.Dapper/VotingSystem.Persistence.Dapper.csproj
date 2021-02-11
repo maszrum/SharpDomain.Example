@@ -21,12 +21,13 @@
     </ItemGroup>
     
     <ItemGroup>
-      <Content Include=".postgresql-docker\docker-compose.yml" />
-      <Content Include=".postgresql-docker\README.md" />
-      <Content Include=".postgresql-tables\3_answer.sql" />
-      <Content Include=".postgresql-tables\2_question.sql" />
-      <Content Include=".postgresql-tables\4_vote.sql" />
-      <Content Include=".postgresql-tables\1_voter.sql" />
+        <Content Include=".postgresql-docker\docker-compose.yml" />
+        <Content Include=".postgresql-docker\README.md" />
+        <Content Include=".postgresql-tables\README.md" />
+        <EmbeddedResource Include=".postgresql-tables\1_voter.sql" />
+        <EmbeddedResource Include=".postgresql-tables\2_question.sql" />
+        <EmbeddedResource Include=".postgresql-tables\3_answer.sql" />
+        <EmbeddedResource Include=".postgresql-tables\4_vote.sql" />
     </ItemGroup>
 
 </Project>

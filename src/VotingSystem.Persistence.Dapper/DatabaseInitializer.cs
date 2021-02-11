@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Dapper;
 using Npgsql;
 using SharpDomain.IoC;
 using VotingSystem.Persistence.Dapper.AutoTransaction;
@@ -10,6 +13,8 @@ namespace VotingSystem.Persistence.Dapper
         private readonly NpgsqlConnection _connection;
         private readonly ITransactionProvider _transactionProvider;
         private readonly SchemaProvider _schemaProvider;
+        
+        private string Schema => _schemaProvider();
 
         public DatabaseInitializer(
             NpgsqlConnection connection, 
@@ -21,16 +26,68 @@ namespace VotingSystem.Persistence.Dapper
             _schemaProvider = schemaProvider;
         }
 
-        protected override Task InitializeIfNeed()
+        protected override async Task InitializeIfNeed()
         {
-            // TODO: create tables if does not exist
-            return Task.CompletedTask;
+            var existingTables = await GetExistingTables();
+            
+            var sqlSource = new TablesSqlSource();
+            var expectedTables = sqlSource.GetAvailableTableNames().ToArray();
+
+            foreach (var expectedTable in expectedTables)
+            {
+                if (!existingTables.Contains(expectedTable))
+                {
+                    var query = await sqlSource.ReadSqlForTable(expectedTable);
+                    
+                    _ = await _connection.ExecuteAsync(
+                        sql: query.InjectSchema(Schema),
+                        param: _transactionProvider.Get());
+                }
+            }
         }
 
-        protected override Task InitializeForcefully()
+        protected override async Task InitializeForcefully()
         {
-            // TODO: remove tables and create
-            return Task.CompletedTask;
+            var existingTables = await GetExistingTables();
+            
+            var sqlSource = new TablesSqlSource();
+            var expectedTables = sqlSource.GetAvailableTableNames().ToArray();
+
+            // drop all tables in reverse order
+            foreach (var expectedTable in expectedTables.Reverse())
+            {
+                if (existingTables.Contains(expectedTable))
+                {
+                    await DropTable(expectedTable);
+                }
+            }
+            
+            // create all tables
+            foreach (var expectedTable in expectedTables)
+            {
+                var query = await sqlSource.ReadSqlForTable(expectedTable);
+                    
+                _ = await _connection.ExecuteAsync(
+                    sql: query.InjectSchema(Schema),
+                    param: _transactionProvider.Get());
+            }
+        }
+        
+        private async Task<IReadOnlyList<string>> GetExistingTables()
+        {
+            var existingTables = await _connection.QueryAsync<string>(
+                sql: "SELECT tablename FROM pg_tables WHERE schemaname = '@Schema'"
+                    .InjectSchema(Schema),
+                param: _transactionProvider.Get());
+            
+            return existingTables.ToArray();
+        }
+        
+        private Task DropTable(string tableName)
+        {
+            return _connection.ExecuteAsync(
+                sql: $"DROP TABLE {Schema}.{tableName}",
+                transaction: _transactionProvider.Get());
         }
     }
 }
