@@ -5,12 +5,12 @@
     question_id uuid NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT voter_id_fkey FOREIGN KEY (voter_id)
-        REFERENCES public.voter (id) MATCH SIMPLE
+        REFERENCES @Schema.voter (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID,
     CONSTRAINT question_id_fkey FOREIGN KEY (question_id)
-        REFERENCES public.question (id) MATCH SIMPLE
+        REFERENCES @Schema.question (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID
