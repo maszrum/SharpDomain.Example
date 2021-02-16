@@ -46,10 +46,15 @@ namespace VotingSystem.Application.Tests.Integration
             const string voterPesel = "87062537594";
             
             var createVoter = new CreateVoter(voterPesel);
-            var voterResponse = await Mediator.Send(createVoter);
+            var createVoterResponse = await Mediator.Send(createVoter);
             
-            var voter = AssertNotError.Of(voterResponse);
-            Assert.That(voter.IsAdministrator, Is.True);
+            var logIn = new LogIn(voterPesel);
+            var logInResponse = await Mediator.Send(logIn);
+            
+            AssertNotError.Of(createVoterResponse);
+            var voterViewModel = AssertNotError.Of(logInResponse);
+            
+            Assert.That(voterViewModel.IsAdministrator, Is.True);
         }
         
         [Test]
@@ -64,7 +69,11 @@ namespace VotingSystem.Application.Tests.Integration
             var createSecondVoter = new CreateVoter(secondVoterPesel);
             var secondVoterResponse = await Mediator.Send(createSecondVoter);
             
-            var secondVoter = AssertNotError.Of(secondVoterResponse);
+            var logIn = new LogIn(secondVoterPesel);
+            var logInResponse = await Mediator.Send(logIn);
+            
+            AssertNotError.Of(secondVoterResponse);
+            var secondVoter = AssertNotError.Of(logInResponse);
             Assert.That(secondVoter.IsAdministrator, Is.False);
         }
     }

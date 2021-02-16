@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Autofac;
 using MediatR;
 using SharpDomain.Application;
-using SharpDomain.Responses;
 using VotingSystem.Application.Identity;
 using VotingSystem.Application.Questions;
 using VotingSystem.Application.Voters;
@@ -27,14 +26,13 @@ namespace VotingSystem.ConsoleApp
             await using var scope = _container.BeginLifetimeScope();
             var mediator = _container.Resolve<IMediator>();
             
-            var voter = await EnsureNotError(() =>
-            {
-                var pesel = GenerateRandomPesel();
-                var createVoter = new CreateVoter(pesel);
-                return mediator.Send(createVoter);
-            });
+            var pesel = GenerateRandomPesel();
             
-            var logIn = new LogIn(voter.Pesel);
+            var createVoter = new CreateVoter(pesel);
+            await mediator.Send(createVoter)
+                .OnError(error => throw new InvalidOperationException(error.ToString()));
+            
+            var logIn = new LogIn(pesel);
             var logInResponse = await mediator.Send(logIn)
                 .OnError(error => throw new InvalidOperationException(error.ToString()));
 
@@ -97,28 +95,6 @@ namespace VotingSystem.ConsoleApp
         {
             var index = Random.Next(0, guids.Count);
             return guids[index];
-        }
-        
-        private static async Task<TData> EnsureNotError<TData>(Func<Task<Response<TData>>> action) 
-            where TData : class
-        {
-            var tries = 0;
-            Response<TData> response;
-            TData? data;
-            do
-            {
-                if (tries == 3)
-                {
-                    throw new InvalidOperationException(
-                        $"received error {tries} times when invoking action");
-                }
-                
-                response = await action();
-                tries++;
-            }
-            while (!response.TryGet(out data));
-            
-            return data;
         }
     }
 }

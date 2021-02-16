@@ -48,10 +48,10 @@ namespace VotingSystem.Application.Tests.Integration
             var getQuestions = new GetQuestions();
             var questionsResponse = await Mediator.Send(getQuestions);
             
-            var addedQuestion = AssertNotError.Of(createQuestionResponse);
+            var addedQuestionId = AssertNotError.Of(createQuestionResponse);
             var allQuestions = AssertNotError.Of(questionsResponse);
             
-            var questionThatWasAdded = allQuestions.Questions.SingleOrDefault(q => q.Id == addedQuestion.Id);
+            var questionThatWasAdded = allQuestions.Questions.SingleOrDefault(q => q.Id == addedQuestionId);
             
             Assert.That(questionThatWasAdded, Is.Not.Null);
             Assert.Multiple(() =>

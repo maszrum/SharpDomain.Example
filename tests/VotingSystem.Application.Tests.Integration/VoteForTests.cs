@@ -20,7 +20,11 @@ namespace VotingSystem.Application.Tests.Integration
                 questionText: "Some question?", 
                 answers: new[] {"First answer", "Second answer"});
             var createQuestionResponse = await Mediator.Send(createQuestion);
-            var createdQuestion = AssertNotError.Of(createQuestionResponse);
+            var createdQuestionId = AssertNotError.Of(createQuestionResponse);
+            
+            var getQuestion = new GetQuestion(createdQuestionId);
+            var questionResponse = await Mediator.Send(getQuestion);
+            var createdQuestion = AssertNotError.Of(questionResponse);
             
             LogOut();
             
@@ -41,7 +45,11 @@ namespace VotingSystem.Application.Tests.Integration
                 questionText: "Some question?", 
                 answers: new[] {"First answer", "Second answer"});
             var createQuestionResponse = await Mediator.Send(createQuestion);
-            var createdQuestion = AssertNotError.Of(createQuestionResponse);
+            var createdQuestionId = AssertNotError.Of(createQuestionResponse);
+            
+            var getQuestion = new GetQuestion(createdQuestionId);
+            var questionResponse = await Mediator.Send(getQuestion);
+            var createdQuestion = AssertNotError.Of(questionResponse);
             
             await LogInAsVoter();
             
@@ -72,7 +80,11 @@ namespace VotingSystem.Application.Tests.Integration
                 questionText: "Some question?", 
                 answers: new[] {"First answer", "Second answer"});
             var createQuestionResponse = await Mediator.Send(createQuestion);
-            var createdQuestion = AssertNotError.Of(createQuestionResponse);
+            var createdQuestionId = AssertNotError.Of(createQuestionResponse);
+            
+            var getQuestion = new GetQuestion(createdQuestionId);
+            var questionResponse = await Mediator.Send(getQuestion);
+            var createdQuestion = AssertNotError.Of(questionResponse);
             
             await LogInAsVoter();
             

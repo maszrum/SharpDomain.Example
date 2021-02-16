@@ -1,10 +1,10 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using SharpDomain.Application;
 using SharpDomain.Core;
 using SharpDomain.Responses;
-using VotingSystem.Application.Voters.ViewModels;
 using VotingSystem.Core.InfrastructureAbstractions;
 using VotingSystem.Core.Voters;
 
@@ -12,7 +12,7 @@ using VotingSystem.Core.Voters;
 
 namespace VotingSystem.Application.Voters
 {
-    internal class CreateVoterHandler : ICommandHandler<CreateVoter, VoterViewModel>
+    internal class CreateVoterHandler : ICreateCommandHandler<CreateVoter>
     {
         private readonly IMapper _mapper;
         private readonly IVotersRepository _voters;
@@ -28,7 +28,7 @@ namespace VotingSystem.Application.Voters
             _domainEvents = domainEvents;
         }
 
-        public async Task<Response<VoterViewModel>> Handle(CreateVoter request, CancellationToken cancellationToken)
+        public async Task<Response<Guid>> Handle(CreateVoter request, CancellationToken cancellationToken)
         {
             var exists = await _voters.Exists(request.Pesel);
             if (exists)
@@ -42,8 +42,7 @@ namespace VotingSystem.Application.Voters
                 .CollectFrom(voter)
                 .PublishCollected(cancellationToken);
 
-            var viewModel = _mapper.Map<Voter, VoterViewModel>(voter);
-            return viewModel;
+            return voter.Id;
         }
     }
 }

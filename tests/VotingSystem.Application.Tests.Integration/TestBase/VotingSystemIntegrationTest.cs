@@ -82,16 +82,18 @@ namespace VotingSystem.Application.Tests.Integration.TestBase
         
         private async Task<VoterViewModel> CreateAdministrator()
         {
+            const string adminPesel = "71102117282";
+            
             // first registered user is admin
-            var createAdmin = new CreateVoter("71102117282");
-            var adminResponse = await Mediator.Send(createAdmin);
+            var createAdmin = new CreateVoter(adminPesel);
+            await Mediator.Send(createAdmin)
+                .OnError(error => throw new Exception($"cannot create admin: {error}"));
             
-            var admin = adminResponse.OnError(
-                error => throw new Exception($"cannot create admin: {error}"));
+            var logIn = new LogIn(adminPesel);
+            _administrator = await Mediator.Send(logIn)
+                .OnError(error => throw new Exception($"cannot create admin: {error}"));
             
-            _administrator = admin;
-            
-            return admin;
+            return _administrator;
         }
         
         private async Task<VoterViewModel> CreateVoter()
@@ -102,16 +104,18 @@ namespace VotingSystem.Application.Tests.Integration.TestBase
                 _ = await CreateAdministrator();
             }
             
+            const string voterPesel = "99041878149";
+            
             // second is not admin
-            var createVoter = new CreateVoter("99041878149");
-            var voterResponse = await Mediator.Send(createVoter);
+            var createVoter = new CreateVoter(voterPesel);
+            await Mediator.Send(createVoter)
+                .OnError(error => throw new Exception($"cannot create voter: {error}"));
             
-            var voter = voterResponse.OnError(
-                error => throw new Exception($"cannot create voter: {error}"));
+            var logIn = new LogIn(voterPesel);
+            _voter = await Mediator.Send(logIn)
+                .OnError(error => throw new Exception($"cannot create voter: {error}"));
             
-            _voter = voter;
-            
-            return voter;
+            return _voter;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using SharpDomain.AccessControl;
@@ -6,14 +7,13 @@ using SharpDomain.Application;
 using SharpDomain.Core;
 using SharpDomain.Responses;
 using VotingSystem.Application.Authorization;
-using VotingSystem.Application.Questions.ViewModels;
 using VotingSystem.Core.Questions;
 
 // ReSharper disable once UnusedType.Global
 
 namespace VotingSystem.Application.Questions
 {
-    internal class CreateQuestionHandler : ICommandHandler<CreateQuestion, QuestionViewModel>, IAuthorizable
+    internal class CreateQuestionHandler : ICreateCommandHandler<CreateQuestion>, IAuthorizationRequired
     {
         private readonly IMapper _mapper;
         private readonly IDomainEvents _domainEvents;
@@ -29,7 +29,7 @@ namespace VotingSystem.Application.Questions
         public void ConfigureAuthorization(AuthorizationConfiguration configuration) =>
             configuration.UseRequirement<VoterMustBeAdministratorRequirement>();
 
-        public async Task<Response<QuestionViewModel>> Handle(CreateQuestion request, CancellationToken cancellationToken)
+        public async Task<Response<Guid>> Handle(CreateQuestion request, CancellationToken cancellationToken)
         {
             var question = Question.Create(request.QuestionText, request.Answers);
             
@@ -37,8 +37,7 @@ namespace VotingSystem.Application.Questions
                 .CollectFrom(question)
                 .PublishCollected(cancellationToken);
             
-            var viewModel = _mapper.Map<Question, QuestionViewModel>(question);
-            return viewModel;
+            return question.Id;
         }
     }
 }

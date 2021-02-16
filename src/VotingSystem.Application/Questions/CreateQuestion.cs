@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using SharpDomain.Application;
-using VotingSystem.Application.Questions.ViewModels;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 
 namespace VotingSystem.Application.Questions
 {
-    public class CreateQuestion : ICommand<QuestionViewModel>
+    public class CreateQuestion : ICreateCommand
     {
         public CreateQuestion(
             string questionText, 

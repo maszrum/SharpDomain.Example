@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpDomain.NUnit;
@@ -19,23 +21,28 @@ namespace VotingSystem.Application.Tests.Integration
                 questionText: "Some question?", 
                 answers: new[] {"First answer", "Second answer"});
             var createFirstQuestionResponse = await Mediator.Send(createFirstQuestion);
-            var firstQuestion = AssertNotError.Of(createFirstQuestionResponse);
+            var firstQuestionId = AssertNotError.Of(createFirstQuestionResponse);
             
             var createSecondQuestion = new CreateQuestion(
                 questionText: "Another question?", 
                 answers: new[] {"Any answer", "Some answer"});
             var createSecondQuestionResponse = await Mediator.Send(createSecondQuestion);
-            var secondQuestion = AssertNotError.Of(createSecondQuestionResponse);
+            var secondQuestionId = AssertNotError.Of(createSecondQuestionResponse);
             
             var createThirdQuestion = new CreateQuestion(
                 questionText: "Third question?", 
                 answers: new[] {"Any answer", "Some answer", "I don't know answer"});
             var createThirdQuestionResponse = await Mediator.Send(createThirdQuestion);
-            var thirdQuestion = AssertNotError.Of(createThirdQuestionResponse);
+            var thirdQuestionId = AssertNotError.Of(createThirdQuestionResponse);
             
             await LogInAsVoter();
             
-            var expectedQuestions = new[] { firstQuestion, secondQuestion, thirdQuestion };
+            var expectedQuestions = new Dictionary<Guid, CreateQuestion>
+            {
+                [firstQuestionId] = createFirstQuestion, 
+                [secondQuestionId] = createSecondQuestion, 
+                [thirdQuestionId] = createThirdQuestion
+            };
             
             var getQuestions = new GetQuestions();
             var getQuestionsResponse = await Mediator.Send(getQuestions);
@@ -44,15 +51,15 @@ namespace VotingSystem.Application.Tests.Integration
             Assert.That(questions.Questions, Has.Count.EqualTo(3));
             
             CollectionAssert.AreEquivalent(
-                expectedQuestions.Select(q => q.QuestionText),
+                expectedQuestions.Select(q => q.Value.QuestionText),
                 questions.Questions.Select(q => q.QuestionText));
 
             foreach (var question in questions.Questions)
             {
                 var expectedAnswers = expectedQuestions
-                    .Single(q => q.Id == question.Id)
-                    .Answers
-                    .Select(a => a.Text);
+                    .Single(q => q.Key == question.Id)
+                    .Value
+                    .Answers;
                 
                 CollectionAssert.AreEqual(
                     expectedAnswers, 

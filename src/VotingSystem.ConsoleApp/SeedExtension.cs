@@ -22,10 +22,14 @@ namespace VotingSystem.ConsoleApp
             if (!logInResult.TryGet(out var voter))
             {
                 var createVoter = new CreateVoter("12312312312");
-                voter = await mediator.Send(createVoter)
+                await mediator.Send(createVoter)
+                    .OnError(error => throw new InvalidOperationException($"cannot create voter while seeding: {error}"));
+                
+                logIn = new LogIn("12312312312");
+                voter = await mediator.Send(logIn)
                     .OnError(error => throw new InvalidOperationException($"cannot create voter while seeding: {error}"));
             }
-                
+
             var identity = new VoterIdentity(voter.Id, voter.Pesel, voter.IsAdministrator);
             authenticationService.SetIdentity(identity);
 

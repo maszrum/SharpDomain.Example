@@ -13,7 +13,7 @@ using VotingSystem.Core.InfrastructureAbstractions;
 
 namespace VotingSystem.Application.Voters
 {
-    internal class VoteForHandler : CommandHandler<VoteFor>, IAuthorizable
+    internal class VoteForHandler : CommandHandler<VoteFor>, IAuthorizationRequired
     {
         private readonly IDomainEvents _domainEvents;
         private readonly IVotersRepository _votersRepository;
@@ -53,7 +53,7 @@ namespace VotingSystem.Application.Voters
                 .CollectFrom(voter)
                 .PublishCollected(cancellationToken);
             
-            return Nothing();
+            return Success();
         }
     }
 }

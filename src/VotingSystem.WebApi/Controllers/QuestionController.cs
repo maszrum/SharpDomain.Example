@@ -29,7 +29,10 @@ namespace VotingSystem.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateQuestion request)
         {
-            var response = await _mediator.Send(request);
+            var questionId = await _mediator.Send(request);
+            
+            var getQuestion = new GetQuestion(questionId);
+            var response = await _mediator.Send(getQuestion);
             
             return HandleErrors(response, Ok);
         }

@@ -20,11 +20,11 @@ namespace VotingSystem.Application.Tests.Integration
                 questionText: "Some question?", 
                 answers: new[] {"First answer", "Second answer"});
             var createQuestionResponse = await Mediator.Send(createQuestion);
-            var question = AssertNotError.Of(createQuestionResponse);
+            var questionId = AssertNotError.Of(createQuestionResponse);
             
             await LogInAsVoter();
             
-            var getResult = new GetQuestionResult(question.Id);
+            var getResult = new GetQuestionResult(questionId);
             var getResultResponse = await Mediator.Send(getResult);
             
             AssertError<AuthorizationError>.Of(getResultResponse);
@@ -39,13 +39,21 @@ namespace VotingSystem.Application.Tests.Integration
                 questionText: "Some question?", 
                 answers: new[] {"First answer", "Second answer"});
             var createFirstQuestionResponse = await Mediator.Send(createFirstQuestion);
-            var firstQuestion = AssertNotError.Of(createFirstQuestionResponse);
+            var firstQuestionId = AssertNotError.Of(createFirstQuestionResponse);
+            
+            var getFirstQuestion = new GetQuestion(firstQuestionId);
+            var firstQuestionResponse = await Mediator.Send(getFirstQuestion);
+            var firstQuestion = AssertNotError.Of(firstQuestionResponse);
             
             var createSecondQuestion = new CreateQuestion(
                 questionText: "Another question?", 
                 answers: new[] {"Any answer", "Some answer"});
             var createSecondQuestionResponse = await Mediator.Send(createSecondQuestion);
-            var secondQuestion = AssertNotError.Of(createSecondQuestionResponse);
+            var secondQuestionId = AssertNotError.Of(createSecondQuestionResponse);
+            
+            var getSecondQuestion = new GetQuestion(secondQuestionId);
+            var secondQuestionResponse = await Mediator.Send(getSecondQuestion);
+            var secondQuestion = AssertNotError.Of(secondQuestionResponse);
             
             var firstVoteFor = new VoteFor(firstQuestion.Id, firstQuestion.Answers[0].Id);
             await Mediator.Send(firstVoteFor);

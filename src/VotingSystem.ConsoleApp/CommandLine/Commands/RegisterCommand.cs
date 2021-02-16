@@ -42,10 +42,14 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
         {
             var createVoter = new CreateVoter(pesel);
             
-            VoterViewModel createVoterResponse;
+            VoterViewModel voterViewModel;
             try
             {
-                createVoterResponse = await _mediator.Send(createVoter)
+                var voterId = await _mediator.Send(createVoter)
+                    .OnError(error => throw new InvalidOperationException(error.ToString()));
+                
+                var logIn = new LogIn(pesel);
+                voterViewModel = await _mediator.Send(logIn)
                     .OnError(error => throw new InvalidOperationException(error.ToString()));
             }
             catch (Exception exception)
@@ -55,7 +59,7 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
             }
 
             Console.WriteLine();
-            Console.WriteLine(createVoterResponse.ToString());
+            Console.WriteLine(voterViewModel.ToString());
             Console.WriteLine();
             Console.WriteLine("Now you can login.");
         }

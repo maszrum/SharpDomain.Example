@@ -15,7 +15,7 @@ using VotingSystem.Core.Votes;
 
 namespace VotingSystem.Application.Voters
 {
-    internal class GetMyVotesHandler : IQueryHandler<GetMyVotes, MyVotesViewModel>, IAuthorizable
+    internal class GetMyVotesHandler : IQueryHandler<GetMyVotes, MyVotesViewModel>, IAuthorizationRequired
     {
         private readonly IMapper _mapper;
         private readonly IVotesRepository _votesRepository;

@@ -15,7 +15,7 @@ using VotingSystem.Core.Questions;
 
 namespace VotingSystem.Application.Questions
 {
-    internal class GetQuestionResultHandler : IQueryHandler<GetQuestionResult, QuestionResultViewModel>, IAuthorizable
+    internal class GetQuestionResultHandler : IQueryHandler<GetQuestionResult, QuestionResultViewModel>, IAuthorizationRequired
     {
         private readonly IMapper _mapper;
         private readonly IQuestionsRepository _questionsRepository;

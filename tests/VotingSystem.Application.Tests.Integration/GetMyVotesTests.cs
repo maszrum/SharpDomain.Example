@@ -29,7 +29,11 @@ namespace VotingSystem.Application.Tests.Integration
                 questionText: "Some question?", 
                 answers: new[] {"First answer", "Second answer"});
             var createFirstQuestionResponse = await Mediator.Send(createFirstQuestion);
-            var firstQuestion = AssertNotError.Of(createFirstQuestionResponse);
+            var firstQuestionId = AssertNotError.Of(createFirstQuestionResponse);
+            
+            var getFirstQuestion = new GetQuestion(firstQuestionId);
+            var firstQuestionResponse = await Mediator.Send(getFirstQuestion);
+            var firstQuestion = AssertNotError.Of(firstQuestionResponse);
             
             var createSecondQuestion = new CreateQuestion(
                 questionText: "Another question?", 
@@ -41,7 +45,11 @@ namespace VotingSystem.Application.Tests.Integration
                 questionText: "Third question?", 
                 answers: new[] {"Any answer", "Some answer", "I don't know answer"});
             var createThirdQuestionResponse = await Mediator.Send(createThirdQuestion);
-            var thirdQuestion = AssertNotError.Of(createThirdQuestionResponse);
+            var thirdQuestionId = AssertNotError.Of(createThirdQuestionResponse);
+            
+            var getThirdQuestion = new GetQuestion(thirdQuestionId);
+            var thirdQuestionResponse = await Mediator.Send(getThirdQuestion);
+            var thirdQuestion = AssertNotError.Of(thirdQuestionResponse);
             
             await LogInAsVoter();
             

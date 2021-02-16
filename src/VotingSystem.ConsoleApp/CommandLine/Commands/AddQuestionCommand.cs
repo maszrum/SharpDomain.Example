@@ -68,12 +68,16 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
         
         private async Task AddQuestion(string question, IList<string> answers)
         {
-            var addQuestion = new CreateQuestion(question, answers);
+            var createQuestion = new CreateQuestion(question, answers);
             
-            QuestionViewModel addQuestionResponse;
+            QuestionViewModel questionViewModel;
             try
             {
-                addQuestionResponse = await _mediator.Send(addQuestion)
+                var questionId = await _mediator.Send(createQuestion)
+                    .OnError(error => throw new InvalidOperationException(error.ToString()));
+                
+                var getQuestion = new GetQuestion(questionId);
+                questionViewModel = await _mediator.Send(getQuestion)
                     .OnError(error => throw new InvalidOperationException(error.ToString()));
             }
             catch (Exception exception)
@@ -83,7 +87,7 @@ namespace VotingSystem.ConsoleApp.CommandLine.Commands
             }
 
             Console.WriteLine();
-            Console.WriteLine(addQuestionResponse);
+            Console.WriteLine(questionViewModel);
             Console.WriteLine();
         }
 

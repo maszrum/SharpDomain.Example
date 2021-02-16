@@ -1,11 +1,10 @@
 ﻿using SharpDomain.Application;
-using VotingSystem.Application.Voters.ViewModels;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 
 namespace VotingSystem.Application.Voters
 {
-    public class CreateVoter : ICommand<VoterViewModel>
+    public class CreateVoter : ICreateCommand
     {
         public CreateVoter(string pesel)
         {

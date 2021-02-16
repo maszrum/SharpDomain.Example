@@ -9,7 +9,7 @@ using VotingSystem.Core.Voters;
 
 namespace VotingSystem.Core.Answers
 {
-    internal class IncrementAnswerVotesOnVotePosted : DomainEventHandler<VotePosted, Voter>
+    internal class IncrementAnswerVotesOnVotePosted : IEventHandler<VotePosted>
     {
         private readonly IDomainEvents _domainEvents;
         private readonly IAnswersRepository _answersRepository;
@@ -21,15 +21,15 @@ namespace VotingSystem.Core.Answers
             _domainEvents = domainEvents;
             _answersRepository = answersRepository;
         }
-        
-        public override async Task Handle(VotePosted @event, Voter model, CancellationToken cancellationToken)
+
+        public async Task Handle(VotePosted notification, CancellationToken cancellationToken)
         {
-            var answer = await _answersRepository.Get(@event.AnswerId)!;
+            var answer = await _answersRepository.Get(notification.AnswerId)!;
             
             if (answer is null)
             {
                 throw new NullReferenceException(
-                    $"answer with id {@event.AnswerId} was not found");
+                    $"answer with id {notification.AnswerId} was not found");
             }
             
             answer.IncrementVotes();

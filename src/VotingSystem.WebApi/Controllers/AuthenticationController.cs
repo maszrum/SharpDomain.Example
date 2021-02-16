@@ -52,7 +52,10 @@ namespace VotingSystem.WebApi.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] CreateVoter request)
         {
-            var response = await _mediator.Send(request);
+            var voterId = await _mediator.Send(request);
+            
+            var logIn = new LogIn(request.Pesel);
+            var response = await _mediator.Send(logIn);
             
             return HandleErrors(response, Ok);
         }
