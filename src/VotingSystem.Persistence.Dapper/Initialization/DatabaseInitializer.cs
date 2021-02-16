@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
@@ -6,7 +7,7 @@ using Npgsql;
 using SharpDomain.IoC;
 using VotingSystem.Persistence.Dapper.AutoTransaction;
 
-namespace VotingSystem.Persistence.Dapper
+namespace VotingSystem.Persistence.Dapper.Initialization
 {
     internal class DatabaseInitializer : SystemInitializer
     {
@@ -30,7 +31,7 @@ namespace VotingSystem.Persistence.Dapper
         {
             var existingTables = await GetExistingTables();
             
-            var sqlSource = new TablesSqlSource();
+            var sqlSource = new EmbeddedResourcesSqlSource();
             var expectedTables = sqlSource.GetAvailableTableNames().ToArray();
 
             foreach (var expectedTable in expectedTables)
@@ -50,7 +51,7 @@ namespace VotingSystem.Persistence.Dapper
         {
             var existingTables = await GetExistingTables();
             
-            var sqlSource = new TablesSqlSource();
+            var sqlSource = new EmbeddedResourcesSqlSource();
             var expectedTables = sqlSource.GetAvailableTableNames().ToArray();
 
             // drop all tables in reverse order

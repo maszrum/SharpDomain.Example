@@ -5,13 +5,13 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace VotingSystem.Persistence.Dapper
+namespace VotingSystem.Persistence.Dapper.Initialization
 {
-    internal class TablesSqlSource
+    internal class EmbeddedResourcesSqlSource
     {
         private readonly IReadOnlyList<(string TableName, string ResourceName)> _resources;
         
-        public TablesSqlSource()
+        public EmbeddedResourcesSqlSource()
         {
             var assembly = Assembly.GetExecutingAssembly();
             

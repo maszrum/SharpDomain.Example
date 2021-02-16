@@ -4,6 +4,7 @@ using Autofac;
 using Dapper;
 using Npgsql;
 using VotingSystem.Persistence.Dapper.AutoTransaction;
+using VotingSystem.Persistence.Dapper.Initialization;
 
 namespace VotingSystem.Persistence.Dapper
 {
